@@ -53,12 +53,31 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
     const localStorageLayout = getFromLocalStorage(history.location.key)
     const extraCols = anyBikeRentalStations ? 1 : 0
 
+    // Limit column count to n if there are not enough space
+    function maxCols(n: number): number {
+        return numberOfStopPlaces + extraCols < n
+            ? numberOfStopPlaces + extraCols
+            : n
+    }
+
     const cols = {
-        lg: numberOfStopPlaces + extraCols,
-        md: numberOfStopPlaces + extraCols,
-        sm: 1,
+        xxlg: maxCols(6),
+        xlg: maxCols(5),
+        lg: maxCols(4),
+        md: maxCols(3),
+        sm: maxCols(2),
         xs: 1,
         xxs: 1,
+    }
+
+    const gridBreakpoints = {
+        xxlg: 2200,
+        xlg: 1600,
+        lg: 1350,
+        md: 996,
+        sm: 768,
+        xs: 480,
+        xxs: 0,
     }
 
     return (
@@ -73,6 +92,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                     key={numberOfStopPlaces}
                     cols={cols}
                     layouts={localStorageLayout}
+                    breakpoints={gridBreakpoints}
                     compactType="horizontal"
                     isResizable={true}
                     onLayoutChange={(layout, layouts) => {
