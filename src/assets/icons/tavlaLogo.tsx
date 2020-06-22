@@ -14,7 +14,7 @@ function TavlaLogo({ className, theme = 'dark' }: Props): JSX.Element {
                     fill={fillColor}
                     d="M2.25.25v29.264h21.131v-4.957H7.739V17.48h13.878v-4.957H7.739V5.207H23.38V.25z"
                 />
-                <path fill={colors.brand.coral} d="M0 43h51.711v-4.5H0z" />
+                <path fill={colors.brand.coral} d="M2.2,43H54v-4.5H2.2V43z" />
                 <path
                     fill={fillColor}
                     // eslint-disable-next-line max-len
