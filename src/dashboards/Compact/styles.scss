@@ -4,7 +4,7 @@
     &__tiles {
         display: block;
         flex-direction: row;
-        overflow-x: auto;
+        overflow-x: visible;
 
         .tile {
             width: 100%;
