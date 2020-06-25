@@ -24,6 +24,11 @@
     &__texts {
         flex-direction: column;
         flex-grow: 1;
+
+        .realtime {
+            color: $colors-validation-canary;
+            font-weight: 500;
+        }
     }
 
     &__sublabels {
