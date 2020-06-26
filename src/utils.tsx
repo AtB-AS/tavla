@@ -212,6 +212,7 @@ export function transformDepartureToLineData(departure: Departure): LineData {
         route,
         situation: situations[0]?.summary?.[0]?.value,
         hasCancellation: cancellation,
+        isRealtime: departure.realtime,
     }
 }
 
@@ -219,11 +220,13 @@ export function createTileSubLabel({
     situation,
     hasCancellation,
     time,
+    isRealtime,
 }: LineData): TileSubLabel {
     return {
         hasSituation: Boolean(situation),
         hasCancellation,
         time,
+        isRealtime,
     }
 }
 

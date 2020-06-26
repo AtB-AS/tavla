@@ -14,7 +14,12 @@ export function TileRow({ label, icon, subLabels }: Props): JSX.Element {
                 <Heading3 className="tilerow__label">{label}</Heading3>
                 <div className="tilerow__sublabels">
                     {subLabels.map((subLabel, index) => (
-                        <div className="tilerow__sublabel" key={index}>
+                        <div
+                            className={`tilerow__sublabel${
+                                subLabel.isRealtime ? ' realtime' : ''
+                            }`}
+                            key={index}
+                        >
                             {subLabel.time}
                             <SubLabelIcon subLabel={subLabel} />
                         </div>
