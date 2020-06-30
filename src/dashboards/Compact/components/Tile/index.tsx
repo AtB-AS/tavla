@@ -4,12 +4,25 @@ import { Heading2 } from '@entur/typography'
 import './styles.scss'
 
 function Tile({ title, icons, children }: Props): JSX.Element {
+    const isAlert = false
+
     return (
         <div className="tile">
-            <header className="tile__header">
-                <Heading2>{title}</Heading2>
-                <div className="tile__header-icons">{icons}</div>
-            </header>
+            <div className={isAlert ? 'tile__alert' : ''}>
+                <header className="tile__header">
+                    <Heading2>{title}</Heading2>
+                    <div className="tile__header-icons">{icons}</div>
+                </header>
+                {isAlert ? (
+                    <div className="tile__alert__text">
+                        <h4>Lorem ipsum Dolor sit amet consectetur</h4>
+                        <p>
+                            Dolor sit amet consectetur adipisicing elit. Numquam
+                            sed accusantium doloribus vitae veniam.
+                        </p>
+                    </div>
+                ) : null}
+            </div>
             {children}
         </div>
     )
