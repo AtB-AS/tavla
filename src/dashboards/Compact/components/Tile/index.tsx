@@ -15,9 +15,9 @@ function Tile({ title, icons, children }: Props): JSX.Element {
                     <div className="tile__header-icons">{icons}</div>
                 </header>
                 {isAlert ? (
-                    <div className="tile__warning__alert">
-                        <WarningIcon className="tile__warning__alert__icon"></WarningIcon>
-                        <div className="tile__warning__alert__text">
+                    <div className="tile__alert">
+                        <WarningIcon className="tile__alert__icon"></WarningIcon>
+                        <div className="tile__alert__text">
                             <h4>Lorem ipsum Dolor sit amet consectetur</h4>
                             <p>
                                 Dolor sit amet consectetur adipisicing elit.
