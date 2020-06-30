@@ -39,6 +39,7 @@
     "@entur/tokens": "^1.3.5",
     "@entur/travel": "^4.0.3",
     "@entur/typography": "^1.2.0",
+    "@types/pbf": "^3.0.2",
     "connect-history-api-fallback": "^1.6.0",
     "date-fns": "^2.14.0",
     "firebase": "^7.15.2",
