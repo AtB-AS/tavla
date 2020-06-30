@@ -1,5 +1,6 @@
 import React from 'react'
 import { Heading2 } from '@entur/typography'
+import { WarningIcon } from '@entur/icons'
 
 import './styles.scss'
 
@@ -8,18 +9,21 @@ function Tile({ title, icons, children }: Props): JSX.Element {
 
     return (
         <div className="tile">
-            <div className={isAlert ? 'tile__alert' : ''}>
+            <div className={isAlert ? 'tile__warning' : ''}>
                 <header className="tile__header">
                     <Heading2>{title}</Heading2>
                     <div className="tile__header-icons">{icons}</div>
                 </header>
                 {isAlert ? (
-                    <div className="tile__alert__text">
-                        <h4>Lorem ipsum Dolor sit amet consectetur</h4>
-                        <p>
-                            Dolor sit amet consectetur adipisicing elit. Numquam
-                            sed accusantium doloribus vitae veniam.
-                        </p>
+                    <div className="tile__warning__alert">
+                        <WarningIcon className="tile__warning__alert__icon"></WarningIcon>
+                        <div className="tile__warning__alert__text">
+                            <h4>Lorem ipsum Dolor sit amet consectetur</h4>
+                            <p>
+                                Dolor sit amet consectetur adipisicing elit.
+                                Numquam sed accusantium doloribus vitae veniam.
+                            </p>
+                        </div>
                     </div>
                 ) : null}
             </div>
