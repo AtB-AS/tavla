@@ -9,6 +9,7 @@ export interface LineData {
     expectedDepartureTime: string
     situation?: string
     hasCancellation?: boolean
+    isRealtime?: boolean
 }
 
 export interface Line {
@@ -33,4 +34,5 @@ export interface TileSubLabel {
     time: string
     hasCancellation?: boolean
     hasSituation?: boolean
+    isRealtime?: boolean
 }
