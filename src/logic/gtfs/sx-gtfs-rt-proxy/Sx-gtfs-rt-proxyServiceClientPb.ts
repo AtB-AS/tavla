@@ -15,12 +15,13 @@ import * as grpcWeb from 'grpc-web'
 import * as gtfs$rt_gtfs$realtime_pb from '../gtfs-rt/gtfs-realtime_pb.d'
 
 import {
-    FeedResponse,
     GetCurrentFeedRequest,
     PublishRequest,
-    PublishResponse,
     StreamFeedRequest,
 } from './sx-gtfs-rt-proxy_pb.d'
+
+import FeedResponse from './sx-gtfs-rt-proxy_pb.d'
+import PublishResponse from './sx-gtfs-rt-proxy_pb.d'
 
 export class FeedServiceClient {
     client_: grpcWeb.AbstractClientBase

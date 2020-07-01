@@ -40,7 +40,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
 
     const cachebuster = 'hky5jc'
 
-    const disruptionMessages = useDisruptionMessages('RUT', cachebuster)
+    const disruptionMessages = useDisruptionMessages()
 
     console.log(disruptionMessages)
 
