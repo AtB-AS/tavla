@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+import "gtfs-rt/gtfs-realtime.proto";
+
+service FeedService {
+  rpc GetCurrentFeed (GetCurrentFeedRequest) returns (FeedResponse) {}
+  rpc StreamFeed (StreamFeedRequest) returns (stream FeedResponse) {}
+  rpc Publish (PublishRequest) returns (PublishResponse) {}
+}
+
+message GetCurrentFeedRequest {
+
+}
+
+message FeedResponse {
+  transit_realtime.FeedMessage msg = 1;
+}
+
+message StreamFeedRequest {
+
+}
+
+message PublishRequest {
+  transit_realtime.FeedMessage msg = 1;
+}
+
+message PublishResponse {
+
+}

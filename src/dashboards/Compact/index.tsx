@@ -42,6 +42,8 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
 
     const disruptionMessages = useDisruptionMessages('RUT', cachebuster)
 
+    console.log(disruptionMessages)
+
     // Remove stop places without departures
     if (stopPlacesWithDepartures) {
         stopPlacesWithDepartures = stopPlacesWithDepartures.filter(

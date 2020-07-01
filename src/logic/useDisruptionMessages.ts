@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { REFRESH_INTERVAL } from '../constants'
 
 import Pbf from 'pbf'
-import { FeedMessage, IFeedMessage, IFeedEntity } from './gtfsRealtime'
+import { FeedResponse } from './gtfs/sx-gtfs-rt-proxy/sx-gtfs-rt-proxy_pb.d'
+import { FeedServiceClient } from './gtfs/sx-gtfs-rt-proxy/Sx-gtfs-rt-proxyServiceClientPb'
 
 function disruptionMessagesGet(url: string): Promise<any> {
     return fetch(url, {
@@ -13,31 +14,25 @@ function disruptionMessagesGet(url: string): Promise<any> {
 async function getDisruptionMessages(
     datasource: string,
     cachebuster,
-): Promise<IFeedEntity[]> {
-    const endpoint = 'https://api.entur.io/realtime/v1/gtfs-rt/trip-updates'
+): Promise<FeedResponse> {
+    const endpoint = 'https://atb-gtfs-rt-jlmnrncfba-ew.a.run.app/'
 
-    const response = await disruptionMessagesGet(
-        `${endpoint}?datasource=${datasource}&cachebuster=${cachebuster}`,
-    )
+    const feedService = new FeedServiceClient(endpoint)
 
-    if (response.ok) {
-        const bufferRes = await response.arrayBuffer()
-        const pbf = new Pbf(new Uint8Array(bufferRes))
-        const obj = FeedMessage.read(pbf)
-        return obj.entity
-    } else {
-        console.error('error:', response.status)
-        return null
-    }
+    const feedResponse = feedService.getCurrentFeed
+
+    return feedResponse
 }
 
 export default function useDisruptionMessages(
     datasource: string,
     cachebuster: string,
-): Array<IFeedEntity> | null {
+): FeedResponse | null {
     const [disruptionMessages, setDisruptionMessages] = useState<
-        Array<IFeedEntity>
+        Array<FeedResponse>
     >(null)
+
+    getDisruptionMessages('ATB', 'asd')
 
     useEffect(() => {
         getDisruptionMessages(datasource, cachebuster).then(
