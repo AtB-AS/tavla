@@ -36,14 +36,17 @@ function getTransportHeaderIcons(
     return transportIcons.map(({ icon }) => icon)
 }
 
-const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
+const DepartureTile = ({
+    stopPlaceWithDepartures,
+    disruptionMessages,
+}: Props): JSX.Element => {
     const { departures, name } = stopPlaceWithDepartures
     const groupedDepartures = groupBy<LineData>(departures, 'route')
     const headerIcons = getTransportHeaderIcons(departures)
     const routes = Object.keys(groupedDepartures)
 
     return (
-        <Tile title={name} icons={headerIcons}>
+        <Tile title={name} icons={headerIcons} alerts={disruptionMessages}>
             {routes.map(route => {
                 const subType = groupedDepartures[route][0].subType
                 const routeData = groupedDepartures[route].slice(0, 3)
@@ -65,6 +68,7 @@ const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
 
 interface Props {
     stopPlaceWithDepartures: StopPlaceWithDepartures
+    disruptionMessages?: Array<object>
 }
 
 export default DepartureTile
