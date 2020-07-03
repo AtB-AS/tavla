@@ -109,6 +109,14 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                         <div
                             key={index.toString()}
                             data-grid={getDataGrid(index)}
+                            className={
+                                disruptionMessagesForStop(
+                                    stop,
+                                    disruptionMessages,
+                                ).length > 0
+                                    ? 'warning'
+                                    : ''
+                            }
                         >
                             <DepartureTile
                                 key={index}

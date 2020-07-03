@@ -24,6 +24,12 @@
         transition: all 200ms ease;
         transition-property: left, top;
         z-index: 1;
+        border-radius: 8px;
+        background-color: $colors-blues-blue10;
+    }
+
+    .react-grid-item.warning {
+        border: 2px solid #f8cf54;
     }
 
     .react-grid-item::after {
@@ -34,6 +40,7 @@
         bottom: 0;
         background: linear-gradient(0deg, rgba($colors-blues-blue10, 1) 0%, rgba($colors-blues-blue10, 0.7) 50%, rgba($colors-blues-blue10, 0) 100%);
         z-index: 1;
+        border-radius: 0 0 1rem 1rem;
     }
 
     .react-grid-item.cssTransforms {
