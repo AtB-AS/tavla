@@ -1,9 +1,24 @@
-import { createContext, useContext, useState, useCallback } from 'react'
-import { LegMode } from '@entur/sdk'
+import {
+    createContext,
+    useContext,
+    useState,
+    useCallback,
+    useEffect,
+} from 'react'
+import { useLocation } from 'react-router-dom'
+import { LegMode, Coordinates } from '@entur/sdk'
 
-import { persist, restore } from './UrlStorage'
+import { persist as persistToFirebase, FieldTypes } from './FirestoreStorage'
+import {
+    persist as persistToUrl,
+    restore as restoreFromUrl,
+} from './UrlStorage'
+import { getSettings } from '../services/firebase'
+
+import { getDocumentId } from '../utils'
 
 export interface Settings {
+    coordinates?: Coordinates
     hiddenStations: Array<string>
     hiddenStops: Array<string>
     hiddenModes: Array<LegMode>
@@ -17,32 +32,22 @@ export interface Settings {
 }
 
 interface SettingsSetters {
-    setHiddenStations: (
-        hiddenStations: Array<string>,
-        options?: SetOptions,
-    ) => void
-    setHiddenStops: (hiddenStops: Array<string>, options?: SetOptions) => void
-    setHiddenModes: (hiddenModes: Array<LegMode>, options?: SetOptions) => void
-    setHiddenRoutes: (
-        hiddenModes: { [stopPlaceId: string]: Array<string> },
-        options?: SetOptions,
-    ) => void
-    setDistance: (distance: number, options?: SetOptions) => void
-    setNewStations: (newStations: Array<string>, options?: SetOptions) => void
-    setNewStops: (newStops: Array<string>, options?: SetOptions) => void
-    setDashboard: (dashboard: string, options?: SetOptions) => void
+    setHiddenStations: (hiddenStations: Array<string>) => void
+    setHiddenStops: (hiddenStops: Array<string>) => void
+    setHiddenModes: (hiddenModes: Array<LegMode>) => void
+    setHiddenRoutes: (hiddenModes: {
+        [stopPlaceId: string]: Array<string>
+    }) => void
+    setDistance: (distance: number) => void
+    setNewStations: (newStations: Array<string>) => void
+    setNewStops: (newStops: Array<string>) => void
+    setDashboard: (dashboard: string) => void
 }
-
-interface SetOptions {
-    persist?: boolean
-}
-
-type Persistor = () => void
 
 export const SettingsContext = createContext<
-    [Settings, SettingsSetters, Persistor]
+    [Settings | null, SettingsSetters]
 >([
-    restore(),
+    null,
     {
         setHiddenStations: (): void => undefined,
         setHiddenStops: (): void => undefined,
@@ -53,86 +58,114 @@ export const SettingsContext = createContext<
         setNewStops: (): void => undefined,
         setDashboard: (): void => undefined,
     },
-    (): void => console.log('Persistor not set up yet'), // eslint-disable-line no-console
 ])
 
-export function useSettingsContext(): [Settings, SettingsSetters, Persistor] {
+export function useSettingsContext(): [Settings, SettingsSetters] {
     return useContext(SettingsContext)
 }
 
-export function useSettings(): [Settings, SettingsSetters, Persistor] {
-    const [settings, setSettings] = useState(restore())
+export function useSettings(): [Settings, SettingsSetters] {
+    const [settings, setSettings] = useState<Settings>()
 
-    const persistSettings = useCallback(() => {
-        persist(settings)
-    }, [settings])
+    const location = useLocation()
+
+    useEffect(() => {
+        if (location.pathname == '/') return
+
+        const id = getDocumentId()
+
+        if (id) {
+            return getSettings(id).onSnapshot((document) => {
+                if (document.exists) {
+                    setSettings(document.data() as Settings)
+                } else {
+                    window.location.pathname = '/'
+                }
+            })
+        }
+
+        const positionArray = location.pathname
+            .split('/')[2]
+            .split('@')[1]
+            .split('-')
+            .join('.')
+            .split(/,/)
+
+        setSettings({
+            ...restoreFromUrl(),
+            coordinates: {
+                latitude: Number(positionArray[0]),
+                longitude: Number(positionArray[1]),
+            },
+        })
+    }, [location])
 
     const set = useCallback(
-        <T>(key: string, value: T, options?: SetOptions): void => {
+        <T>(key: string, value: FieldTypes): void => {
             const newSettings = { ...settings, [key]: value }
             setSettings(newSettings)
-            if (options && options.persist) {
-                persist(newSettings)
+
+            if (getDocumentId()) {
+                persistToFirebase(getDocumentId(), key, value)
+                return
             }
+            persistToUrl(newSettings)
         },
         [settings],
     )
 
     const setHiddenStations = useCallback(
-        (newHiddenStations: Array<string>, options?: SetOptions): void => {
-            set('hiddenStations', newHiddenStations, options)
+        (newHiddenStations: Array<string>): void => {
+            set('hiddenStations', newHiddenStations)
         },
         [set],
     )
 
     const setHiddenStops = useCallback(
-        (newHiddenStops: Array<string>, options?: SetOptions): void => {
-            set('hiddenStops', newHiddenStops, options)
+        (newHiddenStops: Array<string>): void => {
+            set('hiddenStops', newHiddenStops)
         },
         [set],
     )
 
     const setHiddenModes = useCallback(
-        (newHiddenModes: Array<LegMode>, options?: SetOptions): void => {
-            set('hiddenModes', newHiddenModes, options)
+        (newHiddenModes: Array<LegMode>): void => {
+            set('hiddenModes', newHiddenModes)
         },
         [set],
     )
 
     const setHiddenRoutes = useCallback(
-        (
-            newHiddenRoutes: { [stopPlaceId: string]: Array<string> },
-            options?: SetOptions,
-        ): void => {
-            set('hiddenRoutes', newHiddenRoutes, options)
+        (newHiddenRoutes: { [stopPlaceId: string]: Array<string> }): void => {
+            set('hiddenRoutes', newHiddenRoutes)
         },
         [set],
     )
 
     const setDistance = useCallback(
-        (newDistance: number, options?: SetOptions): void => {
-            set('distance', newDistance, options)
+        (newDistance: number): void => {
+            set('distance', newDistance)
         },
         [set],
     )
 
     const setNewStations = useCallback(
-        (newStations: Array<string>, options?: SetOptions): void => {
-            set('newStations', newStations, options)
+        (newStations: Array<string>): void => {
+            set('newStations', newStations)
         },
         [set],
     )
 
     const setNewStops = useCallback(
-        (newStops: Array<string>, options?: SetOptions): void => {
-            set('newStops', newStops, options)
+        (newStops: Array<string>): void => {
+            set('newStops', newStops)
         },
         [set],
     )
 
     const setDashboard = useCallback(
-        (dashboard: string, options?: SetOptions): void => {
-            set('dashboard', dashboard, options)
+        (dashboard: string): void => {
+            set('dashboard', dashboard)
         },
         [set],
     )
@@ -148,5 +181,5 @@ export function useSettings(): [Settings, SettingsSetters, Persistor] {
         setDashboard,
     }
 
-    return [settings, setters, persistSettings]
+    return [settings, setters]
 }

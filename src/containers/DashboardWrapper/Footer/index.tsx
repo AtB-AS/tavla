@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react'
+import { useParams } from 'react-router-dom'
 import { Heading3, Paragraph } from '@entur/typography'
 import { ActionChip } from '@entur/chip'
 import { EditIcon, SettingsIcon, CheckIcon } from '@entur/icons'
@@ -11,7 +12,19 @@ import BackButton from '../../../components/backButton/BackButton'
 
 import './styles.scss'
 
-function RadioBox({ value, selected, onChange, children }): JSX.Element {
+interface RadioBoxProps {
+    value: string
+    selected: boolean
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    children: JSX.Element | JSX.Element[]
+}
+
+function RadioBox({
+    value,
+    selected,
+    onChange,
+    children,
+}: RadioBoxProps): JSX.Element {
     const id = `radio-${value}`
 
     return (
@@ -50,25 +63,34 @@ function Footer({ className, history }: Props): JSX.Element {
         history.push('/')
     }, [history])
 
+    const { documentId } = useParams()
+
     const onSettingsButtonClick = useCallback(
-        event => {
-            const path = window.location.pathname.split('@')[1]
-            history.push(`/admin/@${path}`)
-            event.preventDefault()
+        (event) => {
+            if (documentId) {
+                history.push(`/admin/${documentId}`)
+            } else {
+                const path = window.location.pathname.split('@')[1]
+                history.push(`/admin/@${path}`)
+                event.preventDefault()
+            }
         },
-        [history],
+        [history, documentId],
     )
 
-    const onChange = useCallback(event => {
-        event.preventDefault()
-        setChoice(event.target.value)
-    }, [])
+    const onChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            event.preventDefault()
+            setChoice(event.target.value)
+        },
+        [],
+    )
 
     const submit = useCallback(
-        event => {
+        (event) => {
             event.preventDefault()
             setModalOpen(false)
-            setDashboard(choice, { persist: true })
+            setDashboard(choice)
         },
         [choice, setDashboard],
     )

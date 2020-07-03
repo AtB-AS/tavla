@@ -3,9 +3,9 @@ import { LegMode } from '@entur/sdk'
 
 import { StopPlaceWithDepartures } from '../types'
 import {
-    getPositionFromUrl,
     transformDepartureToLineData,
     unique,
+    isNotNullOrUndefined,
 } from '../utils'
 import service from '../service'
 import { useSettingsContext, Settings } from '../settings'
@@ -20,19 +20,19 @@ async function fetchStopPlaceDepartures(
     const { newStops, hiddenStops, hiddenModes, hiddenRoutes } = settings
 
     const allStopPlaceIds = unique([...newStops, ...nearestStopPlaces]).filter(
-        id => !hiddenStops.includes(id),
+        (id) => !hiddenStops.includes(id),
     )
 
-    const allStopPlaceIdsWithoutDuplicateNumber = allStopPlaceIds.map(id =>
+    const allStopPlaceIdsWithoutDuplicateNumber = allStopPlaceIds.map((id) =>
         id.replace(/-\d+$/, ''),
     )
 
     const allStopPlaces = await service.getStopPlaces(
         allStopPlaceIdsWithoutDuplicateNumber,
     )
-    const sortedStops = allStopPlaces.sort((a, b) =>
-        a.name.localeCompare(b.name, 'no'),
-    )
+    const sortedStops = allStopPlaces
+        .filter(isNotNullOrUndefined)
+        .sort((a, b) => a.name.localeCompare(b.name, 'no'))
 
     const whiteListedModes = Object.values(LegMode).filter(
         (mode: LegMode) => !hiddenModes.includes(mode),
@@ -48,18 +48,22 @@ async function fetchStopPlaceDepartures(
         },
     )
 
-    const stopPlacesWithDepartures = allStopPlaceIds.map(stopId => {
+    const stopPlacesWithDepartures = allStopPlaceIds.map((stopId) => {
         const stop = sortedStops.find(
             ({ id }) => id === stopId.replace(/-\d+$/, ''),
         )
-        const departuresForThisStopPlace = departures.find(
-            ({ id }) => stop.id === id,
-        )
+
+        if (!stop) return
+
+        const departuresForThisStopPlace = departures
+            .filter(isNotNullOrUndefined)
+            .find(({ id }) => stop.id === id)
+
         if (
             !departuresForThisStopPlace ||
             !departuresForThisStopPlace.departures
         ) {
-            return stop
+            return { ...stop, departures: [] }
         }
 
         const mappedAndFilteredDepartures = departuresForThisStopPlace.departures
@@ -76,15 +80,17 @@ async function fetchStopPlaceDepartures(
         }
     })
 
-    return stopPlacesWithDepartures
+    return stopPlacesWithDepartures.filter(isNotNullOrUndefined)
 }
 
 export default function useStopPlacesWithDepartures(): Array<
     StopPlaceWithDepartures
 > | null {
-    const position = useMemo(() => getPositionFromUrl(), [])
     const [settings] = useSettingsContext()
-    const nearestPlaces = useNearestPlaces(position, settings.distance)
+    const nearestPlaces = useNearestPlaces(
+        settings.coordinates,
+        settings.distance,
+    )
     const [
         stopPlacesWithDepartures,
         setStopPlacesWithDepartures,

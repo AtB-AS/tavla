@@ -8,15 +8,14 @@ import BikePanel from './BikePanel'
 import ModePanel from './ModePanel'
 import DistanceEditor from './DistanceEditor'
 
-import { getPositionFromUrl, useDebounce, isLegMode, unique } from '../../utils'
+import { useDebounce, isLegMode, unique, getDocumentId } from '../../utils'
 
 import service, { getStopPlacesWithLines } from '../../service'
 import { StopPlaceWithLines } from '../../types'
 
 import { useSettingsContext } from '../../settings'
 import { useNearestPlaces } from '../../logic'
-
-import AdminHeader from './AdminHeader'
+import { DEFAULT_DISTANCE } from '../../constants'
 
 import BikePanelSearch from './BikeSearch'
 import StopPlaceSearch from './StopPlaceSearch'
@@ -24,23 +23,30 @@ import StopPlaceSearch from './StopPlaceSearch'
 import './styles.scss'
 
 const AdminPage = ({ history }: Props): JSX.Element => {
-    const position = useMemo(() => getPositionFromUrl(), [])
-    const [settings, settingsSetters, persistSettings] = useSettingsContext()
+    const [settings, settingsSetters] = useSettingsContext()
 
-    const { distance, hiddenModes, newStops, newStations } = settings
+    const { hiddenModes, newStops, newStations } = settings
 
-    const {
-        setHiddenModes,
-        setDistance,
-        setNewStops,
-        setNewStations,
-    } = settingsSetters
+    const { setHiddenModes, setNewStops, setNewStations } = settingsSetters
+
+    const [distance, setDistance] = useState<number>(
+        settings.distance || DEFAULT_DISTANCE,
+    )
+    const debouncedDistance = useDebounce(distance, 800)
+
+    useEffect(() => {
+        if (settings.distance != debouncedDistance) {
+            settingsSetters.setDistance(debouncedDistance)
+        }
+    }, [debouncedDistance, settingsSetters, settings.distance])
 
     const [stopPlaces, setStopPlaces] = useState<Array<StopPlaceWithLines>>([])
     const [stations, setStations] = useState<Array<BikeRentalStation>>([])
 
-    const debouncedDistance = useDebounce(distance, 300)
-    const nearestPlaces = useNearestPlaces(position, debouncedDistance)
+    const nearestPlaces = useNearestPlaces(
+        settings.coordinates,
+        debouncedDistance,
+    )
 
     const nearestStopPlaceIds = useMemo(
         () =>
@@ -53,16 +59,16 @@ const AdminPage = ({ history }: Props): JSX.Element => {
     useEffect(() => {
         const ids = [...newStops, ...nearestStopPlaceIds]
         if (ids.length) {
-            getStopPlacesWithLines(ids.map(id => id.replace(/-\d+$/, ''))).then(
-                resultingStopPlaces => {
-                    setStopPlaces(
-                        resultingStopPlaces.map((s, index) => ({
-                            ...s,
-                            id: ids[index],
-                        })),
-                    )
-                },
-            )
+            getStopPlacesWithLines(
+                ids.map((id) => id.replace(/-\d+$/, '')),
+            ).then((resultingStopPlaces) => {
+                setStopPlaces(
+                    resultingStopPlaces.map((s, index) => ({
+                        ...s,
+                        id: ids[index],
+                    })),
+                )
+            })
         }
     }, [nearestPlaces, nearestStopPlaceIds, newStops])
 
@@ -72,7 +78,7 @@ const AdminPage = ({ history }: Props): JSX.Element => {
             .map(({ id }) => id)
         const ids = [...newStations, ...nearestBikeRentalStationIds]
         if (ids.length) {
-            service.getBikeRentalStations(ids).then(freshStations => {
+            service.getBikeRentalStations(ids).then((freshStations) => {
                 const sortedStations = freshStations.sort(
                     (a: BikeRentalStation, b: BikeRentalStation) =>
                         a.name.localeCompare(b.name, 'no'),
@@ -85,8 +91,8 @@ const AdminPage = ({ history }: Props): JSX.Element => {
     const addNewStop = useCallback(
         (stopId: string) => {
             const numberOfDuplicates = [...nearestStopPlaceIds, ...newStops]
-                .map(id => id.replace(/-\d+$/, ''))
-                .filter(id => id === stopId).length
+                .map((id) => id.replace(/-\d+$/, ''))
+                .filter((id) => id === stopId).length
             const id = !numberOfDuplicates
                 ? stopId
                 : `${stopId}-${numberOfDuplicates}`
@@ -107,7 +113,7 @@ const AdminPage = ({ history }: Props): JSX.Element => {
         subMode?: TransportSubmode
     }> = useMemo(() => {
         const modesFromStopPlaces = stopPlaces
-            .map(stopPlace =>
+            .map((stopPlace) =>
                 stopPlace.lines.map(({ transportMode, transportSubmode }) => ({
                     mode: transportMode,
                     subMode: transportSubmode,
@@ -126,27 +132,17 @@ const AdminPage = ({ history }: Props): JSX.Element => {
             : uniqModesFromStopPlaces
     }, [stations.length, stopPlaces])
 
-    const discardSettingsAndGoToDash = useCallback(() => {
-        // eslint-disable-next-line no-restricted-globals
-        const answerIsYes = confirm(
-            'Er du sikker på at du vil gå tilbake uten å lagre endringene dine? Lagre-knapp finner du nederst til høyre på siden.',
-        )
-        if (answerIsYes) {
-            window.location.pathname = window.location.pathname.replace(
-                'admin',
-                'dashboard',
-            )
-        }
-    }, [])
+    const documentId = getDocumentId()
 
-    const submitSettingsAndGoToDash = useCallback(() => {
-        persistSettings()
+    const goToDash = useCallback(() => {
+        if (documentId) {
+            history.push(window.location.pathname.replace('admin', 't'))
+        }
         history.push(window.location.pathname.replace('admin', 'dashboard'))
-    }, [history, persistSettings])
+    }, [history, documentId])
 
     return (
         <Contrast className="admin">
-            <AdminHeader goBackToDashboard={discardSettingsAndGoToDash} />
             <div className="admin__content">
                 <div className="admin__selection-panel">
                     <DistanceEditor
@@ -169,7 +165,7 @@ const AdminPage = ({ history }: Props): JSX.Element => {
                     <div className="admin__selection-panel">
                         <div className="search-stop-places">
                             <BikePanelSearch
-                                position={position}
+                                position={settings.coordinates}
                                 onSelected={addNewStation}
                             />
                         </div>
@@ -180,9 +176,9 @@ const AdminPage = ({ history }: Props): JSX.Element => {
             <Button
                 className="admin__submit-button"
                 variant="primary"
-                onClick={submitSettingsAndGoToDash}
+                onClick={goToDash}
             >
-                Oppdater tavla
+                Se avgangstavla
             </Button>
         </Contrast>
     )

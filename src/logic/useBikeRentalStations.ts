@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { BikeRentalStation } from '@entur/sdk'
 
-import { getPositionFromUrl } from '../utils'
 import service from '../service'
 import { useSettingsContext, Settings } from '../settings'
 import { REFRESH_INTERVAL } from '../constants'
@@ -19,7 +18,7 @@ async function fetchBikeRentalStations(
     }
 
     const allStationIds = [...newStations, ...nearestBikeRentalStations]
-        .filter(id => !hiddenStations.includes(id))
+        .filter((id) => !hiddenStations.includes(id))
         .filter((id, index, ids) => ids.indexOf(id) === index)
 
     const allStations = await service.getBikeRentalStations(allStationIds)
@@ -29,12 +28,14 @@ async function fetchBikeRentalStations(
 export default function useBikeRentalStations(): Array<
     BikeRentalStation
 > | null {
-    const position = useMemo(() => getPositionFromUrl(), [])
     const [settings] = useSettingsContext()
     const [bikeRentalStations, setBikeRentalStations] = useState<Array<
         BikeRentalStation
     > | null>(null)
-    const nearestPlaces = useNearestPlaces(position, settings.distance)
+    const nearestPlaces = useNearestPlaces(
+        settings.coordinates,
+        settings.distance,
+    )
 
     const nearestBikeRentalStations = useMemo(
         () =>

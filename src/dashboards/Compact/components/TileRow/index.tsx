@@ -30,7 +30,11 @@ export function TileRow({ label, icon, subLabels }: Props): JSX.Element {
     )
 }
 
-function SubLabelIcon({ subLabel }: { subLabel: TileSubLabel }): JSX.Element {
+function SubLabelIcon({
+    subLabel,
+}: {
+    subLabel: TileSubLabel
+}): JSX.Element | null {
     if (subLabel.hasCancellation)
         return (
             <div className="tilerow__sublabel__cancellation">
@@ -50,8 +54,8 @@ function SubLabelIcon({ subLabel }: { subLabel: TileSubLabel }): JSX.Element {
 
 interface Props {
     label: string
-    subLabels: Array<TileSubLabel>
-    icon: JSX.Element
+    subLabels: TileSubLabel[]
+    icon: JSX.Element | null
 }
 
 export default TileRow

@@ -18,16 +18,24 @@ import {
 
 import { colors } from '@entur/tokens'
 
-import { Coordinates, Departure, LegMode, TransportSubmode } from '@entur/sdk'
+import { Departure, LegMode, TransportSubmode } from '@entur/sdk'
 
 import { LineData, TileSubLabel } from './types'
 
+export function isNotNullOrUndefined<T>(
+    thing: T | undefined | null,
+): thing is T {
+    return thing !== undefined && thing !== null
+}
+
 function isSubModeAirportLink(subMode?: string): boolean {
+    if (!subMode) return false
     const airportLinkTypes = ['airportLinkRail', 'airportLinkBus']
     return airportLinkTypes.includes(subMode)
 }
 
 function isSubModeCarFerry(subMode?: string): boolean {
+    if (!subMode) return false
     const carFerryTypes = [
         'localCarFerry',
         'internationalCarFerry',
@@ -60,7 +68,7 @@ export function getIconColor(
         case 'air':
             return colors.transport.contrast.plane
         default:
-            return null
+            return colors.transport.contrast.walk
     }
 }
 
@@ -107,7 +115,7 @@ export function getIcon(
     legMode: LegMode,
     subMode?: TransportSubmode,
     color?: string,
-): JSX.Element {
+): JSX.Element | null {
     const colorToUse = color ?? getIconColor(legMode, subMode)
 
     const identifier = getTransportIconIdentifier(legMode, subMode)
@@ -134,22 +142,9 @@ export function getIcon(
     }
 }
 
-export function getPositionFromUrl(): Coordinates {
-    const positionArray = window.location.pathname
-        .split('/')[2]
-        .split('@')[1]
-        .split('-')
-        .join('.')
-        .split(/,/)
-    return {
-        latitude: Number(positionArray[0]),
-        longitude: Number(positionArray[1]),
-    }
-}
-
-export function groupBy<T>(
-    objectArray: Array<T>,
-    property: string,
+export function groupBy<T extends { [key: string]: any }>(
+    objectArray: T[],
+    property: keyof T,
 ): { [key: string]: Array<T> } {
     return objectArray.reduce((acc, obj) => {
         const key = obj[property]
@@ -158,7 +153,7 @@ export function groupBy<T>(
         }
         acc[key].push(obj)
         return acc
-    }, {})
+    }, {} as { [key: string]: any })
 }
 
 function formatDeparture(minDiff: number, departureTime: Date): string {
@@ -172,7 +167,7 @@ export function unique<T>(
 ): Array<T> {
     return array.filter((item, index, items) => {
         const previousItems = items.slice(0, index)
-        return !previousItems.some(uniqueItem => isEqual(item, uniqueItem))
+        return !previousItems.some((uniqueItem) => isEqual(item, uniqueItem))
     })
 }
 
@@ -232,7 +227,7 @@ export function createTileSubLabel({
 
 export function toggleValueInList<T>(list: Array<T>, item: T): Array<T> {
     if (list.includes(item)) {
-        return list.filter(i => i !== item)
+        return list.filter((i) => i !== item)
     }
     return [...list, item]
 }
@@ -288,5 +283,16 @@ export interface Suggestion {
     coordinates?: {
         latitude: number
         longitude: number
+    }
+}
+
+// Matches the ID in an URL, if it exists.
+const ID_REGEX = /\/(?:t|(?:admin))\/(\w+)(?:\/)?/
+
+export const getDocumentId = (): string | undefined => {
+    const id = window.location.pathname.match(ID_REGEX)
+
+    if (id) {
+        return id[1]
     }
 }
