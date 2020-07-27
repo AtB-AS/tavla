@@ -19,7 +19,7 @@ function onLayoutChange(layouts: Layouts, key: string): void {
     saveToLocalStorage(key, layouts)
 }
 
-function getDataGrid(index: number) {
+function getDataGrid(index: number): { [key: string]: number } {
     return {
         w: 1,
         maxW: 1,
@@ -94,7 +94,10 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                     breakpoints={gridBreakpoints}
                     compactType="horizontal"
                     isResizable={true}
-                    onLayoutChange={(layout: Layout[], layouts: Layouts) => {
+                    onLayoutChange={(
+                        layout: Layout[],
+                        layouts: Layouts,
+                    ): void => {
                         if (numberOfStopPlaces > 0) {
                             onLayoutChange(layouts, dashboardKey)
                         }

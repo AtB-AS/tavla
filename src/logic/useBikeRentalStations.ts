@@ -9,12 +9,12 @@ import useNearestPlaces from './useNearestPlaces'
 
 async function fetchBikeRentalStations(
     settings: Settings,
-    nearestBikeRentalStations: Array<string>,
-): Promise<Array<BikeRentalStation> | null> {
+    nearestBikeRentalStations: string[],
+): Promise<BikeRentalStation[] | null> {
     const { newStations, hiddenStations, hiddenModes } = settings
 
-    if (hiddenModes.includes('bicycle')) {
-        return []
+    if (hiddenModes.includes('bysykkel')) {
+        return
     }
 
     const allStationIds = [...newStations, ...nearestBikeRentalStations]
@@ -25,13 +25,11 @@ async function fetchBikeRentalStations(
     return allStations
 }
 
-export default function useBikeRentalStations(): Array<
-    BikeRentalStation
-> | null {
+export default function useBikeRentalStations(): BikeRentalStation[] | null {
     const [settings] = useSettingsContext()
-    const [bikeRentalStations, setBikeRentalStations] = useState<Array<
-        BikeRentalStation
-    > | null>(null)
+    const [bikeRentalStations, setBikeRentalStations] = useState<
+        BikeRentalStation[] | null
+    >(null)
     const nearestPlaces = useNearestPlaces(
         settings.coordinates,
         settings.distance,

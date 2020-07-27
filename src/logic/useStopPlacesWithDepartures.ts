@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react'
-import { LegMode } from '@entur/sdk'
 
 import { StopPlaceWithDepartures } from '../types'
 import {
@@ -15,9 +14,13 @@ import useNearestPlaces from './useNearestPlaces'
 
 async function fetchStopPlaceDepartures(
     settings: Settings,
-    nearestStopPlaces: Array<string>,
-): Promise<Array<StopPlaceWithDepartures>> {
-    const { newStops, hiddenStops, hiddenModes, hiddenRoutes } = settings
+    nearestStopPlaces: string[],
+): Promise<StopPlaceWithDepartures[]> {
+    const { newStops, hiddenStops, hiddenStopModes, hiddenRoutes } = settings
+
+    if (settings.hiddenModes.includes('kollektiv')) {
+        return
+    }
 
     const allStopPlaceIds = unique([...newStops, ...nearestStopPlaces]).filter(
         (id) => !hiddenStops.includes(id),
@@ -34,17 +37,12 @@ async function fetchStopPlaceDepartures(
         .filter(isNotNullOrUndefined)
         .sort((a, b) => a.name.localeCompare(b.name, 'no'))
 
-    const whiteListedModes = Object.values(LegMode).filter(
-        (mode: LegMode) => !hiddenModes.includes(mode),
-    )
-
     const departures = await service.getDeparturesFromStopPlaces(
         allStopPlaceIdsWithoutDuplicateNumber,
         {
             includeNonBoarding: false,
             limit: 200,
             limitPerLine: 3,
-            whiteListedModes,
         },
     )
 
@@ -69,9 +67,9 @@ async function fetchStopPlaceDepartures(
         const mappedAndFilteredDepartures = departuresForThisStopPlace.departures
             .map(transformDepartureToLineData)
             .filter(
-                ({ route }) =>
-                    !hiddenRoutes[stopId] ||
-                    !hiddenRoutes[stopId].includes(route),
+                ({ route, type }) =>
+                    !hiddenRoutes?.[stopId]?.includes(route) &&
+                    !hiddenStopModes?.[stopId]?.includes(type),
             )
 
         return {
@@ -83,18 +81,18 @@ async function fetchStopPlaceDepartures(
     return stopPlacesWithDepartures.filter(isNotNullOrUndefined)
 }
 
-export default function useStopPlacesWithDepartures(): Array<
-    StopPlaceWithDepartures
-> | null {
+export default function useStopPlacesWithDepartures():
+    | StopPlaceWithDepartures[]
+    | null {
     const [settings] = useSettingsContext()
+
     const nearestPlaces = useNearestPlaces(
         settings.coordinates,
         settings.distance,
     )
-    const [
-        stopPlacesWithDepartures,
-        setStopPlacesWithDepartures,
-    ] = useState<Array<StopPlaceWithDepartures> | null>(null)
+    const [stopPlacesWithDepartures, setStopPlacesWithDepartures] = useState<
+        StopPlaceWithDepartures[] | null
+    >(null)
 
     const nearestStopPlaces = useMemo(
         () =>

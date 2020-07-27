@@ -1,0 +1,22 @@
+@import '../../../assets/styles/import.scss';
+@import '../../../variables.scss';
+
+.radio {
+    height: 2rem;
+    width: 2rem;
+    border: 2px solid var(--tavla-border-color);
+    border-radius: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__checked {
+        background-color: var(--tavla-background-color);
+        border-color: var(--tavla-background-color);
+    }
+
+    &__icon {
+        width: 2rem;
+        height: 2rem;
+    }
+}

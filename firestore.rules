@@ -1,8 +1,19 @@
 rules_version = '2';
+
 service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, update, create: if request.auth.uid != null;
+  match /databases/{database}/documents/settings/{document} {
+    function hasValidDescription() {
+      return !('description' in request.resource.data) || request.resource.data.description.size() <= 50;
     }
+
+    function hasEditAccess() {
+      return request.auth != null && (resource.data.owners.size() == 0 || !('owners' in resource.data)
+        || resource.data.owners.hasAny([request.auth.uid]));
+    }
+
+    allow read;
+    allow create: if request.auth != null && hasValidDescription();
+    allow update: if request.auth != null && hasEditAccess() && hasValidDescription();
+    allow delete: if request.auth != null && hasEditAccess();
   }
 }

@@ -2,6 +2,7 @@ import lz from 'lz-string'
 
 import { DEFAULT_DISTANCE } from '../constants'
 import { Settings } from './index'
+import { Theme } from '../types'
 
 export const DEFAULT_SETTINGS: Settings = {
     hiddenStations: [],
@@ -9,10 +10,16 @@ export const DEFAULT_SETTINGS: Settings = {
     hiddenRoutes: {},
     distance: DEFAULT_DISTANCE,
     hiddenModes: [],
+    hiddenStopModes: {},
     newStations: [],
     newStops: [],
-    dashboard: 'Chrono',
+    dashboard: '',
     coordinates: undefined,
+    owners: [],
+    theme: Theme.DEFAULT,
+    logo: null,
+    logoSize: '32px',
+    description: '',
 }
 
 const VERSION_PREFIX_REGEX = /^v(\d)+::/

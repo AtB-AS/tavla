@@ -14,10 +14,12 @@ import './styles.scss'
 
 const LandingPage = ({ history }: Props): JSX.Element => {
     const addLocation = useCallback(
-        (position: Coordinates): void => {
+        (position: Coordinates, locationName: string): void => {
             const initialSettings = {
                 ...DEFAULT_SETTINGS,
                 coordinates: position,
+                boardName: locationName,
+                created: new Date(),
             }
 
             createSettings(initialSettings).then((docRef) => {
@@ -31,7 +33,7 @@ const LandingPage = ({ history }: Props): JSX.Element => {
         <div className="landing-page">
             <header>
                 <h1>
-                    <TavlaLogo className="landing-page__logo" theme="light" />
+                    <TavlaLogo className="landing-page__logo" />
                 </h1>
                 <h2>Sanntidstavla du selv kan tilpasse etter dine behov.</h2>
             </header>
