@@ -1,152 +1,319 @@
-import { createContext, useContext, useState, useCallback } from 'react'
-import { LegMode } from '@entur/sdk'
+import {
+    createContext,
+    useContext,
+    useState,
+    useCallback,
+    useEffect,
+} from 'react'
+import { useLocation } from 'react-router-dom'
+import { LegMode, Coordinates } from '@entur/sdk'
+import { Theme } from '../types'
 
-import { persist, restore } from './UrlStorage'
+import { persist as persistToFirebase, FieldTypes } from './FirestoreStorage'
+import {
+    persist as persistToUrl,
+    restore as restoreFromUrl,
+} from './UrlStorage'
+import { getSettings } from '../services/firebase'
+
+import { getDocumentId } from '../utils'
+import { useFirebaseAuthentication } from '../auth'
+
+export type Mode = 'bysykkel' | 'kollektiv'
 
 export interface Settings {
-    hiddenStations: Array<string>
-    hiddenStops: Array<string>
-    hiddenModes: Array<LegMode>
+    boardName?: string
+    coordinates?: Coordinates
+    hiddenStations: string[]
+    hiddenStops: string[]
+    hiddenModes: Mode[]
+    hiddenStopModes: { [stopPlaceId: string]: LegMode[] }
     hiddenRoutes: {
-        [stopPlaceId: string]: Array<string>
+        [stopPlaceId: string]: string[]
     }
     distance?: number
-    newStations?: Array<string>
-    newStops?: Array<string>
+    newStations?: string[]
+    newStops?: string[]
     dashboard?: string | void
+    owners?: string[]
+    theme?: Theme
+    logo?: string
+    logoSize?: string
+    description?: string
 }
 
 interface SettingsSetters {
-    setHiddenStations: (
-        hiddenStations: Array<string>,
-        options?: SetOptions,
-    ) => void
-    setHiddenStops: (hiddenStops: Array<string>, options?: SetOptions) => void
-    setHiddenModes: (hiddenModes: Array<LegMode>, options?: SetOptions) => void
-    setHiddenRoutes: (
-        hiddenModes: { [stopPlaceId: string]: Array<string> },
-        options?: SetOptions,
-    ) => void
-    setDistance: (distance: number, options?: SetOptions) => void
-    setNewStations: (newStations: Array<string>, options?: SetOptions) => void
-    setNewStops: (newStops: Array<string>, options?: SetOptions) => void
-    setDashboard: (dashboard: string, options?: SetOptions) => void
+    setBoardName: (boardName: string) => void
+    setHiddenStations: (hiddenStations: string[]) => void
+    setHiddenStops: (hiddenStops: string[]) => void
+    setHiddenStopModes: (hiddenModes: {
+        [stopPlaceId: string]: LegMode[]
+    }) => void
+    setHiddenModes: (modes: Mode[]) => void
+    setHiddenRoutes: (hiddenModes: { [stopPlaceId: string]: string[] }) => void
+    setDistance: (distance: number) => void
+    setNewStations: (newStations: string[]) => void
+    setNewStops: (newStops: string[]) => void
+    setDashboard: (dashboard: string) => void
+    setOwners: (owners: string[]) => void
+    setTheme: (theme: Theme) => void
+    setLogo: (url: string) => void
+    setLogoSize: (size: string) => void
+    setDescription: (description: string) => void
 }
-
-interface SetOptions {
-    persist?: boolean
-}
-
-type Persistor = () => void
 
 export const SettingsContext = createContext<
-    [Settings, SettingsSetters, Persistor]
+    [Settings | null, SettingsSetters]
 >([
-    restore(),
+    null,
     {
+        setBoardName: (): void => undefined,
         setHiddenStations: (): void => undefined,
         setHiddenStops: (): void => undefined,
+        setHiddenStopModes: (): void => undefined,
         setHiddenModes: (): void => undefined,
         setHiddenRoutes: (): void => undefined,
         setDistance: (): void => undefined,
         setNewStations: (): void => undefined,
         setNewStops: (): void => undefined,
         setDashboard: (): void => undefined,
+        setOwners: (): void => undefined,
+        setTheme: (): void => undefined,
+        setLogo: (): void => undefined,
+        setLogoSize: (): void => undefined,
+        setDescription: (): void => undefined,
     },
-    (): void => console.log('Persistor not set up yet'), // eslint-disable-line no-console
 ])
 
-export function useSettingsContext(): [Settings, SettingsSetters, Persistor] {
+export function useSettingsContext(): [Settings, SettingsSetters] {
     return useContext(SettingsContext)
 }
 
-export function useSettings(): [Settings, SettingsSetters, Persistor] {
-    const [settings, setSettings] = useState(restore())
+export function useSettings(): [Settings, SettingsSetters] {
+    const [settings, setSettings] = useState<Settings>()
 
-    const persistSettings = useCallback(() => {
-        persist(settings)
-    }, [settings])
+    const location = useLocation()
+    const user = useFirebaseAuthentication()
+
+    useEffect(() => {
+        const protectedPath =
+            location.pathname == '/' ||
+            location.pathname.split('/')[1] == 'permissionDenied' ||
+            location.pathname.split('/')[1] == 'privacy' ||
+            location.pathname.split('/')[1] == 'tavler'
+
+        if (protectedPath) {
+            setSettings(null)
+            return
+        }
+
+        const id = getDocumentId()
+
+        const defaultSettings = {
+            description: '',
+            logoSize: '32px',
+            theme: Theme.DEFAULT,
+            owners: [] as string[],
+            hiddenStopModes: {},
+        }
+
+        if (id) {
+            return getSettings(id).onSnapshot((document) => {
+                if (document.exists) {
+                    const data = document.data()
+
+                    const settingsWithDefaults = {
+                        ...defaultSettings,
+                        ...data,
+                    }
+
+                    // The fields under are added if missing, and if the tavle is not locked.
+                    // If a tavle is locked by a user, you are not allowed to write to
+                    // tavle unless you are logged in as the user who locked tavla, so we need
+                    // to check if you have edit access.
+                    const editAccess =
+                        data.owners === undefined ||
+                        data.owners.length === 0 ||
+                        data.owners.includes(user?.uid)
+
+                    if (editAccess) {
+                        Object.entries(defaultSettings).forEach(
+                            ([key, value]) => {
+                                if (data[key] === undefined) {
+                                    persistToFirebase(
+                                        getDocumentId(),
+                                        key,
+                                        value,
+                                    )
+                                }
+                            },
+                        )
+                    }
+
+                    setSettings(settingsWithDefaults as Settings)
+                } else {
+                    window.location.pathname = '/'
+                }
+            })
+        }
+
+        let positionArray: string[] = []
+        try {
+            positionArray = location.pathname
+                .split('/')[2]
+                .split('@')[1]
+                .split('-')
+                .join('.')
+                .split(/,/)
+        } catch (error) {
+            return
+        }
+
+        setSettings({
+            ...defaultSettings,
+            ...restoreFromUrl(),
+            coordinates: {
+                latitude: Number(positionArray[0]),
+                longitude: Number(positionArray[1]),
+            },
+        })
+    }, [location, user])
 
     const set = useCallback(
-        <T>(key: string, value: T, options?: SetOptions): void => {
+        <T>(key: string, value: FieldTypes): void => {
             const newSettings = { ...settings, [key]: value }
             setSettings(newSettings)
-            if (options && options.persist) {
-                persist(newSettings)
+
+            if (getDocumentId()) {
+                persistToFirebase(getDocumentId(), key, value)
+                return
             }
+            persistToUrl(newSettings)
         },
         [settings],
     )
 
+    const setBoardName = useCallback(
+        (boardName: string): void => {
+            set('boardName', boardName)
+        },
+        [set],
+    )
+
     const setHiddenStations = useCallback(
-        (newHiddenStations: Array<string>, options?: SetOptions): void => {
-            set('hiddenStations', newHiddenStations, options)
+        (newHiddenStations: string[]): void => {
+            set('hiddenStations', newHiddenStations)
         },
         [set],
     )
 
     const setHiddenStops = useCallback(
-        (newHiddenStops: Array<string>, options?: SetOptions): void => {
-            set('hiddenStops', newHiddenStops, options)
+        (newHiddenStops: string[]): void => {
+            set('hiddenStops', newHiddenStops)
+        },
+        [set],
+    )
+
+    const setHiddenStopModes = useCallback(
+        (newHiddenStopModes: { [stopPlaceId: string]: LegMode[] }): void => {
+            set('hiddenStopModes', newHiddenStopModes)
         },
         [set],
     )
 
     const setHiddenModes = useCallback(
-        (newHiddenModes: Array<LegMode>, options?: SetOptions): void => {
-            set('hiddenModes', newHiddenModes, options)
+        (newHiddenModes: Mode[]): void => {
+            set('hiddenModes', newHiddenModes)
         },
         [set],
     )
 
     const setHiddenRoutes = useCallback(
-        (
-            newHiddenRoutes: { [stopPlaceId: string]: Array<string> },
-            options?: SetOptions,
-        ): void => {
-            set('hiddenRoutes', newHiddenRoutes, options)
+        (newHiddenRoutes: { [stopPlaceId: string]: string[] }): void => {
+            set('hiddenRoutes', newHiddenRoutes)
         },
         [set],
     )
 
     const setDistance = useCallback(
-        (newDistance: number, options?: SetOptions): void => {
-            set('distance', newDistance, options)
+        (newDistance: number): void => {
+            set('distance', newDistance)
         },
         [set],
     )
 
     const setNewStations = useCallback(
-        (newStations: Array<string>, options?: SetOptions): void => {
-            set('newStations', newStations, options)
+        (newStations: string[]): void => {
+            set('newStations', newStations)
         },
         [set],
     )
 
     const setNewStops = useCallback(
-        (newStops: Array<string>, options?: SetOptions): void => {
-            set('newStops', newStops, options)
+        (newStops: string[]): void => {
+            set('newStops', newStops)
         },
         [set],
     )
 
     const setDashboard = useCallback(
-        (dashboard: string, options?: SetOptions): void => {
-            set('dashboard', dashboard, options)
+        (dashboard: string): void => {
+            set('dashboard', dashboard)
+        },
+        [set],
+    )
+
+    const setOwners = useCallback(
+        (owners: string[]): void => {
+            set('owners', owners)
+        },
+        [set],
+    )
+
+    const setTheme = useCallback(
+        (theme: Theme): void => {
+            set('theme', theme)
+        },
+        [set],
+    )
+    const setLogo = useCallback(
+        (url: string): void => {
+            set('logo', url)
+        },
+        [set],
+    )
+
+    const setLogoSize = useCallback(
+        (size: string): void => {
+            set('logoSize', size)
+        },
+        [set],
+    )
+
+    const setDescription = useCallback(
+        (description: string): void => {
+            set('description', description)
         },
         [set],
     )
 
     const setters = {
+        setBoardName,
         setHiddenStations,
         setHiddenStops,
         setHiddenModes,
+        setHiddenStopModes,
         setHiddenRoutes,
         setDistance,
         setNewStations,
         setNewStops,
         setDashboard,
+        setOwners,
+        setTheme,
+        setLogo,
+        setLogoSize,
+        setDescription,
     }
 
-    return [settings, setters, persistSettings]
+    return [settings, setters]
 }

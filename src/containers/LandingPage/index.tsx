@@ -6,16 +6,25 @@ import { Github, TavlaLogo } from '../../assets/icons'
 
 import coverPhoto from '../../assets/images/cover-photo.jpg'
 
+import { createSettings } from '../../services/firebase'
+import { DEFAULT_SETTINGS } from '../../settings/UrlStorage'
+
 import SearchPanel from './SearchPanel'
 import './styles.scss'
 
 const LandingPage = ({ history }: Props): JSX.Element => {
     const addLocation = useCallback(
-        (position: Coordinates): void => {
-            const pos = `${position.latitude},${position.longitude}`
-                .split('.')
-                .join('-')
-            history.push(`/dashboard/@${pos}/`)
+        (position: Coordinates, locationName: string): void => {
+            const initialSettings = {
+                ...DEFAULT_SETTINGS,
+                coordinates: position,
+                boardName: locationName,
+                created: new Date(),
+            }
+
+            createSettings(initialSettings).then((docRef) => {
+                history.push(`/t/${docRef.id}`)
+            })
         },
         [history],
     )
@@ -24,7 +33,7 @@ const LandingPage = ({ history }: Props): JSX.Element => {
         <div className="landing-page">
             <header>
                 <h1>
-                    <TavlaLogo className="landing-page__logo" theme="light" />
+                    <TavlaLogo className="landing-page__logo" />
                 </h1>
                 <h2>Sanntidstavla du selv kan tilpasse etter dine behov.</h2>
             </header>

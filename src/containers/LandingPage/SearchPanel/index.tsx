@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect } from 'react'
 import { Button } from '@entur/button'
-import { Coordinates, Feature } from '@entur/sdk'
+import { Coordinates, Feature, convertFeatureToLocation } from '@entur/sdk'
 import { Dropdown } from '@entur/dropdown'
 
 import service from '../../../service'
@@ -13,6 +13,20 @@ interface Item {
     value: string
     label: string
     coordinates?: Coordinates
+}
+
+async function getStopPlace(coordinates: {
+    latitude: number
+    longitude: number
+}): Promise<string> {
+    return await service
+        .getFeaturesReverse(coordinates, {
+            size: 1,
+            radius: 1000,
+        })
+        .then((result) => {
+            return convertFeatureToLocation(result[0]).name
+        })
 }
 
 function mapFeaturesToItems(features: Feature[]): Item[] {
@@ -28,7 +42,7 @@ function mapFeaturesToItems(features: Feature[]): Item[] {
     })
 }
 
-function getErrorMessage(error): string {
+function getErrorMessage(error: PositionError): string {
     switch (error.code) {
         case error.PERMISSION_DENIED:
             return 'Du må godta bruk av posisjon i nettleseren før vi kan hente den.'
@@ -59,9 +73,11 @@ const SearchPanel = ({ handleCoordinatesSelected }: Props): JSX.Element => {
 
     const getAddressFromPosition = (position: Coordinates): void => {
         setChosenCoord(position)
-        setLocation({
-            hasLocation: true,
-            selectedLocationName: YOUR_POSITION,
+        getStopPlace(position).then((locationName) => {
+            setLocation({
+                hasLocation: true,
+                selectedLocationName: locationName,
+            })
         })
     }
 
@@ -74,7 +90,7 @@ const SearchPanel = ({ handleCoordinatesSelected }: Props): JSX.Element => {
         getAddressFromPosition(position)
     }
 
-    const handleDeniedLocation = (error): void => {
+    const handleDeniedLocation = (error: PositionError): void => {
         refreshLocationPermission()
         setErrorMessage(getErrorMessage(error))
         setLocation({
@@ -83,9 +99,10 @@ const SearchPanel = ({ handleCoordinatesSelected }: Props): JSX.Element => {
         })
     }
 
-    const onItemSelected = (item: Item): void => {
+    const onItemSelected = (item: Item | null): void => {
+        if (!item) return
         if (item.value === YOUR_POSITION) {
-            setLocation(previousLocation => ({
+            setLocation((previousLocation) => ({
                 ...previousLocation,
                 selectedLocationName: YOUR_POSITION,
             }))
@@ -103,10 +120,13 @@ const SearchPanel = ({ handleCoordinatesSelected }: Props): JSX.Element => {
         }
     }
 
-    const handleGoToBoard = (event): void => {
+    const handleGoToBoard = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault()
         if (chosenCoord) {
-            handleCoordinatesSelected(chosenCoord)
+            handleCoordinatesSelected(
+                chosenCoord,
+                location.selectedLocationName,
+            )
         }
     }
 
@@ -159,7 +179,10 @@ const SearchPanel = ({ handleCoordinatesSelected }: Props): JSX.Element => {
 }
 
 interface Props {
-    handleCoordinatesSelected: (choseCoord: Coordinates | null) => void
+    handleCoordinatesSelected: (
+        choseCoord: Coordinates | null,
+        locationName: string,
+    ) => void
 }
 
 export default memo(SearchPanel)

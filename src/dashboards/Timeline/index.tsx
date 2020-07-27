@@ -1,16 +1,23 @@
-import React, { Fragment, useMemo } from 'react'
+import React, { Fragment, useMemo, useEffect, useState } from 'react'
 import { Heading2 } from '@entur/typography'
 import { LegBone } from '@entur/travel'
 import { LegMode } from '@entur/sdk'
 import { colors } from '@entur/tokens'
 
-import { getIcon, getIconColor, timeUntil, useCounter } from '../../utils'
-import { LineData } from '../../types'
+import {
+    getIcon,
+    getIconColor,
+    timeUntil,
+    useCounter,
+    getIconColorType,
+} from '../../utils'
+import { LineData, IconColorType } from '../../types'
 
 import { useStopPlacesWithDepartures } from '../../logic'
 import DashboardWrapper from '../../containers/DashboardWrapper'
 
 import './styles.scss'
+import { useSettingsContext } from '../../settings'
 
 const TICKS = [-1, 0, 1, 2, 3, 4, 5, 10, 15, 20, 30, 60]
 
@@ -27,20 +34,20 @@ function diffSincePreviousTick(minute: number): number {
 
 function competitorPosition(waitTime: number): number {
     const negativeTickOffset = Math.abs(
-        TICKS.filter(tick => tick < 0).reduce((a, b) => a + b, 0),
+        TICKS.filter((tick) => tick < 0).reduce((a, b) => a + b, 0),
     )
     return ZOOM * (waitTime + negativeTickOffset * 60)
 }
 
 function groupDeparturesByMode(
-    departures: Array<LineData>,
-): { [mode in LegMode]?: Array<LineData> } {
+    departures: LineData[],
+): { [mode in LegMode]?: LineData[] } {
     return departures.reduce(
         (map, departure) => ({
             ...map,
             [departure.type]: [...(map[departure.type] || []), departure],
         }),
-        {},
+        {} as { [mode in LegMode]?: LineData[] },
     )
 }
 
@@ -69,7 +76,15 @@ function getLegBonePattern(
     }
 }
 
-function Tick({ minutes, mode, index }): JSX.Element {
+interface TickProps {
+    minutes: number
+    mode: LegMode
+    index: number
+}
+
+function Tick({ minutes, mode, index }: TickProps): JSX.Element {
+    const [settings] = useSettingsContext()
+    const [color, setColor] = useState(colors.blues.blue30)
     let label = `${minutes} min`
     let marginLeft = -30
 
@@ -82,8 +97,13 @@ function Tick({ minutes, mode, index }): JSX.Element {
         label = ''
     }
 
+    useEffect(() => {
+        if (settings && !(minutes < 0)) {
+            setColor(getIconColor(mode, getIconColorType(settings.theme)))
+        }
+    }, [settings, minutes, mode])
+
     const width = diffSincePreviousTick(minutes) * (60 * ZOOM)
-    const color = minutes < 0 ? colors.blues.blue30 : getIconColor(mode)
 
     return (
         <div style={{ minWidth: width }}>
@@ -102,21 +122,43 @@ function Tick({ minutes, mode, index }): JSX.Element {
     )
 }
 
+interface TimelineData {
+    stopId: string
+    name: string
+    groupedDepartures: Array<[LegMode, LineData[]]>
+}
+
 const TimelineDashboard = ({ history }: Props): JSX.Element => {
     useCounter()
     const stopPlacesWithDepartures = useStopPlacesWithDepartures()
+    const [settings] = useSettingsContext()
+    const [iconColorType, setIconColorType] = useState<IconColorType>(
+        'contrast',
+    )
 
-    const data = useMemo(
+    useEffect(() => {
+        if (settings) {
+            setIconColorType(getIconColorType(settings.theme))
+        }
+    }, [settings])
+
+    const data: TimelineData[] = useMemo(
         () =>
             (stopPlacesWithDepartures || [])
                 .filter(({ departures }) => departures.length > 0)
-                .map(({ id, name, departures }) => ({
-                    stopId: id,
-                    name,
-                    groupedDepartures: Object.entries(
+                .map(({ id, name, departures }) => {
+                    const groupedDepartures = Object.entries(
                         groupDeparturesByMode(departures.reverse()),
-                    ).sort(([modeA], [modeB]) => orderModes(modeA, modeB)),
-                })),
+                    ).sort(([modeA], [modeB]) =>
+                        orderModes(modeA, modeB),
+                    ) as TimelineData['groupedDepartures']
+
+                    return {
+                        stopId: id,
+                        name,
+                        groupedDepartures,
+                    }
+                }),
         [stopPlacesWithDepartures],
     )
 
@@ -129,7 +171,11 @@ const TimelineDashboard = ({ history }: Props): JSX.Element => {
             <div className="timeline__body">
                 {data.map(({ stopId, name, groupedDepartures }) => (
                     <div key={stopId} className="timeline__stop">
-                        <Heading2 margin="none" style={{ margin: 0 }}>
+                        <Heading2
+                            className="timeline__heading"
+                            margin="none"
+                            style={{ margin: 0 }}
+                        >
                             {name}
                         </Heading2>
                         {groupedDepartures.map(([mode, departures]) => (
@@ -145,7 +191,10 @@ const TimelineDashboard = ({ history }: Props): JSX.Element => {
                                             const waitTime = timeUntil(
                                                 expectedDepartureTime,
                                             )
-                                            const icon = getIcon(type)
+                                            const icon = getIcon(
+                                                type,
+                                                iconColorType,
+                                            )
                                             return (
                                                 <div
                                                     key={id}

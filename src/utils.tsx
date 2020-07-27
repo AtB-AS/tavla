@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import differenceInMinutes from 'date-fns/differenceInMinutes'
@@ -18,16 +18,25 @@ import {
 
 import { colors } from '@entur/tokens'
 
-import { Coordinates, Departure, LegMode, TransportSubmode } from '@entur/sdk'
+import { Departure, LegMode, TransportSubmode } from '@entur/sdk'
 
-import { LineData, TileSubLabel } from './types'
+import { LineData, TileSubLabel, Theme, IconColorType } from './types'
+import { useSettingsContext } from './settings'
+
+export function isNotNullOrUndefined<T>(
+    thing: T | undefined | null,
+): thing is T {
+    return thing !== undefined && thing !== null
+}
 
 function isSubModeAirportLink(subMode?: string): boolean {
+    if (!subMode) return false
     const airportLinkTypes = ['airportLinkRail', 'airportLinkBus']
     return airportLinkTypes.includes(subMode)
 }
 
 function isSubModeCarFerry(subMode?: string): boolean {
+    if (!subMode) return false
     const carFerryTypes = [
         'localCarFerry',
         'internationalCarFerry',
@@ -38,29 +47,39 @@ function isSubModeCarFerry(subMode?: string): boolean {
     return carFerryTypes.includes(subMode)
 }
 
+export function getIconColorType(theme: Theme): IconColorType {
+    const defaultThemes = [Theme.LIGHT, Theme.GREY]
+    if (defaultThemes.includes(theme)) {
+        return 'default'
+    }
+    return 'contrast'
+}
+
 export function getIconColor(
     type: LegMode,
+    iconColorType: IconColorType,
     subType?: TransportSubmode,
 ): string {
-    if (isSubModeAirportLink(subType)) return colors.transport.contrast.plane
+    if (isSubModeAirportLink(subType))
+        return colors.transport[iconColorType].plane
 
     switch (type) {
         case 'bus':
-            return colors.transport.contrast.bus
+            return colors.transport[iconColorType].bus
         case 'bicycle':
-            return colors.transport.contrast.mobility
+            return colors.transport[iconColorType].mobility
         case 'water':
-            return colors.transport.contrast.ferry
+            return colors.transport[iconColorType].ferry
         case 'metro':
-            return colors.transport.contrast.metro
+            return colors.transport[iconColorType].metro
         case 'rail':
-            return colors.transport.contrast.train
+            return colors.transport[iconColorType].train
         case 'tram':
-            return colors.transport.contrast.tram
+            return colors.transport[iconColorType].tram
         case 'air':
-            return colors.transport.contrast.plane
+            return colors.transport[iconColorType].plane
         default:
-            return null
+            return colors.transport[iconColorType].walk
     }
 }
 
@@ -105,10 +124,11 @@ export function getTransportIconIdentifier(
 
 export function getIcon(
     legMode: LegMode,
+    iconColorType: IconColorType,
     subMode?: TransportSubmode,
     color?: string,
-): JSX.Element {
-    const colorToUse = color ?? getIconColor(legMode, subMode)
+): JSX.Element | null {
+    const colorToUse = color ?? getIconColor(legMode, iconColorType, subMode)
 
     const identifier = getTransportIconIdentifier(legMode, subMode)
 
@@ -134,23 +154,10 @@ export function getIcon(
     }
 }
 
-export function getPositionFromUrl(): Coordinates {
-    const positionArray = window.location.pathname
-        .split('/')[2]
-        .split('@')[1]
-        .split('-')
-        .join('.')
-        .split(/,/)
-    return {
-        latitude: Number(positionArray[0]),
-        longitude: Number(positionArray[1]),
-    }
-}
-
-export function groupBy<T>(
-    objectArray: Array<T>,
-    property: string,
-): { [key: string]: Array<T> } {
+export function groupBy<T extends { [key: string]: any }>(
+    objectArray: T[],
+    property: keyof T,
+): { [key: string]: T[] } {
     return objectArray.reduce((acc, obj) => {
         const key = obj[property]
         if (!acc[key]) {
@@ -158,7 +165,7 @@ export function groupBy<T>(
         }
         acc[key].push(obj)
         return acc
-    }, {})
+    }, {} as { [key: string]: any })
 }
 
 function formatDeparture(minDiff: number, departureTime: Date): string {
@@ -167,12 +174,12 @@ function formatDeparture(minDiff: number, departureTime: Date): string {
 }
 
 export function unique<T>(
-    array: Array<T>,
+    array: T[],
     isEqual: (a: T, b: T) => boolean = (a, b): boolean => a === b,
-): Array<T> {
+): T[] {
     return array.filter((item, index, items) => {
         const previousItems = items.slice(0, index)
-        return !previousItems.some(uniqueItem => isEqual(item, uniqueItem))
+        return !previousItems.some((uniqueItem) => isEqual(item, uniqueItem))
     })
 }
 
@@ -230,9 +237,9 @@ export function createTileSubLabel({
     }
 }
 
-export function toggleValueInList<T>(list: Array<T>, item: T): Array<T> {
+export function toggleValueInList<T>(list: T[], item: T): T[] {
     if (list.includes(item)) {
-        return list.filter(i => i !== item)
+        return list.filter((i) => i !== item)
     }
     return [...list, item]
 }
@@ -289,4 +296,58 @@ export interface Suggestion {
         latitude: number
         longitude: number
     }
+}
+
+// Matches the ID in an URL, if it exists.
+const ID_REGEX = /^\/(?:t|(?:admin))\/(\w+)(?:\/)?/
+
+export const getDocumentId = (): string | undefined => {
+    const id = window.location.pathname.match(ID_REGEX)
+
+    if (id) {
+        return id[1]
+    }
+}
+
+export function useFormFields<T>(
+    initialState: T,
+): [
+    T,
+    (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void,
+] {
+    const [values, setValues] = useState<T>(initialState)
+
+    return [
+        values,
+        function (
+            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+        ): void {
+            setValues({
+                ...values,
+                [event.target.id]: event.target.value,
+            })
+        },
+    ]
+}
+
+export function usePrevious<T>(value: T): T {
+    const ref = useRef<T>()
+
+    useEffect(() => {
+        ref.current = value
+    }, [value])
+
+    return ref.current
+}
+
+export const useThemeColor = (
+    color: { [key: string]: string },
+    fallback: string,
+): string => {
+    const [settings] = useSettingsContext()
+    return color[settings?.theme] || fallback
+}
+
+export function isDarkOrDefaultTheme(theme: Theme): boolean {
+    return theme === Theme.DARK || theme === Theme.DEFAULT
 }

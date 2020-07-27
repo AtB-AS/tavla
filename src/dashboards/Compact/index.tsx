@@ -1,5 +1,5 @@
 import React from 'react'
-import { WidthProvider, Responsive } from 'react-grid-layout'
+import { WidthProvider, Responsive, Layouts, Layout } from 'react-grid-layout'
 
 import { useBikeRentalStations, useStopPlacesWithDepartures } from '../../logic'
 import DashboardWrapper from '../../containers/DashboardWrapper'
@@ -19,11 +19,11 @@ import {
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
 
-function onLayoutChange(layouts, key): void {
+function onLayoutChange(layouts: Layouts, key: string): void {
     saveToLocalStorage(key, layouts)
 }
 
-function getDataGrid(index): object {
+function getDataGrid(index: number): { [key: string]: number } {
     return {
         w: 1,
         maxW: 1,
@@ -56,7 +56,8 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
     const anyBikeRentalStations =
         bikeRentalStations && bikeRentalStations.length
 
-    const localStorageLayout = getFromLocalStorage(history.location.key)
+    const localStorageLayout: Layouts =
+        getFromLocalStorage(history.location.key) || {}
     const extraCols = anyBikeRentalStations ? 1 : 0
 
     // Limit column count if there are not enough space
@@ -99,7 +100,10 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                     breakpoints={gridBreakpoints}
                     compactType="horizontal"
                     isResizable={true}
-                    onLayoutChange={(layout, layouts) => {
+                    onLayoutChange={(
+                        layout: Layout[],
+                        layouts: Layouts,
+                    ): void => {
                         if (numberOfStopPlaces > 0) {
                             onLayoutChange(layouts, dashboardKey)
                         }

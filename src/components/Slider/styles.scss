@@ -1,4 +1,25 @@
 @import '../../assets/styles/import.scss';
+@import '../../variables.scss';
+
+@mixin reset-track {
+    width: 100%;
+    height: 0.3rem;
+    cursor: pointer;
+    background: var(--tavla-slider-color);
+    border: none;
+    background-image: -webkit-gradient(linear, left top, right top, color-stop(var(--slider-progress), var(--tavla-slider-fill-color)),
+                                       color-stop(var(--slider-progress), var(--tavla-slider-color)));
+}
+
+@mixin reset-thumb {
+    border: 1px solid var(--tavla-slider-thumb-color);
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 100%;
+    background: var(--tavla-slider-thumb-color);
+    box-shadow: 0px 0.125rem 0.25rem 0px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
 
 .slider {
     width: 100%;
@@ -14,7 +35,7 @@
         div {
             height: 20px;
             width: 50px;
-            color: $colors-blues-blue60;
+            color: var(--tavla-label-font-color);
             font-size: 14px;
             font-weight: 400;
             line-height: 16px;
@@ -22,77 +43,38 @@
     }
 
     &::-webkit-slider-thumb {
+        @include reset-thumb();
         -webkit-appearance: none;
-        border: 1px solid $colors-brand-coral;
-        height: 1.25rem;
-        width: 1.25rem;
-        border-radius: 100%;
-        background: $colors-brand-coral;
-        cursor: pointer;
         margin-top: -0.6em;
     }
 
     &::-moz-range-thumb {
-        border: 1px solid $colors-brand-coral;
-        height: 1.25rem;
-        width: 1.25rem;
-        border-radius: 100%;
-        background: $colors-brand-coral;
-        cursor: pointer;
+        @include reset-thumb();
+
     }
 
     &::-ms-thumb {
-        border: 1px solid $colors-brand-coral;
-        height: 1.25rem;
-        width: 1.25rem;
-        border-radius: 100%;
-        background: $colors-brand-coral;
-        cursor: pointer;
+        @include reset-thumb();
     }
 
     &::-webkit-slider-runnable-track {
-        width: 100%;
-        height: 0.5rem;
-        cursor: pointer;
-        background: white;
-        border: 0.2px solid white;
+        @include reset-track();
     }
 
     &::-moz-range-track {
-        width: 100%;
-        height: 0.5rem;
-        cursor: pointer;
-        background: white;
-        border: 0.2px solid white;
+        @include reset-track();
+
     }
 
     &::-ms-track {
-        width: 100%;
-        height: 0.5rem;
-        cursor: pointer;
-        border: 0.2px solid white;
-        background: transparent;
-        border-color: transparent;
-        color: transparent;
-    }
-
-    &::-ms-fill-lower {
-        background: $colors-brand-coral;
-    }
-
-    &::-ms-fill-upper {
-        background: white;
-    }
-
-    &::-ms-fill-left {
-        background: white;
+        @include reset-track();
     }
 
     &:focus {
         outline: none;
 
         &::-webkit-slider-runnable-track {
-            background: white;
+            @include reset-track();
         }
     }
 }

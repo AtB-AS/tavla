@@ -1,23 +1,20 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BikeRentalStation } from '@entur/sdk'
 import { Loader } from '@entur/loader'
-import { SubParagraph } from '@entur/typography'
-import { Contrast } from '@entur/layout'
 
-import { useCounter } from '../../utils'
+import { useCounter, isDarkOrDefaultTheme } from '../../utils'
+import { useSettingsContext } from '../../settings'
 
-import errorImage from '../../assets/images/noStops.png'
-import TavlaLogo from '../../assets/icons/tavlaLogo'
-import { Clock } from '../../components'
+import BottomMenu from './BottomMenu'
+import EnturLogo from '../../assets/icons/enturLogo'
+import { NoStopsOnTavle } from './../Error/ErrorPages'
 import { StopPlaceWithDepartures } from '../../types'
-
-import Footer from './Footer'
+import ThemeContrastWrapper from '../ThemeWrapper/ThemeContrastWrapper'
 
 import './styles.scss'
 
 function DashboardWrapper(props: Props): JSX.Element {
     const secondsSinceMount = useCounter()
-
     const {
         className,
         children,
@@ -25,15 +22,6 @@ function DashboardWrapper(props: Props): JSX.Element {
         bikeRentalStations,
         stopPlacesWithDepartures,
     } = props
-
-    const onSettingsButtonClick = useCallback(
-        event => {
-            const path = window.location.pathname.split('@')[1]
-            history.push(`/admin/@${path}`)
-            event.preventDefault()
-        },
-        [history],
-    )
 
     const [initialLoading, setInitialLoading] = useState<boolean>(true)
 
@@ -52,7 +40,7 @@ function DashboardWrapper(props: Props): JSX.Element {
         (!stopPlacesWithDepartures || !stopPlacesWithDepartures.length) &&
         (!bikeRentalStations || !bikeRentalStations.length)
 
-    const renderContents = (): JSX.Element | Array<JSX.Element> => {
+    const renderContents = (): JSX.Element | JSX.Element[] => {
         if (!noData && !initialLoading) {
             return children
         }
@@ -65,46 +53,41 @@ function DashboardWrapper(props: Props): JSX.Element {
             return <Loader>Laster...</Loader>
         }
 
-        return (
-            <div className="dashboard-wrapper__no-stops">
-                <img src={errorImage} />
-                <div>
-                    <header>Er du utenfor allfarvei?</header>
-                    Vi finner ingen stoppesteder her, trykk på tannhjulet for å
-                    endre på søket.
-                </div>
-            </div>
-        )
+        return <NoStopsOnTavle />
+    }
+
+    const [{ logo, theme }] = useSettingsContext()
+
+    const getEnturLogo = (): JSX.Element => {
+        const logoColor = isDarkOrDefaultTheme(theme) ? 'white' : 'black'
+        return <EnturLogo height="24px" style={logoColor} />
     }
 
     return (
-        <Contrast className={`dashboard-wrapper ${className}`}>
-            <div className="dashboard-wrapper__top">
-                <div className="dashboard-wrapper__logo-wrapper">
-                    <TavlaLogo className="dashboard-wrapper__logo" />
-                    <SubParagraph>
-                        Finn din rute på entur.no eller i Entur-appen.
-                    </SubParagraph>
-                </div>
-                <Clock className="dashboard-wrapper__clock" />
+        <ThemeContrastWrapper useContrast={isDarkOrDefaultTheme(theme)}>
+            <div className={`dashboard-wrapper ${className}`}>
+                {renderContents()}
+                <ThemeContrastWrapper useContrast={true}>
+                    {logo && (
+                        <div className="dashboard-wrapper__byline">
+                            Tjenesten leveres av {getEnturLogo()}
+                        </div>
+                    )}
+                    <BottomMenu
+                        className="dashboard-wrapper__bottom-menu"
+                        history={history}
+                    />
+                </ThemeContrastWrapper>
             </div>
-            {renderContents()}
-            <Contrast>
-                <Footer
-                    className="dashboard-wrapper__footer"
-                    history={history}
-                    onSettingsButtonClick={onSettingsButtonClick}
-                />
-            </Contrast>
-        </Contrast>
+        </ThemeContrastWrapper>
     )
 }
 
 interface Props {
-    stopPlacesWithDepartures?: Array<StopPlaceWithDepartures> | null
-    bikeRentalStations?: Array<BikeRentalStation> | null
+    stopPlacesWithDepartures?: StopPlaceWithDepartures[] | null
+    bikeRentalStations?: BikeRentalStation[] | null
     className: string
-    children: JSX.Element | Array<JSX.Element>
+    children: JSX.Element | JSX.Element[]
     history: any
 }
 

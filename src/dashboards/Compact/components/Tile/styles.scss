@@ -1,8 +1,10 @@
 @import '../../../../assets/styles/import.scss';
+@import '../../../../variables.scss';
 
 .tile {
     height: 100%;
     width: 25rem;
+    background-color: var(--tavla-box-background-color);
     color: white;
     flex: none;
     padding: 2rem;
@@ -16,6 +18,7 @@
 
         h2 {
             margin: 0;
+            color: var(--tavla-font-color);
         }
     }
 

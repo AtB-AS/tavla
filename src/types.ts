@@ -20,14 +20,14 @@ export interface Line {
 }
 
 export type StopPlaceWithDepartures = StopPlace & {
-    departures?: Array<LineData>
+    departures: LineData[]
 }
 
-export type StopPlaceWithLines = StopPlace & { lines: Array<Line> }
+export type StopPlaceWithLines = StopPlace & { lines: Line[] }
 
 export interface NearestPlaces {
-    bikeRentalStationIds: Array<string>
-    stopPlaceIds: Array<string>
+    bikeRentalStationIds: string[]
+    stopPlaceIds: string[]
 }
 
 export interface TileSubLabel {
@@ -36,3 +36,12 @@ export interface TileSubLabel {
     hasSituation?: boolean
     isRealtime?: boolean
 }
+
+export enum Theme {
+    DEFAULT = 'default',
+    DARK = 'dark',
+    LIGHT = 'light',
+    GREY = 'grey',
+}
+
+export type IconColorType = 'default' | 'contrast'

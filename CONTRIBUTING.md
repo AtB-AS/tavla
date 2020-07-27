@@ -52,19 +52,19 @@ We are using Firebase for hosting tavla.entur.no (Firebase Hosting) and we are u
 PS! Make sure you are following the licenses and terms for Tavla: https://github.com/entur/tavla#licenses-and-terms
 
 ### Create a project
-First of all you need a Firebase _project. Go to https://console.firebase.google.com to set up a new project.
+First of all you need a Firebase _project_. Go to https://console.firebase.google.com to set up a new project.
 
 When the project is set up, add a new Web app to your project from the Project Overview. You don't need to "Add Firebase SDK" – that's already done in this repo.
 
-### Download config for local development
-In order to ease local development and allow hot reloading and such, we need to reference the Firebase config through an environment variable called `FIREBASE_CONFIG`, rather than rely on the auto-config that Firebase provides through `firebase serve`.
+### Download config
+We need to reference the Firebase config through an environment variable called `FIREBASE_CONFIG`.
 
-Press the cogwheel next to "Project Settings" in the left menu and go to "Project settings". Scroll down and find the Config under "Firebase SDK snippet". Copy the config object (the part after `const firebaseConfig = `). You need to stringify this and put it in your `.env.staging` file. To stringify it, you can open the browser console and run `JSON.stringify(<CONFIG OBJECT>)`. Set the resulting string as the value for `FIREBASE_CONFIG` in the .env.staging file:
+Press the cogwheel next to "Project Settings" in the left menu and go to "Project settings". Scroll down and find the Config under "Firebase SDK snippet". Copy the config object (the part after `const firebaseConfig = `). You need to stringify this and put it in your `.env.staging` file. To stringify it, you can open the browser console and run `JSON.stringify(<CONFIG OBJECT>)`. Set the resulting string as the value for `FIREBASE_CONFIG` in the .env.prod file:
 
 ```diff
-# .env.staging
-JOURNEYPLANNER_HOST=https://api.staging.entur.io/journey-planner/v2
-GEOCODER_HOST=https://api.staging.entur.io/geocoder/v1
+# .env.prod
+JOURNEYPLANNER_HOST=https://api.entur.io/journey-planner/v2
+GEOCODER_HOST=https://api.entur.io/geocoder/v1
 -FIREBASE_CONFIG='{"apiKey":"AIz...
 +FIREBASE_CONFIG='{"apiKey":"<YOUR_CONFIG ... >
 ```
@@ -105,7 +105,7 @@ firebase login
 When that's done, run
 
 ```
-npm run deploy
+npm run deploy:prod
 ```
 
 This will build the app and deploy it to the `prod` project that is defined in `.firebaserc`.
@@ -123,7 +123,7 @@ Properties of a dashboard:
 
 Although the dashboards are independent and might look totally different, they have some things in common:
 * They use some React hooks that handle data fetching (`useStopPlacesWithDepartures`, `useBikeRentalStations`)
-* They use the DashboardWrapper component to add the default header and footer
+* They use the DashboardWrapper component to add the default header and menu
 
 Adding a new Dashboard is easy. Let's go through it!
 
@@ -178,7 +178,7 @@ interface Props {
 export default Sooon
 ```
 
-The DashboardWrapper component will give us the default header and footer. `useStopPlaceDepartures` is a [React hook](https://reactjs.org/docs/hooks-intro.html) that will give us relevant stop place departures data based on the configurations in the admin panel every 30 seconds.
+The DashboardWrapper component will give us the default header and menu. `useStopPlaceDepartures` is a [React hook](https://reactjs.org/docs/hooks-intro.html) that will give us relevant stop place departures data based on the configurations in the admin panel every 30 seconds.
 
 There is no way to select your new dashboard yet, so let's fix that.
 
@@ -206,34 +206,46 @@ function getDashboardComponent(dashboardKey?: string | void) {
 }
 ```
 
-In `src/containers/DashboardWrapper/Footer/index.tsx`, add an entry for your dashboard in the picker:
+In `src/containers/Admin/VisningTab/index.tsx`, add an entry for your dashboard in the picker:
 
 ```diff
-<form onSubmit={submit}>
-    <RadioBox value="" selected={choice === ''} onChange={onChange}>
-        <Heading3>Kompakt</Heading3>
-        <Paragraph>De tre neste avgangene til en linje vises på samme rad.</Paragraph>
-    </RadioBox>
-    <RadioBox value="Chrono" selected={choice === 'Chrono'} onChange={onChange}>
-        <Heading3>Kronologisk</Heading3>
-        <Paragraph>Hver avgang får sin egen rad.</Paragraph>
-    </RadioBox>
-    <RadioBox value="Timeline" selected={choice === 'Timeline'} onChange={onChange}>
-        <Heading3>Tidslinja</Heading3>
-        <Paragraph>Avgangene ruller mot høyre mot målet. Ikke egnet for bysykkel.</Paragraph>
-    </RadioBox>
-+   <RadioBox value="Sooon" selected={choice === 'Sooon'} onChange={onChange}>
-+       <Heading3>Sooon</Heading3>
-+       <Paragraph>A dashboard that says "sooooon".</Paragraph>
-+   </RadioBox>
-    <div className="footer-modal__buttons">
-        <Button variant="primary" type="submit">Lagre valg</Button>
-        <Button variant="secondary" type="button" onClick={(): void => setModalOpen(false)}>Avbryt</Button>
-    </div>
-</form>
+<div className="visning-wrapper">
+    <RadioCard
+        title="Kompakt (standard)"
+        description="Alle avgangene til en linje vises på en samlet rad. Ikke egnet for linjer som varierer spor/plattform."
+        cardValue="Compact"
+        selected={radioValue === 'Compact'}
+        preview={CompactSVG}
+        callback={(val): void => updateChoice(val)}
+    />
+    <RadioCard
+        title="Kronologisk"
+        description="Avgangene vises i en kronologisk rekkefølge. Egner seg godt for linjer som varierer spor/plattform."
+        cardValue="Chrono"
+        selected={radioValue === 'Chrono'}
+        preview={ChronoSVG}
+        callback={(val): void => updateChoice(val)}
+    />
++   <RadioCard
++       title="Sooon"
++       description="A dashboard that says "sooooon"."
++       cardValue="Sooon"
++       selected={radioValue === 'Sooon'}
++       preview={SooonSVG}
++       callback={(val): void => updateChoice(val)}
++   />
+    <RadioCard
+        title="Tidslinje"
+        description="Avgangene vises i en visualisert fremstilling. Viser ikke bysykkel, spor/plattform eller avvik."
+        cardValue="Timeline"
+        selected={radioValue === 'Timeline'}
+        preview={TimelineSVG}
+        callback={(val): void => updateChoice(val)}
+    />
+</div>
 ```
 
-That's it! You should now be able to select your dashboard in the menu, And you should see the "Hello World" heading.
+That's it! You should now be able to select your dashboard in the admin tab, and you should see the "Hello World" heading.
 
 
 #### Step 4: Displaying some data

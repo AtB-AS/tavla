@@ -1,195 +1,57 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { Button } from '@entur/button'
-import { BikeRentalStation, LegMode, TransportSubmode } from '@entur/sdk'
-import { Contrast } from '@entur/layout'
-
-import StopPlacePanel from './StopPlacePanel'
-import BikePanel from './BikePanel'
-import ModePanel from './ModePanel'
-import DistanceEditor from './DistanceEditor'
-
-import { getPositionFromUrl, useDebounce, isLegMode, unique } from '../../utils'
-
-import service, { getStopPlacesWithLines } from '../../service'
-import { StopPlaceWithLines } from '../../types'
-
-import { useSettingsContext } from '../../settings'
-import { useNearestPlaces } from '../../logic'
-
-import AdminHeader from './AdminHeader'
-
-import BikePanelSearch from './BikeSearch'
-import StopPlaceSearch from './StopPlaceSearch'
+import React, { useState } from 'react'
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@entur/tab'
+import { ClosedLockIcon } from '@entur/icons'
 
 import './styles.scss'
+import { useFirebaseAuthentication } from '../../auth'
 
-const AdminPage = ({ history }: Props): JSX.Element => {
-    const position = useMemo(() => getPositionFromUrl(), [])
-    const [settings, settingsSetters, persistSettings] = useSettingsContext()
+import LogoTab from './LogoTab'
+import EditTab from './EditTab'
+import ThemeTab from './ThemeTab'
+import VisningTab from './DashboardPickerTab'
+import FloatingButtons from './FloatingButtons'
 
-    const { distance, hiddenModes, newStops, newStations } = settings
+const AdminPage = (): JSX.Element => {
+    const user = useFirebaseAuthentication()
 
-    const {
-        setHiddenModes,
-        setDistance,
-        setNewStops,
-        setNewStations,
-    } = settingsSetters
+    const [currentIndex, setCurrentIndex] = useState<number>(0)
 
-    const [stopPlaces, setStopPlaces] = useState<Array<StopPlaceWithLines>>([])
-    const [stations, setStations] = useState<Array<BikeRentalStation>>([])
-
-    const debouncedDistance = useDebounce(distance, 300)
-    const nearestPlaces = useNearestPlaces(position, debouncedDistance)
-
-    const nearestStopPlaceIds = useMemo(
-        () =>
-            nearestPlaces
-                .filter(({ type }) => type === 'StopPlace')
-                .map(({ id }) => id),
-        [nearestPlaces],
-    )
-
-    useEffect(() => {
-        const ids = [...newStops, ...nearestStopPlaceIds]
-        if (ids.length) {
-            getStopPlacesWithLines(ids.map(id => id.replace(/-\d+$/, ''))).then(
-                resultingStopPlaces => {
-                    setStopPlaces(
-                        resultingStopPlaces.map((s, index) => ({
-                            ...s,
-                            id: ids[index],
-                        })),
-                    )
-                },
-            )
-        }
-    }, [nearestPlaces, nearestStopPlaceIds, newStops])
-
-    useEffect(() => {
-        const nearestBikeRentalStationIds = nearestPlaces
-            .filter(({ type }) => type === 'BikeRentalStation')
-            .map(({ id }) => id)
-        const ids = [...newStations, ...nearestBikeRentalStationIds]
-        if (ids.length) {
-            service.getBikeRentalStations(ids).then(freshStations => {
-                const sortedStations = freshStations.sort(
-                    (a: BikeRentalStation, b: BikeRentalStation) =>
-                        a.name.localeCompare(b.name, 'no'),
-                )
-                setStations(sortedStations)
-            })
-        }
-    }, [nearestPlaces, newStations])
-
-    const addNewStop = useCallback(
-        (stopId: string) => {
-            const numberOfDuplicates = [...nearestStopPlaceIds, ...newStops]
-                .map(id => id.replace(/-\d+$/, ''))
-                .filter(id => id === stopId).length
-            const id = !numberOfDuplicates
-                ? stopId
-                : `${stopId}-${numberOfDuplicates}`
-            setNewStops([...newStops, id])
-        },
-        [nearestStopPlaceIds, newStops, setNewStops],
-    )
-
-    const addNewStation = useCallback(
-        (stationId: string) => {
-            setNewStations([...newStations, stationId])
-        },
-        [newStations, setNewStations],
-    )
-
-    const modes: Array<{
-        mode: LegMode
-        subMode?: TransportSubmode
-    }> = useMemo(() => {
-        const modesFromStopPlaces = stopPlaces
-            .map(stopPlace =>
-                stopPlace.lines.map(({ transportMode, transportSubmode }) => ({
-                    mode: transportMode,
-                    subMode: transportSubmode,
-                })),
-            )
-            .reduce((a, b) => [...a, ...b], [])
-            .filter(({ mode }) => isLegMode(mode))
-
-        const uniqModesFromStopPlaces = unique(
-            modesFromStopPlaces,
-            (a, b) => a.mode === b.mode,
-        )
-
-        return stations.length
-            ? [{ mode: 'bicycle' }, ...uniqModesFromStopPlaces]
-            : uniqModesFromStopPlaces
-    }, [stations.length, stopPlaces])
-
-    const discardSettingsAndGoToDash = useCallback(() => {
-        // eslint-disable-next-line no-restricted-globals
-        const answerIsYes = confirm(
-            'Er du sikker på at du vil gå tilbake uten å lagre endringene dine? Lagre-knapp finner du nederst til høyre på siden.',
-        )
-        if (answerIsYes) {
-            window.location.pathname = window.location.pathname.replace(
-                'admin',
-                'dashboard',
-            )
-        }
-    }, [])
-
-    const submitSettingsAndGoToDash = useCallback(() => {
-        persistSettings()
-        history.push(window.location.pathname.replace('admin', 'dashboard'))
-    }, [history, persistSettings])
+    const lockIcon = !(user && !user.isAnonymous) && <ClosedLockIcon />
 
     return (
-        <Contrast className="admin">
-            <AdminHeader goBackToDashboard={discardSettingsAndGoToDash} />
-            <div className="admin__content">
-                <div className="admin__selection-panel">
-                    <DistanceEditor
-                        distance={distance}
-                        onDistanceUpdated={setDistance}
-                    />
-                    <ModePanel
-                        transportModes={modes}
-                        disabledModes={hiddenModes}
-                        onModesChange={setHiddenModes}
-                    />
-                </div>
-                <div className="admin__selection-panel">
-                    <div className="search-stop-places">
-                        <StopPlaceSearch handleAddNewStop={addNewStop} />
-                    </div>
-                    <StopPlacePanel stops={stopPlaces} />
-                </div>
-                {!hiddenModes.includes('bicycle') ? (
-                    <div className="admin__selection-panel">
-                        <div className="search-stop-places">
-                            <BikePanelSearch
-                                position={position}
-                                onSelected={addNewStation}
-                            />
-                        </div>
-                        <BikePanel stations={stations} />
-                    </div>
-                ) : null}
-            </div>
-            <Button
-                className="admin__submit-button"
-                variant="primary"
-                onClick={submitSettingsAndGoToDash}
+        <div className="admin">
+            <Tabs
+                index={currentIndex}
+                onChange={setCurrentIndex}
+                className="admin__tabs"
             >
-                Oppdater tavla
-            </Button>
-        </Contrast>
+                <TabList className="admin__tabs">
+                    <Tab className="admin__tabs">Rediger innhold</Tab>
+                    <Tab>Velg visning</Tab>
+                    <Tab>Velg farger</Tab>
+                    <Tab>Last opp logo {lockIcon}</Tab>
+                </TabList>
+                <TabPanels className="admin__tabs__tab-panels">
+                    <TabPanel>
+                        <EditTab />
+                    </TabPanel>
+                    <TabPanel>
+                        <VisningTab />
+                    </TabPanel>
+                    <TabPanel>
+                        <ThemeTab />
+                    </TabPanel>
+                    <TabPanel>
+                        <LogoTab
+                            tabIndex={currentIndex}
+                            setTabIndex={setCurrentIndex}
+                        />
+                    </TabPanel>
+                </TabPanels>
+            </Tabs>
+            <FloatingButtons />
+        </div>
     )
-}
-
-interface Props {
-    history: any
 }
 
 export default AdminPage

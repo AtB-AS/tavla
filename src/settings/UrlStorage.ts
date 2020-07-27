@@ -2,15 +2,24 @@ import lz from 'lz-string'
 
 import { DEFAULT_DISTANCE } from '../constants'
 import { Settings } from './index'
+import { Theme } from '../types'
 
-const DEFAULT_SETTINGS: Settings = {
+export const DEFAULT_SETTINGS: Settings = {
     hiddenStations: [],
     hiddenStops: [],
     hiddenRoutes: {},
     distance: DEFAULT_DISTANCE,
     hiddenModes: [],
+    hiddenStopModes: {},
     newStations: [],
     newStops: [],
+    dashboard: '',
+    coordinates: undefined,
+    owners: [],
+    theme: Theme.DEFAULT,
+    logo: null,
+    logoSize: '32px',
+    description: '',
 }
 
 const VERSION_PREFIX_REGEX = /^v(\d)+::/
@@ -21,14 +30,17 @@ function migrateFromV0(settings: string): Settings {
         return DEFAULT_SETTINGS
     }
     const parsed = JSON.parse(atob(settings))
-    const migratedHiddenRoutes = parsed.hiddenRoutes
-        .map(idAndRouteString => idAndRouteString.split('$'))
+    const migratedHiddenRoutes: Settings['hiddenRoutes'] = parsed.hiddenRoutes
+        .map((idAndRouteString: string) => idAndRouteString.split('$'))
         .reduce(
-            (routeMap, [stopPlaceId, routeName]) => ({
+            (
+                routeMap: Settings['hiddenRoutes'],
+                [stopPlaceId, routeName]: [string, string],
+            ) => ({
                 ...routeMap,
                 [stopPlaceId]: [...(routeMap[stopPlaceId] || []), routeName],
             }),
-            {},
+            {} as Settings['hiddenRoutes'],
         )
 
     return {

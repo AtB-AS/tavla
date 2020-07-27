@@ -1,5 +1,4 @@
-import React from 'react'
-import { LegMode } from '@entur/sdk'
+import React, { useState, useEffect } from 'react'
 import { colors } from '@entur/tokens'
 
 import {
@@ -8,29 +7,30 @@ import {
     unique,
     getTransportIconIdentifier,
     createTileSubLabel,
+    getIconColorType,
 } from '../../../utils'
-import { StopPlaceWithDepartures, LineData } from '../../../types'
+import {
+    StopPlaceWithDepartures,
+    LineData,
+    IconColorType,
+} from '../../../types'
 
 import Tile from '../components/Tile'
 import TileRow from '../components/TileRow'
 
 import './styles.scss'
+import { useSettingsContext } from '../../../settings'
 
-function getTransportHeaderIcons(
-    departures: Array<LineData>,
-    hiddenModes?: Array<LegMode>,
-): Array<JSX.Element> {
+function getTransportHeaderIcons(departures: LineData[]): JSX.Element[] {
     const transportModes = unique(
-        departures
-            .map(({ type, subType }) => ({ type, subType }))
-            .filter(({ type }) => !hiddenModes || !hiddenModes.includes(type)),
+        departures.map(({ type, subType }) => ({ type, subType })),
         (a, b) =>
             getTransportIconIdentifier(a.type, a.subType) ===
             getTransportIconIdentifier(b.type, b.subType),
     )
 
     const transportIcons = transportModes.map(({ type, subType }) => ({
-        icon: getIcon(type, subType, colors.blues.blue60),
+        icon: getIcon(type, undefined, subType, colors.blues.blue60),
     }))
 
     return transportIcons.map(({ icon }) => icon)
@@ -44,14 +44,24 @@ const DepartureTile = ({
     const groupedDepartures = groupBy<LineData>(departures, 'route')
     const headerIcons = getTransportHeaderIcons(departures)
     const routes = Object.keys(groupedDepartures)
+    const [settings] = useSettingsContext()
+    const [iconColorType, setIconColorType] = useState<IconColorType>(
+        'contrast',
+    )
+
+    useEffect(() => {
+        if (settings) {
+            setIconColorType(getIconColorType(settings.theme))
+        }
+    }, [settings])
 
     return (
-        <Tile title={name} icons={headerIcons} alerts={disruptionMessages}>
-            {routes.map(route => {
+        <Tile title={name} icons={headerIcons}>
+            {routes.map((route) => {
                 const subType = groupedDepartures[route][0].subType
                 const routeData = groupedDepartures[route].slice(0, 3)
                 const routeType = routeData[0].type
-                const icon = getIcon(routeType, subType)
+                const icon = getIcon(routeType, iconColorType, subType)
 
                 return (
                     <TileRow

@@ -6,17 +6,26 @@ import service from '../service'
 export default function useNearestPlaces(
     position: Coordinates,
     distance: number,
-): Array<NearestPlace> {
-    const [nearestPlaces, setNearestPlaces] = useState<Array<NearestPlace>>([])
+): NearestPlace[] {
+    const [nearestPlaces, setNearestPlaces] = useState<NearestPlace[]>([])
 
     useEffect(() => {
+        let ignoreResponse = false
+
         service
             .getNearestPlaces(position, {
                 maximumDistance: distance,
                 filterByPlaceTypes: ['StopPlace', 'BikeRentalStation'],
                 multiModalMode: 'parent',
             })
-            .then(setNearestPlaces)
+            .then((places) => {
+                if (ignoreResponse) return
+                setNearestPlaces(places)
+            })
+
+        return (): void => {
+            ignoreResponse = true
+        }
     }, [distance, position])
 
     return nearestPlaces

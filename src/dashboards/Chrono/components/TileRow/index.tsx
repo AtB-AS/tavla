@@ -1,7 +1,7 @@
 import React from 'react'
 import { Heading3 } from '@entur/typography'
-import { ValidationExclamationIcon, ValidationErrorIcon } from '@entur/icons'
-import { colors } from '@entur/tokens'
+import ValidationExclamation from '../../../../assets/icons/ValidationExclamation'
+import ValidationError from '../../../../assets/icons/ValidationError'
 
 import { TileSubLabel } from '../../../../types'
 import './styles.scss'
@@ -19,18 +19,22 @@ export function TileRow({ label, icon, subLabel }: Props): JSX.Element {
     )
 }
 
-function SubLabelIcon({ subLabel }: { subLabel: TileSubLabel }): JSX.Element {
+function SubLabelIcon({
+    subLabel,
+}: {
+    subLabel: TileSubLabel
+}): JSX.Element | null {
     if (subLabel.hasCancellation)
         return (
             <div className="tilerow__sublabel__cancellation">
-                <ValidationErrorIcon color={colors.validation.lava} />
+                <ValidationError />
             </div>
         )
 
     if (subLabel.hasSituation)
         return (
             <div className="tilerow__sublabel__situation">
-                <ValidationExclamationIcon color={colors.validation.canary} />
+                <ValidationExclamation />
             </div>
         )
 
@@ -40,7 +44,7 @@ function SubLabelIcon({ subLabel }: { subLabel: TileSubLabel }): JSX.Element {
 interface Props {
     label: string
     subLabel: TileSubLabel
-    icon: JSX.Element
+    icon: JSX.Element | null
 }
 
 export default TileRow
