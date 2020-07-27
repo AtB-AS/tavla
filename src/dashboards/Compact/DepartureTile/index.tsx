@@ -56,7 +56,7 @@ const DepartureTile = ({
     }, [settings])
 
     return (
-        <Tile title={name} icons={headerIcons}>
+        <Tile title={name} icons={headerIcons} alerts={disruptionMessages}>
             {routes.map((route) => {
                 const subType = groupedDepartures[route][0].subType
                 const routeData = groupedDepartures[route].slice(0, 3)
@@ -78,7 +78,7 @@ const DepartureTile = ({
 
 interface Props {
     stopPlaceWithDepartures: StopPlaceWithDepartures
-    disruptionMessages?: Array<object>
+    disruptionMessages: string[]
 }
 
 export default DepartureTile

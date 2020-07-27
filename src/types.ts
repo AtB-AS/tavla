@@ -1,4 +1,4 @@
-import { LegMode, TransportSubmode, StopPlace } from '@entur/sdk'
+import { LegMode, TransportSubmode, StopPlace, Quay } from '@entur/sdk'
 
 export interface LineData {
     id: string
@@ -21,6 +21,7 @@ export interface Line {
 
 export type StopPlaceWithDepartures = StopPlace & {
     departures: LineData[]
+    quays?: Quay[]
 }
 
 export type StopPlaceWithLines = StopPlace & { lines: Line[] }

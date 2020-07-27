@@ -5,36 +5,23 @@ import { ValidationExclamationIcon } from '@entur/icons'
 import './styles.scss'
 
 function Tile({ title, icons, children, alerts }: Props): JSX.Element {
-    const isAlert = alerts ? alerts.length > 0 : false
-
     return (
-        <div className={`tile ${isAlert ? 'warning' : ''}`}>
-            <div className={isAlert ? 'tile__warning' : ''}>
+        <div className={`tile ${alerts ? 'warning' : ''}`}>
+            <div className={alerts ? 'tile__warning' : ''}>
                 <header className="tile__header">
                     <Heading2>{title}</Heading2>
                     <div className="tile__header-icons">{icons}</div>
                 </header>
-                {isAlert
-                    ? alerts.map(el => {
-                          const alert = el['alert']
-                          const heading =
-                              alert['header_text']['translation'][0]['text']
-                          const description =
-                              alert['description_text']['translation'][0][
-                                  'text'
-                              ]
-
-                          return (
-                              <div className="tile__alert" key={heading}>
-                                  <ValidationExclamationIcon className="tile__alert__icon"></ValidationExclamationIcon>
-                                  <div className="tile__alert__text">
-                                      <h4>{heading}</h4>
-                                      <p>{description}</p>
-                                  </div>
-                              </div>
-                          )
-                      })
-                    : null}
+                {alerts?.map((alert, index) => {
+                    return (
+                        <div className="tile__alert" key={alert}>
+                            <ValidationExclamationIcon className="tile__alert__icon"></ValidationExclamationIcon>
+                            <div className="tile__alert__text">
+                                <p>{alert}</p>
+                            </div>
+                        </div>
+                    )
+                })}
             </div>
             {children}
         </div>
@@ -45,7 +32,7 @@ interface Props {
     title: string
     icons: JSX.Element | JSX.Element[]
     children: JSX.Element[]
-    alerts?: Array<object>
+    alerts?: string[]
 }
 
 export default Tile

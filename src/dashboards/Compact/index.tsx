@@ -3,10 +3,7 @@ import { WidthProvider, Responsive, Layouts, Layout } from 'react-grid-layout'
 
 import { useBikeRentalStations, useStopPlacesWithDepartures } from '../../logic'
 import DashboardWrapper from '../../containers/DashboardWrapper'
-import {
-    useDisruptionMessages,
-    disruptionMessagesForStop,
-} from '../../logic/useDisruptionMessages'
+import { disruptionMessagesForStop } from '../../logic/disruptionMessagesForStop'
 
 import DepartureTile from './DepartureTile'
 import BikeTile from './BikeTile'
@@ -40,8 +37,6 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
     const bikeRentalStations = useBikeRentalStations()
 
     let stopPlacesWithDepartures = useStopPlacesWithDepartures()
-
-    const disruptionMessages = useDisruptionMessages()
 
     // Remove stop places without departures
     if (stopPlacesWithDepartures) {
@@ -114,12 +109,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             key={index.toString()}
                             data-grid={getDataGrid(index)}
                             className={
-                                disruptionMessagesForStop(
-                                    stop,
-                                    disruptionMessages,
-                                ).length > 0
-                                    ? 'warning'
-                                    : ''
+                                disruptionMessagesForStop(stop) ? 'warning' : ''
                             }
                         >
                             <DepartureTile
@@ -127,7 +117,6 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                                 stopPlaceWithDepartures={stop}
                                 disruptionMessages={disruptionMessagesForStop(
                                     stop,
-                                    disruptionMessages,
                                 )}
                             />
                         </div>
