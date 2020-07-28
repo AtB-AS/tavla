@@ -7,6 +7,7 @@ function ValidationError(): JSX.Element {
         {
             [Theme.DARK]: '#000000',
             [Theme.DEFAULT]: '292c6a',
+            [Theme.ATB]: '#00252c',
         },
         '#ffffff',
     )
@@ -14,6 +15,7 @@ function ValidationError(): JSX.Element {
         {
             [Theme.DARK]: '#FF9494',
             [Theme.DEFAULT]: '#FF9494',
+            [Theme.ATB]: '#a2ad00',
         },
         '#d31b1b',
     )
