@@ -12,7 +12,7 @@ function Tile({ title, icons, children, alerts }: Props): JSX.Element {
                     <Heading2>{title}</Heading2>
                     <div className="tile__header-icons">{icons}</div>
                 </header>
-                {alerts?.map((alert, index) => {
+                {alerts?.map((alert) => {
                     return (
                         <div className="tile__alert" key={alert}>
                             <ValidationExclamationIcon className="tile__alert__icon"></ValidationExclamationIcon>

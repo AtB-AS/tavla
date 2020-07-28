@@ -1,4 +1,4 @@
-import { StopPlaceWithDepartures } from '../types'
+import { StopPlaceWithDepartures, LineData } from '../types'
 
 export function disruptionMessagesForStop(
     stop: StopPlaceWithDepartures,
@@ -10,6 +10,28 @@ export function disruptionMessagesForStop(
             disruptionMessages.add(situation.description[0]?.value)
         })
     })
+
+    return disruptionMessages.size > 0 ? [...disruptionMessages] : null
+}
+
+export function disruptionMessagesForRoute(
+    routes: LineData[],
+    stop?: StopPlaceWithDepartures,
+): string[] | null {
+    const disruptionMessages: Set<string> = new Set()
+
+    routes.forEach((route) => {
+        if (route.situation) disruptionMessages.add(route.situation)
+    })
+
+    // Filter out messages that are already an alert for the parent stop
+    if (stop) {
+        const stopDisruptionMessages = disruptionMessagesForStop(stop)
+
+        stopDisruptionMessages?.forEach((stopDisruptionMessage) => {
+            disruptionMessages.delete(stopDisruptionMessage)
+        })
+    }
 
     return disruptionMessages.size > 0 ? [...disruptionMessages] : null
 }
