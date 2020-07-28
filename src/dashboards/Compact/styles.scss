@@ -27,11 +27,10 @@
         z-index: 1;
         border-radius: 8px;
         overflow: hidden;
-        background-color: $colors-blues-blue10;
     }
 
     .react-grid-item.warning {
-        border: 2px solid #f8cf54;
+        border: 2px solid var(--tavla-warning);
     }
 
     .react-grid-item::after {
@@ -44,8 +43,8 @@
             0deg,
             rgba(var(--tavla-box-background-color), 1) 0%,
             rgba(var(--tavla-box-background-color), 0.7) 50%,
-            rgba(var(--tavla-box-background-color), 0) 100%
-        );
+                rgba(var(--tavla-box-background-color), 0) 100%
+            );
         z-index: 1;
     }
 

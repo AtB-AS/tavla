@@ -34,11 +34,11 @@
     }
 
     &__alerts {
-        background-color: #f8cf54;
+        background-color: var(--tavla-warning);
         margin-bottom: 0.5rem;
         padding: 0.5rem;
         border-radius: 0.5rem;
-        color: $colors-blues-blue10;
+        color: var(--tavla-warning-text);
 
         &__alert {
             display: flex;
