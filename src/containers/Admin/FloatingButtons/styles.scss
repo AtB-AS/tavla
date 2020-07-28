@@ -13,6 +13,10 @@
         align-items: center;
         justify-content: center;
 
+        &:hover {
+            opacity: 0.8;
+        }
+
         &.eds-button--variant-primary {
             background: var(--floating-button-primary-background);
             color: var(--floating-button-primary-font-color);
