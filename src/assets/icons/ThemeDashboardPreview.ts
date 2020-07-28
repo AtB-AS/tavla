@@ -10,6 +10,9 @@ import TimelineDefault from '../../assets/previews/previewDefault/Tidslinje-blue
 import CompactGrey from '../../assets/previews/previewGrey/Kompakt-grey.svg'
 import ChronoGrey from '../../assets/previews/previewGrey/Kronologisk-grey.svg'
 import TimelineGrey from '../../assets/previews/previewGrey/Tidslinje-grey.svg'
+import CompactAtb from '../../assets/previews/previewAtb/Kompakt-atb.svg'
+import ChronoAtb from '../../assets/previews/previewAtb/Kronologisk-atb.svg'
+import TimelineAtb from '../../assets/previews/previewAtb/Tidslinje-atb.svg'
 
 import { Theme } from '../../types'
 
@@ -32,6 +35,12 @@ export function ThemeDashbboardPreview(theme: Theme): any {
                 Timeline: TimelineLight,
                 Chrono: ChronoLight,
                 Compact: CompactLight,
+            }
+        case Theme.ATB:
+            return {
+                Timeline: TimelineAtb,
+                Chrono: ChronoAtb,
+                Compact: CompactAtb,
             }
         default:
             return {

@@ -28,7 +28,7 @@ function ErrorWrapper({
     ) : null
 
     return (
-        <ThemeContrastWrapper useContrast={settings?.theme === Theme.DEFAULT}>
+        <ThemeContrastWrapper useContrast={settings?.theme === Theme.ATB}>
             <div className="error-wrapper">
                 <img className="style-image" src={`${image}`} />
                 <Heading1 className="heading" margin="both">

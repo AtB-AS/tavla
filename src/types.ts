@@ -42,6 +42,7 @@ export enum Theme {
     DARK = 'dark',
     LIGHT = 'light',
     GREY = 'grey',
+    ATB = 'atb',
 }
 
 export type IconColorType = 'default' | 'contrast'

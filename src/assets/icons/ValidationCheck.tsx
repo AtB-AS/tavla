@@ -12,6 +12,7 @@ function ValidationCheck(): JSX.Element {
         {
             [Theme.DARK]: '#000',
             [Theme.DEFAULT]: colors.brand.blue,
+            [Theme.ATB]: '#00252c',
         },
         colors.brand.white,
     )

@@ -7,6 +7,7 @@ function ValidationExclamation(): JSX.Element {
         {
             [Theme.DARK]: '#171717',
             [Theme.DEFAULT]: '#292c6a',
+            [Theme.ATB]: '#00252C',
         },
         'black',
     )

@@ -14,10 +14,10 @@ const ThemeContext = React.createContext<ThemeContextType>({
 const ThemeProvider: FC = (props): JSX.Element => {
     const [settings] = useSettingsContext()
 
-    const themeContext = settings?.theme || Theme.DEFAULT
+    const themeContext = settings?.theme || Theme.ATB
 
     useEffect(() => {
-        const themes = ['dark', 'light', 'grey', 'default']
+        const themes = ['dark', 'light', 'grey', 'default', 'atb']
         themes.forEach((theme) => {
             document.body.classList.remove(`${theme}-theme`)
         })
