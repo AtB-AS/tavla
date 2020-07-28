@@ -8,6 +8,7 @@ import Grey from '../../../assets/previews/Grey-theme.svg'
 import Dark from '../../../assets/previews/Dark-theme.svg'
 import Light from '../../../assets/previews/Light-theme.svg'
 import Entur from '../../../assets/previews/Entur-theme.svg'
+import Atb from '../../../assets/previews/Atb-theme.svg'
 
 import './styles.scss'
 import { getDocumentId } from '../../../utils'
@@ -45,7 +46,15 @@ const ThemeTab = (): JSX.Element => {
             <Heading2 className="heading">Velg farger</Heading2>
             <div className="theme-tab">
                 <RadioCard
-                    title="Entur (standard)"
+                    title="AtB (standard)"
+                    cardValue="atb"
+                    preview={Atb}
+                    selected={radioValue === 'atb'}
+                    callback={(val): void => switchTheme(val as Theme)}
+                    className="theme-tab__theme-card"
+                />
+                <RadioCard
+                    title="Entur"
                     cardValue="default"
                     preview={Entur}
                     selected={radioValue === 'default'}
