@@ -26,6 +26,7 @@
         transition-property: left, top;
         z-index: 1;
         border-radius: 8px;
+        overflow: hidden;
         background-color: $colors-blues-blue10;
     }
 
@@ -46,7 +47,6 @@
             rgba(var(--tavla-box-background-color), 0) 100%
         );
         z-index: 1;
-        border-radius: 0 0 1rem 1rem;
     }
 
     .react-grid-item.cssTransforms {
