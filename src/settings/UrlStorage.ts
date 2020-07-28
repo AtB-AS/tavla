@@ -16,7 +16,7 @@ export const DEFAULT_SETTINGS: Settings = {
     dashboard: '',
     coordinates: undefined,
     owners: [],
-    theme: Theme.DEFAULT,
+    theme: Theme.ATB,
     logo: null,
     logoSize: '32px',
     description: '',

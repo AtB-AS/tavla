@@ -112,7 +112,7 @@ export function useSettings(): [Settings, SettingsSetters] {
         const defaultSettings = {
             description: '',
             logoSize: '32px',
-            theme: Theme.DEFAULT,
+            theme: Theme.ATB,
             owners: [] as string[],
             hiddenStopModes: {},
         }
