@@ -12,7 +12,7 @@ function getDepartureMessages(departures: LineData[]): Set<string> {
     return messages
 }
 
-export function disruptionMessagesForStop(
+export function getDisruptionMessagesForStop(
     stop: StopPlaceWithDepartures,
 ): string[] {
     const disruptionMessages: Set<string> = new Set()
@@ -36,7 +36,7 @@ export function disruptionMessagesForStop(
     return disruptionMessages.size > 0 ? [...disruptionMessages] : null
 }
 
-export function disruptionMessagesForRoute(
+export function getDisruptionMessagesForRoute(
     departures: LineData[],
     stopDisruptionMessages?: string[],
 ): string[] | null {

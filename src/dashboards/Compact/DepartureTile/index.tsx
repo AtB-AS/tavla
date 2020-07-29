@@ -21,7 +21,7 @@ import TileRow from '../components/TileRow'
 import './styles.scss'
 import { useSettingsContext } from '../../../settings'
 
-import { disruptionMessagesForRoute } from '../../../logic/disruptionMessagesForStop'
+import { getDisruptionMessagesForRoute } from '../../../logic/getDisruptionMessages'
 
 function getTransportHeaderIcons(departures: LineData[]): JSX.Element[] {
     const transportModes = unique(
@@ -71,7 +71,7 @@ const DepartureTile = ({
                         label={route}
                         subLabels={routeData.map(createTileSubLabel)}
                         icon={icon}
-                        alerts={disruptionMessagesForRoute(
+                        alerts={getDisruptionMessagesForRoute(
                             groupedDepartures[route],
                             disruptionMessages,
                         )}
