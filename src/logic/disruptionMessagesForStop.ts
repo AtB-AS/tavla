@@ -21,7 +21,10 @@ export function disruptionMessagesForRoute(
     const disruptionMessages: Set<string> = new Set()
 
     routes.forEach((route) => {
-        if (route.situation) disruptionMessages.add(route.situation)
+        if (route.situations)
+            route.situations.forEach((situation) =>
+                disruptionMessages.add(situation),
+            )
     })
 
     // Filter out messages that are already an alert for the parent stop

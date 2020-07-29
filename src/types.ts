@@ -7,7 +7,7 @@ export interface LineData {
     time: string
     route: string
     expectedDepartureTime: string
-    situation?: string
+    situations?: string[]
     hasCancellation?: boolean
     isRealtime?: boolean
 }
