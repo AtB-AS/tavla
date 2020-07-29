@@ -73,7 +73,7 @@ const DepartureTile = ({
                         icon={icon}
                         alerts={disruptionMessagesForRoute(
                             groupedDepartures[route],
-                            stopPlaceWithDepartures,
+                            disruptionMessages,
                         )}
                     />
                 )
