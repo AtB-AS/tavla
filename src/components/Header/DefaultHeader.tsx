@@ -93,7 +93,7 @@ export function DefaultHeader(): JSX.Element {
                 </div>
                 <div className="header__resources__item">
                     <a
-                        href="https://github.com/entur/tavla/"
+                        href="https://github.com/atb-as/tavla/"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
