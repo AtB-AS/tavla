@@ -2,7 +2,6 @@ import React from 'react'
 import { Heading3 } from '@entur/typography'
 
 import { TileSubLabel } from '../../../../types'
-import ValidationExclamation from '../../../../assets/icons/ValidationExclamation'
 import { ValidationExclamationIcon } from '@entur/icons'
 import ValidationError from '../../../../assets/icons/ValidationError'
 import './styles.scss'
@@ -59,13 +58,6 @@ function SubLabelIcon({
         return (
             <div className="tilerow__sublabel__cancellation">
                 <ValidationError />
-            </div>
-        )
-
-    if (subLabel.hasSituation)
-        return (
-            <div className="tilerow__sublabel__situation">
-                <ValidationExclamation />
             </div>
         )
 
