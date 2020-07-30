@@ -69,7 +69,9 @@ function DashboardWrapper(props: Props): JSX.Element {
                 {renderContents()}
                 <ThemeContrastWrapper useContrast={true}>
                     <div className="dashboard-wrapper__byline">
-                        Tjenesten leveres av {getEnturLogo()}
+                        <a href="https://tavla.entur.no">
+                            Tjenesten leveres av {getEnturLogo()}
+                        </a>
                     </div>
                     <BottomMenu
                         className="dashboard-wrapper__bottom-menu"
