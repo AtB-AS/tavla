@@ -5,17 +5,20 @@ import { useSettings } from '../../settings'
 import Clock from '../Clock'
 import { AtbLogo } from '../../assets/icons'
 import UpgradeTavlaBanner from '../../containers/DashboardWrapper/UpgradeTavlaBanner'
+import { isDarkOrDefaultTheme } from '../../utils'
 
 export function DashboardHeader(): JSX.Element {
     const settings = useSettings()[0]
     if (!settings) return null
-    const { logo, logoSize, description } = settings
+    const { logo, logoSize, description, theme } = settings
+
+    const logoColor = isDarkOrDefaultTheme(theme) ? 'white' : 'black'
 
     const headerLogo = logo ? (
         <img src={logo} height={logoSize} />
     ) : (
         <a href="/">
-            <AtbLogo className="header__logo-wrapper__logo" />
+            <AtbLogo className="header__logo-wrapper__logo" style={logoColor} />
         </a>
     )
 
