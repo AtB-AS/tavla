@@ -1,7 +1,7 @@
 .admin__floating-buttons {
     display: flex;
     flex-direction: column;
-    
+
     .eds-button {
         width: 100%;
         border: 2px solid var(--floating-button-background);
@@ -24,15 +24,19 @@
         }
     }
 
-    @media (min-width: 600px) {
+    @media (min-width: 800px) {
         position: fixed;
         bottom: 2rem;
-        right: 2rem;   
+        right: 1.5rem;
         flex-direction: row;
 
         .eds-button {
             width: fit-content;
             margin-left: 2rem;
         }
+    }
+
+    @media (min-width: 1000px) {
+        right: 4rem;
     }
 }
