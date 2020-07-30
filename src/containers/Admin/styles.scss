@@ -72,6 +72,10 @@
     background-color: var(--tavla-background-color);
 }
 
+.eds-tab[aria-selected=true]::before {
+    background: var(--tavla-tab-selection-indicator);
+}
+
 .eds-tab:focus {
     box-shadow: none;
 }
