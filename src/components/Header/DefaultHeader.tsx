@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { ClosedLockIcon, UserIcon, LogOutIcon } from '@entur/icons'
 import { useToast } from '@entur/alert'
 
-import { TavlaLogo, Github } from '../../assets/icons'
+import { AtbLogo, Github } from '../../assets/icons'
 import LoginModal from '../LoginModal'
 
 import { useUser } from '../../auth'
@@ -74,7 +74,7 @@ export function DefaultHeader(): JSX.Element {
             {loginModal}
             <div className={`header__logo-wrapper`}>
                 <a href="/">
-                    <TavlaLogo className={`header__logo-wrapper__logo`} />
+                    <AtbLogo className={`header__logo-wrapper__logo`} />
                 </a>
             </div>
             <div className="header__resources">

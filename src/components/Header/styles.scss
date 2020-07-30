@@ -23,9 +23,25 @@
         }
     }
 
+    &__default {
+        .header__logo-wrapper__logo {
+            height: 4rem;
+        }
+
+        .header__logo-wrapper__description {
+            display: inline-block;
+            margin-left: 1rem;
+        }
+    }
+
     &__clock {
+        &__time {
+            font-size: 2.5rem;
+            line-height: 2.5rem;
+        }
+
         &__date {
-            margin-top: 0.75rem;
+            margin-top: 0.25rem;
             font-size: 1.25rem;
             display: block;
         }
