@@ -3,57 +3,183 @@
 .landing-page {
     width: 100vw;
     height: 100vh;
-    color: $colors-brand-blue;
+    color: var(--tavla-background-color);
     margin: 0;
     background-color: white;
-    padding: 2rem;
 
     header {
         display: flex;
-        align-items: center;
-        flex-direction: column;
         background-color: white;
         padding-top: 3.5%;
 
         h1 {
             margin: 0;
+            font-weight: 600;
+            font-size: 3rem;
+            line-height: 3rem;
+        }
+
+        h3 {
+            font-size: 1rem;
+            line-height: 1rem;
+            margin-top: 0;
         }
     }
 
+    footer {
+        display: flex;
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 5vw;
+        width: 35vw;
+        max-width: 500px;
+        border-top: 2px solid #e2e2e2;
+        padding-top: 2rem;
+    }
+
     p {
-        text-align: center;
         margin-bottom: 0;
     }
 
-    &__logo {
-        height: 54px;
+    a {
+        color: inherit;
+    }
+
+    &__panel-wrapper {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    &__header {
+        &__logo {
+            height: 4rem;
+        }
+
+        &__title {
+            padding-left: 1rem;
+        }
     }
 
     &__content {
         display: flex;
         flex-direction: column;
-        align-items: center;
         background-color: white;
+        margin: 10vw;
+        width: 35vw;
+        max-width: 500px;
+    }
+
+    &__instructions {
+        font-size: 0.9rem;
     }
 
     &__cover-photo {
-        height: 30rem;
+        width: 65vw;
+        height: 100vh;
+        background: url('../../assets/images/cover-photo.jpg') no-repeat center 75%;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        overflow: hidden;
+    }
+
+    &__back-button {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        background-color: white;
+
+        .eds-icon {
+            margin-right: 0.5em;
+        }
+
+        > p {
+            margin: 0;
+        }
+    }
+
+    &__social .eds-icon {
+        margin: 0 0.5rem -0.3rem 0.5rem;
+        font-size: 1.3rem;
+    }
+
+    &__social .eds-icon:hover {
+        opacity: 0.7;
+    }
+
+    &__footer-logo {
+        margin-left: auto;
     }
 
     .github-logo {
         position: absolute;
-        top: 1rem;
-        right: 1rem;
+        top: 2rem;
+        right: 2rem;
 
         > a {
-            color: $colors-brand-blue;
+            color: var(--tavla-background-color);
         }
     }
 }
 
 @media (max-width: 1280px) {
+    .landing-page {
+        background: url('../../assets/images/cover-photo.jpg') no-repeat center 75%;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+
+    .landing-page__panel-wrapper {
+        flex-direction: column;
+    }
+
     .landing-page__cover-photo {
-        height: auto;
-        width: 90%;
+        display: none;
+    }
+
+    .landing-page__content {
+        padding: 10vw;
+        margin: 0;
+        width: 100vw;
+        max-width: none;
+    }
+
+    .landing-page footer {
+        width: 80vw;
+        max-width: none;
+        border-top: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .landing-page {
+        .github-logo {
+            display: none;
+        }
+
+        &__back-button {
+            display: none;
+        }
+    }
+}
+
+@media (max-height: 700px) {
+    .landing-page {
+        footer {
+            margin-top: 6rem;
+            position: inherit;
+            border-top: 2px solid #e2e2e2;
+        }
+
+        &__content {
+            padding-bottom: 0;
+        }
+
+        .landing-page__cover-photo {
+            height: inherit;
+        }
     }
 }
