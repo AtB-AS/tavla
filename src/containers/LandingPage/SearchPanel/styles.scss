@@ -87,10 +87,11 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
     .search-panel {
         &__submit-button {
-            width: 90%;
+            margin: 0 0 0.5rem 0;
+            width: 100%;
         }
 
         .search-container {
@@ -107,9 +108,13 @@
         }
 
         .input-container {
-            margin-bottom: 0.5rem;
+            margin: 0 0 0.5rem 0;
             min-width: unset;
-            width: 90%;
+            width: 100%;
+        }
+
+        .eds-input-group {
+            padding: 0;
         }
     }
 }
