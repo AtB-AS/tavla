@@ -6,16 +6,49 @@
 
 .search-container {
     display: flex;
-    justify-content: center;
     flex-direction: row;
     align-items: flex-end;
     position: relative;
     min-width: 55%;
-}
+    margin-top: 2rem;
 
-.input-container {
-    margin-right: 0.25rem;
-    min-width: 300px;
+    .eds-input-group {
+        width: 100%;
+        padding-right: 1rem;
+    }
+
+    .input-container {
+        margin-right: 0.25rem;
+        width: 100%;
+        min-width: 300px;
+
+        .eds-form-control-wrapper {
+            --border-color-hover: #b3b842;
+        }
+
+        .eds-dropdown-list__item {
+            color: var(--tavla-background-color);
+        }
+
+        .eds-dropdown-list__item--highlighted {
+            background-color: #e3e3e3;
+        }
+    }
+
+    .eds-button {
+        background-color: var(--floating-button-background);
+        color: var(--tavla-background-color);
+    }
+
+    .eds-button:active {
+        background-color: var(--tavla-background-color);
+        color: white;
+    }
+
+    .eds-button:hover {
+        background-color: var(--floating-button-background);
+        opacity: 0.8;
+    }
 }
 
 .input-spinner-container {
