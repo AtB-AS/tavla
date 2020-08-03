@@ -26,4 +26,42 @@
         align-items: center;
         font-size: 2rem;
     }
+
+    &__warning {
+        width: calc(100% + 4rem);
+        margin: -2rem -2rem 0.3rem -2rem;
+        padding: 2rem 2rem 0.4rem 2rem;
+        background-color: var(--tavla-warning);
+        color: var(--tavla-warning-text);
+
+        h2 {
+            color: inherit;
+        }
+    }
+
+    &__alert {
+        color: inherit;
+        margin: -0.5rem 0 1rem 0;
+        padding: 0;
+        line-height: 1.4em;
+        display: flex;
+
+        &__icon {
+            min-width: 2rem;
+            margin-right: 1rem;
+            font-size: 2em;
+        }
+
+        &__text {
+            font-size: 0.9em;
+
+            h4 {
+                font-weight: bold;
+            }
+
+            * {
+                margin: 0;
+            }
+        }
+    }
 }

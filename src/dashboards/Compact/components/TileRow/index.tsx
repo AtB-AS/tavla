@@ -2,16 +2,22 @@ import React from 'react'
 import { Heading3 } from '@entur/typography'
 
 import { TileSubLabel } from '../../../../types'
-import ValidationExclamation from '../../../../assets/icons/ValidationExclamation'
+import { ValidationExclamationIcon } from '@entur/icons'
 import ValidationError from '../../../../assets/icons/ValidationError'
 import './styles.scss'
 
-export function TileRow({ label, icon, subLabels }: Props): JSX.Element {
+export function TileRow({
+    label,
+    icon,
+    subLabels,
+    alerts,
+}: Props): JSX.Element {
     return (
         <div className="tilerow">
             <div className="tilerow__icon">{icon}</div>
             <div className="tilerow__texts">
                 <Heading3 className="tilerow__label">{label}</Heading3>
+                <AlertContainer alerts={alerts} />
                 <div className="tilerow__sublabels">
                     {subLabels.map((subLabel, index) => (
                         <div
@@ -30,6 +36,19 @@ export function TileRow({ label, icon, subLabels }: Props): JSX.Element {
     )
 }
 
+const AlertContainer = ({ alerts }: AlertProps): JSX.Element => {
+    return alerts ? (
+        <div className="tilerow__alerts" key={alerts.toString()}>
+            {alerts.map((alertText) => (
+                <div key={alertText} className="tilerow__alerts__alert">
+                    <ValidationExclamationIcon className="tilerow__alerts__icon"></ValidationExclamationIcon>
+                    <p>{alertText}</p>
+                </div>
+            ))}
+        </div>
+    ) : null
+}
+
 function SubLabelIcon({
     subLabel,
 }: {
@@ -42,13 +61,6 @@ function SubLabelIcon({
             </div>
         )
 
-    if (subLabel.hasSituation)
-        return (
-            <div className="tilerow__sublabel__situation">
-                <ValidationExclamation />
-            </div>
-        )
-
     return null
 }
 
@@ -56,6 +68,11 @@ interface Props {
     label: string
     subLabels: TileSubLabel[]
     icon: JSX.Element | null
+    alerts?: string[]
+}
+
+interface AlertProps {
+    alerts: string[]
 }
 
 export default TileRow
