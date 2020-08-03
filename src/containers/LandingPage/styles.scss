@@ -5,11 +5,10 @@
     height: 100vh;
     color: var(--tavla-background-color);
     margin: 0;
-    background-color: white;
+    background-color: #f1f1f1;
 
     header {
         display: flex;
-        background-color: white;
         padding-top: 3.5%;
 
         h1 {
@@ -63,7 +62,7 @@
     &__content {
         display: flex;
         flex-direction: column;
-        background-color: white;
+        background-color: #f1f1f1;
         margin: 10vw;
         width: 35vw;
         max-width: 500px;
@@ -88,7 +87,6 @@
         position: absolute;
         top: 2rem;
         left: 2rem;
-        background-color: white;
 
         .eds-icon {
             margin-right: 0.5em;

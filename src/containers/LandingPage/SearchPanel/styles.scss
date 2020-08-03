@@ -23,7 +23,10 @@
         min-width: 300px;
 
         .eds-form-control-wrapper {
-            --border-color-hover: #b3b842;
+            --border-color-hover: var(--tavla-input-border-hover-color);
+            --border-color: var(--tavla-input-border-color);
+
+            background-color: white;
         }
 
         .eds-dropdown-list__item {
@@ -37,7 +40,7 @@
 
     .eds-button {
         background-color: var(--floating-button-background);
-        color: var(--tavla-background-color);
+        color: white;
     }
 
     .eds-button:active {
@@ -46,8 +49,7 @@
     }
 
     .eds-button:hover {
-        background-color: var(--floating-button-background);
-        opacity: 0.8;
+        background-color: rgb(140, 156, 41);
     }
 }
 
