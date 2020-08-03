@@ -13,6 +13,7 @@
     --tavla-checkbox-hover-color: #8285a8;
     --tavla-hover-color: #aeb7e2;
     --tavla-input-background-color: rgb(248, 248, 248);
+    --tavla-input-highlight-background-color: #e3e3e3;
     --tavla-input-border-color: #181c56;
     --tavla-input-border-hover-color: #aeb7e2;
     --tavla-input-font-color: #181c56;
@@ -44,6 +45,7 @@
     --tavla-checkbox-hover-color: #8285a8;
     --tavla-hover-color: #aeb7e2;
     --tavla-input-background-color: rgb(248, 248, 248);
+    --tavla-input-highlight-background-color: #e3e3e3;
     --tavla-input-border-color: #181c56;
     --tavla-input-border-hover-color: #aeb7e2;
     --tavla-input-font-color: #181c56;
@@ -70,15 +72,15 @@
     --tavla-checkbox-color: #292929;
     --tavla-checkbox-hover-color: #4d4d4d;
     --tavla-hover-color: #4d4d4d;
-    --tavla-input-background-color: rgba(255, 255, 255, 0.11);
-    --tavla-input-border-color: rgba(255, 255, 255, 0.14);
-    --tavla-input-border-hover-color: #4d4d4d;
-    --tavla-input-font-color: rgb(255, 255, 255);
-    --tavla-input-placeholder-color: #d1d3d3;
-    --tavla-input-disabled-background-color: #171717;
-    --tavla-input-disabled-font-color: #898a89;
-    --tavla-input-disabled-font-color: #949494;
-    --tavla-input-icon-color: #fff;
+    --tavla-input-background-color: #fff;
+    --tavla-input-highlight-background-color: #e3e3e3;
+    --tavla-input-border-color: #c1c1c1;
+    --tavla-input-border-hover-color: #949494;
+    --tavla-input-font-color: #000;
+    --tavla-input-placeholder-color: #8a8a8a;
+    --tavla-input-disabled-background-color: #fff;
+    --tavla-input-disabled-font-color: #656781;
+    --tavla-input-icon-color: #000;
     --tavla-slider-color: #303030;
     --tavla-slider-thumb-color: #303030;
     --tavla-slider-fill-color: #4d4d4d;
@@ -103,6 +105,7 @@
     --tavla-checkbox-hover-color: #d1d3d3;
     --tavla-hover-color: #d1d3d3;
     --tavla-input-background-color: #fff;
+    --tavla-input-highlight-background-color: #e3e3e3;
     --tavla-input-border-color: #949494;
     --tavla-input-border-hover-color: #949494;
     --tavla-input-font-color: black;
@@ -134,6 +137,7 @@
     --tavla-checkbox-hover-color: #d1d3d3;
     --tavla-hover-color: #d1d3d3;
     --tavla-input-background-color: #fff;
+    --tavla-input-highlight-background-color: #e3e3e3;
     --tavla-input-border-color: #949494;
     --tavla-input-border-hover-color: #949494;
     --tavla-input-font-color: black;
@@ -163,8 +167,9 @@
     --tavla-checkbox-hover-color: #51777a;
     --tavla-hover-color: #00323a;
     --tavla-input-background-color: #fff;
-    --tavla-input-border-color: #fff;
-    --tavla-input-border-hover-color: #345d63;
+    --tavla-input-highlight-background-color: #e3e3e3;
+    --tavla-input-border-color: #c1c1c1;
+    --tavla-input-border-hover-color: #b3b842;
     --tavla-input-font-color: #00252c;
     --tavla-input-placeholder-color: #8a8a8a;
     --tavla-input-disabled-background-color: #fff;
