@@ -72,6 +72,12 @@
     background-color: var(--tavla-background-color);
 }
 
+.eds-tab:focus {
+    box-shadow: none;
+    border-color: rgba(68, 192, 255, 0.5);
+    border-width: 0.25rem 0.25rem 0 0.25rem;
+}
+
 @media (min-width: 600px) {
     .admin {
         padding-bottom: 8rem;

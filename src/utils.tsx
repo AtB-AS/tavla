@@ -351,5 +351,7 @@ export const useThemeColor = (
 }
 
 export function isDarkOrDefaultTheme(theme: Theme): boolean {
-    return theme === Theme.DARK || theme === Theme.DEFAULT
+    return (
+        theme === Theme.DARK || theme === Theme.DEFAULT || theme === Theme.ATB
+    )
 }

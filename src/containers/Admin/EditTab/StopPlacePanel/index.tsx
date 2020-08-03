@@ -80,7 +80,9 @@ function StopPlacePanel(props: Props): JSX.Element {
         )
     }
 
-    const useContrast = [Theme.DEFAULT, Theme.DARK].includes(settings?.theme)
+    const useContrast = [Theme.DEFAULT, Theme.DARK, Theme.ATB].includes(
+        settings?.theme,
+    )
 
     return (
         <ThemeContrastWrapper useContrast={useContrast}>

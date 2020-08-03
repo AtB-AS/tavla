@@ -30,7 +30,7 @@ function sortBoard(boards: BoardProps[]): BoardProps[] {
 const MyBoards = ({ history }: Props): JSX.Element => {
     const [boards, setBoards] = useState<DocumentData>()
     const user = useUser()
-    const preview = ThemeDashbboardPreview(Theme.DEFAULT)
+    const preview = ThemeDashbboardPreview(Theme.ATB)
 
     const onClickNew = useCallback(() => {
         event.preventDefault()
