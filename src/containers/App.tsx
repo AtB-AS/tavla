@@ -24,7 +24,7 @@ import Header from '../components/Header'
 import './styles.scss'
 import MyBoards from './MyBoards'
 
-analytics.initialize('UA-108877193-6')
+analytics.initialize('UA-174177774-1')
 analytics.set('anonymizeIp', true)
 
 analytics.set('page', window.location.pathname)
