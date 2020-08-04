@@ -9,7 +9,7 @@ export interface LineData {
     expectedDepartureTime: string
     situations?: string[]
     hasCancellation?: boolean
-    isRealtime?: boolean
+    isScheduled?: boolean
 }
 
 export interface Line {
@@ -35,7 +35,7 @@ export interface TileSubLabel {
     time: string
     hasCancellation?: boolean
     hasSituation?: boolean
-    isRealtime?: boolean
+    isScheduled?: boolean
 }
 
 export enum Theme {

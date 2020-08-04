@@ -221,7 +221,7 @@ export function transformDepartureToLineData(departure: Departure): LineData {
             (situation) => situation.summary?.[0]?.value,
         ),
         hasCancellation: cancellation,
-        isRealtime: departure.realtime,
+        isScheduled: !departure.realtime,
     }
 }
 
@@ -229,13 +229,13 @@ export function createTileSubLabel({
     situations,
     hasCancellation,
     time,
-    isRealtime,
+    isScheduled,
 }: LineData): TileSubLabel {
     return {
         hasSituation: situations.length > 0,
         hasCancellation,
         time,
-        isRealtime,
+        isScheduled,
     }
 }
 

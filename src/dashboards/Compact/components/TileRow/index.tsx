@@ -20,12 +20,10 @@ export function TileRow({
                 <AlertContainer alerts={alerts} />
                 <div className="tilerow__sublabels">
                     {subLabels.map((subLabel, index) => (
-                        <div
-                            className={`tilerow__sublabel${
-                                subLabel.isRealtime ? ' realtime' : ''
-                            }`}
-                            key={index}
-                        >
+                        <div key={index}>
+                            {subLabel.isScheduled && (
+                                <span className="scheduled">ca.</span>
+                            )}
                             {subLabel.time}
                             <SubLabelIcon subLabel={subLabel} />
                         </div>
