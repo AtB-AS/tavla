@@ -27,9 +27,9 @@ const Privacy = (): JSX.Element => {
                 <Paragraph>
                     Google Analytics mottar generell web- og appstatistikk, som
                     for eksempel tidspunkt, språk og generell informasjon om din
-                    mobilenhet. Hendelser rundt reisesøk, kjøp og billettering
-                    logges anonymt til bruk for å forbedre tjenesten. Ingenting
-                    av dette kan spores tilbake til enkeltbrukere.
+                    mobilenhet. Hendelser rundt reisesøk logges anonymt til bruk
+                    for å forbedre tjenesten. Ingenting av dette kan spores
+                    tilbake til enkeltbrukere.
                 </Paragraph>
                 <Paragraph>
                     Vi benytter to informasjonskapsler av typen _ga, én av typen
