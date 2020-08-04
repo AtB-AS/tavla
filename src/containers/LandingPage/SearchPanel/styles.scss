@@ -40,12 +40,11 @@
 
     .eds-button {
         background-color: var(--floating-button-background);
-        color: white;
+        color: var(--tavla-background-color);
     }
 
     .eds-button:active {
         background-color: var(--tavla-background-color);
-        color: white;
     }
 
     .eds-button:hover {
