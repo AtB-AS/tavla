@@ -21,6 +21,8 @@ import TileRow from '../components/TileRow'
 import './styles.scss'
 import { useSettingsContext } from '../../../settings'
 
+import { getDisruptionMessagesForRoute } from '../../../logic/getDisruptionMessages'
+
 function getTransportHeaderIcons(departures: LineData[]): JSX.Element[] {
     const transportModes = unique(
         departures.map(({ type, subType }) => ({ type, subType })),
@@ -36,7 +38,10 @@ function getTransportHeaderIcons(departures: LineData[]): JSX.Element[] {
     return transportIcons.map(({ icon }) => icon)
 }
 
-const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
+const DepartureTile = ({
+    stopPlaceWithDepartures,
+    disruptionMessages,
+}: Props): JSX.Element => {
     const { departures, name } = stopPlaceWithDepartures
     const groupedDepartures = groupBy<LineData>(departures, 'route')
     const headerIcons = getTransportHeaderIcons(departures)
@@ -53,7 +58,7 @@ const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
     }, [settings])
 
     return (
-        <Tile title={name} icons={headerIcons}>
+        <Tile title={name} icons={headerIcons} alerts={disruptionMessages}>
             {routes.map((route) => {
                 const subType = groupedDepartures[route][0].subType
                 const routeData = groupedDepartures[route].slice(0, 3)
@@ -66,6 +71,10 @@ const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
                         label={route}
                         subLabels={routeData.map(createTileSubLabel)}
                         icon={icon}
+                        alerts={getDisruptionMessagesForRoute(
+                            groupedDepartures[route],
+                            disruptionMessages,
+                        )}
                     />
                 )
             })}
@@ -75,6 +84,7 @@ const DepartureTile = ({ stopPlaceWithDepartures }: Props): JSX.Element => {
 
 interface Props {
     stopPlaceWithDepartures: StopPlaceWithDepartures
+    disruptionMessages: string[]
 }
 
 export default DepartureTile

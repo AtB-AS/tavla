@@ -25,6 +25,12 @@
         transition: all 200ms ease;
         transition-property: left, top;
         z-index: 1;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .react-grid-item.warning {
+        border: 2px solid var(--tavla-warning);
     }
 
     .react-grid-item::after {

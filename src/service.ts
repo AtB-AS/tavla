@@ -118,6 +118,13 @@ export async function getStopPlacesWithLines(
                                 publicCode
                             }
                         }
+                        situations {
+                            situationNumber
+                            description {
+                                value
+                                language
+                            }
+                        }
                     }
                 }
             }
