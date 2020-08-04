@@ -68,11 +68,11 @@ function DashboardWrapper(props: Props): JSX.Element {
             <div className={`dashboard-wrapper ${className}`}>
                 {renderContents()}
                 <ThemeContrastWrapper useContrast={true}>
-                    {logo && (
-                        <div className="dashboard-wrapper__byline">
+                    <div className="dashboard-wrapper__byline">
+                        <a href="https://tavla.entur.no">
                             Tjenesten leveres av {getEnturLogo()}
-                        </div>
-                    )}
+                        </a>
+                    </div>
                     <BottomMenu
                         className="dashboard-wrapper__bottom-menu"
                         history={history}

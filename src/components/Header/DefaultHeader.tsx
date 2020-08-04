@@ -3,17 +3,24 @@ import React, { useState } from 'react'
 import { ClosedLockIcon, UserIcon, LogOutIcon } from '@entur/icons'
 import { useToast } from '@entur/alert'
 
-import { TavlaLogo, Github } from '../../assets/icons'
+import { AtbLogo, Github } from '../../assets/icons'
 import LoginModal from '../LoginModal'
 
 import { useUser } from '../../auth'
 import firebase from 'firebase'
+import { isDarkOrDefaultTheme } from '../../utils'
+import { useSettings } from '../../settings'
 
 export function DefaultHeader(): JSX.Element {
     const [displayLoginModal, setDisplayLoginModal] = useState<boolean>(false)
     const user = useUser()
     const userLoggedIn = user && !user.isAnonymous
     const { addToast } = useToast()
+
+    const settings = useSettings()[0]
+    if (!settings) return null
+    const { theme } = settings
+    const logoColor = isDarkOrDefaultTheme(theme) ? 'white' : 'black'
 
     const login = (): void => {
         event.preventDefault()
@@ -74,7 +81,10 @@ export function DefaultHeader(): JSX.Element {
             {loginModal}
             <div className={`header__logo-wrapper`}>
                 <a href="/">
-                    <TavlaLogo className={`header__logo-wrapper__logo`} />
+                    <AtbLogo
+                        className={`header__logo-wrapper__logo`}
+                        style={logoColor}
+                    />
                 </a>
             </div>
             <div className="header__resources">
@@ -93,7 +103,7 @@ export function DefaultHeader(): JSX.Element {
                 </div>
                 <div className="header__resources__item">
                     <a
-                        href="https://github.com/entur/tavla/"
+                        href="https://github.com/atb-as/tavla/"
                         target="_blank"
                         rel="noopener noreferrer"
                     >

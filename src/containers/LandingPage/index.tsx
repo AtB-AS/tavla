@@ -38,7 +38,7 @@ const LandingPage = ({ history }: Props): JSX.Element => {
                 <h2>Sanntidstavla du selv kan tilpasse etter dine behov.</h2>
             </header>
             <div className="github-logo">
-                <a href="https://github.com/entur/tavla">
+                <a href="https://github.com/atb-as/tavla">
                     <Github size="30px" />
                 </a>
             </div>
@@ -53,7 +53,7 @@ const LandingPage = ({ history }: Props): JSX.Element => {
                 </p>
                 <p>
                     Tavlas kildekode kan du finne på{' '}
-                    <a href="https://github.com/entur/tavla">GitHub</a>. Bruk
+                    <a href="https://github.com/atb-as/tavla">GitHub</a>. Bruk
                     &quot;Watch Releases&quot; på GitHub for å følge med på
                     endringer vi gjør på Tavla.
                 </p>
