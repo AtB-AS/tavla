@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Coordinates } from '@entur/sdk'
 
-import { Github, AtbLogo, TrondelagLogo } from '../../assets/icons'
+import { Github, AtbLogo, TrondelagLogo, EnturLogo } from '../../assets/icons'
 
 import { createSettings } from '../../services/firebase'
 import { DEFAULT_SETTINGS } from '../../settings/UrlStorage'
@@ -71,8 +71,14 @@ const LandingPage = ({ history }: Props): JSX.Element => {
                         For å opprette en tavle trenger vi å vite hvilket område
                         du er interessert i.
                         <br />
-                        Hvis du vil, kan du lese mer om{' '}
+                        Hvis du vil, kan du lese om{' '}
                         <Link to="/privacy">personvern her.</Link>
+                        <div className="dashboard-wrapper__byline">
+                            <a href="https://tavla.entur.no">
+                                Tjenesten leveres av{' '}
+                                <EnturLogo height="24px" style="black" />
+                            </a>
+                        </div>
                     </p>
                     <footer>
                         <div className="landing-page__social">
