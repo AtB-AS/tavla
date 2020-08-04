@@ -2,7 +2,6 @@
 
 .landing-page {
     width: 100vw;
-    height: 100vh;
     color: var(--tavla-background-color);
     margin: 0;
     background-color: #f1f1f1;
@@ -164,7 +163,7 @@
     }
 }
 
-@media (max-height: 700px) {
+@media (max-height: calc(20vw + 500px)) {
     .landing-page {
         footer {
             margin-top: 6rem;
