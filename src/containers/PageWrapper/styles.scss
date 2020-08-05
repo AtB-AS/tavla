@@ -1,0 +1,178 @@
+@import '../../assets/styles/import.scss';
+
+.page-wrapper {
+    width: 100vw;
+    color: var(--tavla-background-color);
+    margin: 0;
+    background-color: #f1f1f1;
+
+    header {
+        display: flex;
+        padding-top: 3.5%;
+
+        h1 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 3rem;
+            line-height: 3rem;
+        }
+
+        h3 {
+            font-size: 1rem;
+            line-height: 1rem;
+            margin-top: 0;
+        }
+    }
+
+    footer {
+        display: flex;
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 5vw;
+        width: 35vw;
+        max-width: 500px;
+        border-top: 2px solid #e2e2e2;
+        padding-top: 2rem;
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+
+    a {
+        color: inherit;
+    }
+
+    &__panel-wrapper {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    &__header {
+        &__logo {
+            height: 4rem;
+        }
+
+        &__title {
+            padding-left: 1rem;
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        background-color: #f1f1f1;
+        margin: 10vw;
+        width: 35vw;
+        max-width: 500px;
+    }
+
+    &__cover-photo {
+        width: 65vw;
+        height: 100vh;
+        background: url('../../assets/images/cover-photo.jpg') no-repeat center 75%;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        overflow: hidden;
+    }
+
+    &__back-button {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+
+        .eds-icon {
+            margin-right: 0.5em;
+        }
+
+        > p {
+            margin: 0;
+        }
+    }
+
+    &__social .eds-icon {
+        margin: 0 0.5rem -0.3rem 0.5rem;
+        font-size: 1.3rem;
+    }
+
+    &__social .eds-icon:hover {
+        opacity: 0.7;
+    }
+
+    &__footer-logo {
+        margin-left: auto;
+    }
+
+    .github-logo {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+
+        > a {
+            color: var(--tavla-background-color);
+        }
+    }
+}
+
+@media (max-width: 1280px) {
+    .page-wrapper {
+        background: url('../../assets/images/cover-photo.jpg') no-repeat center 75%;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+
+    .page-wrapper__panel-wrapper {
+        flex-direction: column;
+    }
+
+    .page-wrapper__cover-photo {
+        display: none;
+    }
+
+    .page-wrapper__content {
+        padding: 10vw;
+        margin: 0;
+        width: 100vw;
+        max-width: none;
+    }
+
+    .page-wrapper footer {
+        width: 80vw;
+        max-width: none;
+        border-top: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .page-wrapper {
+        .github-logo {
+            display: none;
+        }
+
+        &__back-button {
+            display: none;
+        }
+    }
+}
+
+@media (max-height: calc(20vw + 500px)) {
+    .page-wrapper {
+        footer {
+            margin-top: 6rem;
+            position: inherit;
+            border-top: 2px solid #e2e2e2;
+        }
+
+        &__content {
+            padding-bottom: 0;
+        }
+
+        .page-wrapper__cover-photo {
+            height: inherit;
+        }
+    }
+}
