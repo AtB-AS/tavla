@@ -5,13 +5,17 @@
         margin-left: auto;
     }
 
-    &__success {
+    &__result {
         margin-top: 5rem;
         text-align: center;
 
         .eds-icon {
             color: var(--floating-button-background);
             font-size: 4rem;
+        }
+
+        .eds-icon.error {
+            color: var(--tavla-background-color);
         }
 
         .eds-button {

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { TextField, TextArea } from '@entur/form'
 import { PrimaryButton } from '@entur/button'
-import { ValidationCheckIcon } from '@entur/icons'
+import { ValidationCheckIcon, ValidationErrorIcon } from '@entur/icons'
 import { Link } from 'react-router-dom'
 import querystring from 'querystring'
 
@@ -10,13 +10,13 @@ import PageWrapper from '../PageWrapper'
 import './styles.scss'
 
 const FeedbackPage = (): JSX.Element => {
-    const query = querystring.parse(window.location.search)
+    const query = querystring.parse(window.location.search.substr(1))
 
-    return (
-        <div className="feedback-page">
-            <PageWrapper>
-                {query['?success'] == 'true' ? (
-                    <div className="feedback-page__success">
+    if (query['success'] === 'true') {
+        return (
+            <div className="feedback-page">
+                <PageWrapper>
+                    <div className="feedback-page__result">
                         <ValidationCheckIcon></ValidationCheckIcon>
                         <p>Din tilbakemelding er sendt</p>
                         <p>
@@ -26,26 +26,56 @@ const FeedbackPage = (): JSX.Element => {
                             <PrimaryButton>Tilbake</PrimaryButton>
                         </Link>
                     </div>
-                ) : (
-                    <form action="" method="post">
-                        <p>
-                            Fyll ut boksene nedenfor og gi oss din
-                            tilbakemelding.
-                        </p>
-                        <div className="feedback-page__flex">
-                            <TextField placeholder="Navn" type="text" />
-                            <TextField placeholder="Epost" type="email" />
-                        </div>
-                        <TextArea placeholder="Skriv din tilbakemelding..." />
+                </PageWrapper>
+            </div>
+        )
+    } else if (query['success'] === 'false') {
+        return (
+            <div className="feedback-page">
+                <PageWrapper>
+                    <div className="feedback-page__result">
+                        <ValidationErrorIcon className="error"></ValidationErrorIcon>
+                        <p>Oops! Noe gikk galt.</p>
+                        <p>Feilmelding: {query['err']}</p>
+                        <Link to="/feedback">
+                            <PrimaryButton>Tilbake</PrimaryButton>
+                        </Link>
+                    </div>
+                </PageWrapper>
+            </div>
+        )
+    }
 
-                        <PrimaryButton
-                            className="feedback-page__submit"
-                            type="submit"
-                        >
-                            Send
-                        </PrimaryButton>
-                    </form>
-                )}
+    return (
+        <div className="feedback-page">
+            <PageWrapper>
+                <form
+                    action="https://europe-west1-atb-mobility-platform.cloudfunctions.net/TavlaFormSubmission"
+                    method="post"
+                >
+                    <p>
+                        Fyll ut boksene nedenfor og gi oss din tilbakemelding.
+                    </p>
+                    <div className="feedback-page__flex">
+                        <TextField name="name" placeholder="Navn" type="text" />
+                        <TextField
+                            name="email"
+                            placeholder="E-post"
+                            type="email"
+                        />
+                    </div>
+                    <TextArea
+                        name="body"
+                        placeholder="Skriv din tilbakemelding..."
+                    />
+
+                    <PrimaryButton
+                        className="feedback-page__submit"
+                        type="submit"
+                    >
+                        Send
+                    </PrimaryButton>
+                </form>
             </PageWrapper>
         </div>
     )
