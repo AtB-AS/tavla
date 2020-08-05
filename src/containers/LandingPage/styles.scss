@@ -1,59 +1,7 @@
 @import '../../assets/styles/import.scss';
 
 .landing-page {
-    width: 100vw;
-    height: 100vh;
-    color: $colors-brand-blue;
-    margin: 0;
-    background-color: white;
-    padding: 2rem;
-
-    header {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        background-color: white;
-        padding-top: 3.5%;
-
-        h1 {
-            margin: 0;
-        }
-    }
-
-    p {
-        text-align: center;
-        margin-bottom: 0;
-    }
-
-    &__logo {
-        height: 54px;
-    }
-
-    &__content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: white;
-    }
-
-    &__cover-photo {
-        height: 30rem;
-    }
-
-    .github-logo {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-
-        > a {
-            color: $colors-brand-blue;
-        }
-    }
-}
-
-@media (max-width: 1280px) {
-    .landing-page__cover-photo {
-        height: auto;
-        width: 90%;
+    &__instructions {
+        font-size: 0.9rem;
     }
 }

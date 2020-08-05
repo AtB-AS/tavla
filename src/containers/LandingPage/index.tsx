@@ -2,14 +2,12 @@ import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Coordinates } from '@entur/sdk'
 
-import { Github, TavlaLogo } from '../../assets/icons'
-
-import coverPhoto from '../../assets/images/cover-photo.jpg'
+import { Github, AtbLogo, TrondelagLogo, EnturLogo } from '../../assets/icons'
 
 import { createSettings } from '../../services/firebase'
 import { DEFAULT_SETTINGS } from '../../settings/UrlStorage'
-
 import SearchPanel from './SearchPanel'
+import PageWrapper from '../PageWrapper'
 import './styles.scss'
 
 const LandingPage = ({ history }: Props): JSX.Element => {
@@ -31,38 +29,22 @@ const LandingPage = ({ history }: Props): JSX.Element => {
 
     return (
         <div className="landing-page">
-            <header>
-                <h1>
-                    <TavlaLogo className="landing-page__logo" />
-                </h1>
-                <h2>Sanntidstavla du selv kan tilpasse etter dine behov.</h2>
-            </header>
-            <div className="github-logo">
-                <a href="https://github.com/atb-as/tavla">
-                    <Github size="30px" />
-                </a>
-            </div>
-            <div className="landing-page__content">
+            <PageWrapper>
                 <SearchPanel handleCoordinatesSelected={addLocation} />
-                <p>
+                <p className="landing-page__instructions">
                     For å opprette en tavle trenger vi å vite hvilket område du
                     er interessert i.
                     <br />
-                    Hvis du vil, kan du lese mer om{' '}
+                    Hvis du vil, kan du lese om{' '}
                     <Link to="/privacy">personvern her.</Link>
+                    <div className="dashboard-wrapper__byline">
+                        <a href="https://tavla.entur.no">
+                            Tjenesten leveres av{' '}
+                            <EnturLogo height="24px" style="black" />
+                        </a>
+                    </div>
                 </p>
-                <p>
-                    Tavlas kildekode kan du finne på{' '}
-                    <a href="https://github.com/atb-as/tavla">GitHub</a>. Bruk
-                    &quot;Watch Releases&quot; på GitHub for å følge med på
-                    endringer vi gjør på Tavla.
-                </p>
-                <img
-                    src={coverPhoto}
-                    className="landing-page__cover-photo"
-                    alt="Folk og kollektivtrafikk i landskap"
-                />
-            </div>
+            </PageWrapper>
         </div>
     )
 }
