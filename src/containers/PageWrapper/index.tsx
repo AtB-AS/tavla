@@ -3,12 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { Github, AtbLogo, TrondelagLogo, EnturLogo } from '../../assets/icons'
 
-import {
-    InstagramIcon,
-    TwitterIcon,
-    FacebookIcon,
-    BackArrowIcon,
-} from '@entur/icons'
+import { BackArrowIcon } from '@entur/icons'
 import './styles.scss'
 
 const PageWrapper = ({ children }: Props): JSX.Element => {
@@ -48,43 +43,18 @@ const PageWrapper = ({ children }: Props): JSX.Element => {
                     </header>
                     {children}
                     <footer>
-                        <div className="page-wrapper__social">
-                            <span>
-                                Følg oss
-                                <a
-                                    href="https://www.facebook.com/atb.no/"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    <FacebookIcon></FacebookIcon>
-                                </a>
-                                <a
-                                    href="https://www.instagram.com/atb_no/"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    <InstagramIcon></InstagramIcon>
-                                </a>
-                                <a
-                                    href="https://twitter.com/atb_no"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    <TwitterIcon></TwitterIcon>
-                                </a>
-                            </span>
-                        </div>
-                        <div className="page-wrapper__footer-logo">
-                            <a
-                                href="https://www.trondelagfylke.no/"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                <TrondelagLogo
-                                    height="30px"
-                                    className="trondelagLogo"
-                                ></TrondelagLogo>
+                        <div className="page-wrapper__byline">
+                            <a href="https://tavla.entur.no">
+                                Tjenesten leveres av{' '}
+                                <EnturLogo height="16px" style="black" />
                             </a>
+                        </div>
+                        <div className="page-wrapper__feedback">
+                            <p>
+                                <Link to="/feedback">
+                                    Gi oss en tilbakemelding.
+                                </Link>
+                            </p>
                         </div>
                     </footer>
                 </div>

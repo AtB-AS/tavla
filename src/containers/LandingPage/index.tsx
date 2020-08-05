@@ -2,8 +2,6 @@ import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Coordinates } from '@entur/sdk'
 
-import { Github, AtbLogo, TrondelagLogo, EnturLogo } from '../../assets/icons'
-
 import { createSettings } from '../../services/firebase'
 import { DEFAULT_SETTINGS } from '../../settings/UrlStorage'
 import SearchPanel from './SearchPanel'
@@ -37,12 +35,6 @@ const LandingPage = ({ history }: Props): JSX.Element => {
                     <br />
                     Hvis du vil, kan du lese om{' '}
                     <Link to="/privacy">personvern her.</Link>
-                    <div className="dashboard-wrapper__byline">
-                        <a href="https://tavla.entur.no">
-                            Tjenesten leveres av{' '}
-                            <EnturLogo height="24px" style="black" />
-                        </a>
-                    </div>
                 </p>
             </PageWrapper>
         </div>

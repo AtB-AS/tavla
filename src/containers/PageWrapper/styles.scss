@@ -33,6 +33,7 @@
         max-width: 500px;
         border-top: 2px solid #e2e2e2;
         padding-top: 2rem;
+        font-size: 0.8rem;
     }
 
     p {
@@ -92,17 +93,25 @@
         }
     }
 
-    &__social .eds-icon {
-        margin: 0 0.5rem -0.3rem 0.5rem;
-        font-size: 1.3rem;
+    &__byline a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+
+        img {
+            padding-left: 0.75rem;
+        }
     }
 
-    &__social .eds-icon:hover {
-        opacity: 0.7;
-    }
-
-    &__footer-logo {
+    &__feedback {
+        display: flex;
+        align-items: center;
         margin-left: auto;
+
+        p {
+            margin-top: 0;
+            padding-top: 0;
+        }
     }
 
     .github-logo {
@@ -123,27 +132,27 @@
         -moz-background-size: cover;
         -o-background-size: cover;
         background-size: cover;
-    }
 
-    .page-wrapper__panel-wrapper {
-        flex-direction: column;
-    }
+        &__panel-wrapper {
+            flex-direction: column;
+        }
 
-    .page-wrapper__cover-photo {
-        display: none;
-    }
+        &__cover-photo {
+            display: none;
+        }
 
-    .page-wrapper__content {
-        padding: 10vw;
-        margin: 0;
-        width: 100vw;
-        max-width: none;
-    }
+        &__content {
+            padding: 10vw;
+            margin: 0;
+            width: 100vw;
+            max-width: none;
+        }
 
-    .page-wrapper footer {
-        width: 80vw;
-        max-width: none;
-        border-top: none;
+        footer {
+            width: 80vw;
+            max-width: none;
+            border-top: none;
+        }
     }
 }
 
@@ -155,6 +164,15 @@
 
         &__back-button {
             display: none;
+        }
+
+        footer {
+            flex-direction: column;
+        }
+
+        &__feedback {
+            margin-top: 1rem;
+            margin-left: 0;
         }
     }
 }
