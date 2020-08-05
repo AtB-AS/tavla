@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { Github, AtbLogo, TrondelagLogo, EnturLogo } from '../../assets/icons'
+import { Github, AtbLogo, EnturLogo } from '../../assets/icons'
 
 import { BackArrowIcon } from '@entur/icons'
 import './styles.scss'
