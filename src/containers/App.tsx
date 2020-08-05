@@ -11,6 +11,7 @@ import Chrono from '../dashboards/Chrono'
 import Timeline from '../dashboards/Timeline'
 
 import LandingPage from './LandingPage'
+import FeedbackPage from './FeedbackPage'
 import Admin from './Admin'
 import Privacy from './Privacy'
 import { LockedTavle, PageDoesNotExist } from './Error/ErrorPages'
@@ -84,6 +85,11 @@ const Content = (): JSX.Element => {
                                     component={settings[0] && Admin}
                                 />
                                 <Route path="/privacy" component={Privacy} />
+                                <Route
+                                    exact
+                                    path="/feedback"
+                                    component={FeedbackPage}
+                                />
                                 <Route path="/" component={PageDoesNotExist} />
                             </Switch>
                         </ToastProvider>

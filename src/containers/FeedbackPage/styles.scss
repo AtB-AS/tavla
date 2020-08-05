@@ -1,0 +1,61 @@
+.feedback-page {
+    &__submit {
+        display: block;
+        margin-top: 1rem;
+        margin-left: auto;
+    }
+
+    &__success {
+        margin-top: 5rem;
+        text-align: center;
+
+        .eds-icon {
+            color: var(--floating-button-background);
+            font-size: 4rem;
+        }
+
+        .eds-button {
+            margin-top: 5rem;
+        }
+    }
+
+    &__flex {
+        display: flex;
+
+        > * {
+            margin-right: 1rem;
+        }
+
+        > *:last-child {
+            margin-right: 0;
+        }
+    }
+
+    .eds-form-control-wrapper {
+        --border-color-hover: var(--tavla-input-border-hover-color);
+        --border-color: var(--tavla-input-border-color);
+
+        background-color: white;
+        color: var(--tavla-background-color);
+        margin-top: 1rem;
+    }
+
+    .eds-button {
+        background-color: var(--floating-button-background);
+        color: var(--tavla-background-color);
+    }
+
+    .eds-button:active {
+        background-color: var(--tavla-background-color);
+    }
+
+    .eds-button:hover {
+        background-color: rgb(140, 156, 41);
+    }
+
+    .eds-input-group {
+        margin: 1rem 0;
+        display: flex;
+        flex-direction: row;
+    }
+}
