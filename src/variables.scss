@@ -3,33 +3,35 @@
 :root {
     --tavla-background-color: #00252c;
     --tavla-font-color: #fff;
-    --tavla-box-background-color: #b3b842;
-    --tavla-button-background-color: #393d79;
-    --tavla-github-logo: #aeb7e2;
-    --tavla-border-color: #393d79;
-    --tavla-selected-color: #393d79;
+    --tavla-box-background-color: #00323a;
+    --tavla-button-background-color: #104048;
+    --tavla-github-logo: #eab7e2;
+    --tavla-border-color: #345d63;
+    --tavla-selected-color: #104048;
     --tavla-label-font-color: #99adb0;
-    --tavla-checkbox-color: #54568c;
-    --tavla-checkbox-hover-color: #8285a8;
-    --tavla-hover-color: #aeb7e2;
-    --tavla-input-background-color: rgb(248, 248, 248);
+    --tavla-checkbox-color: #2d565a;
+    --tavla-checkbox-hover-color: #51777a;
+    --tavla-hover-color: #00323a;
+    --tavla-input-background-color: #fff;
     --tavla-input-highlight-background-color: #e3e3e3;
-    --tavla-input-border-color: #b3b842;
-    --tavla-input-border-hover-color: #aeb7e2;
-    --tavla-input-font-color: #b3b842;
-    --tavla-input-placeholder-color: #888aa8;
-    --tavla-input-disabled-background-color: #e9e9e9;
+    --tavla-input-border-color: #c1c1c1;
+    --tavla-input-border-hover-color: #b3b842;
+    --tavla-input-font-color: #00252c;
+    --tavla-input-placeholder-color: #8a8a8a;
+    --tavla-input-disabled-background-color: #fff;
     --tavla-input-disabled-font-color: #656781;
-    --tavla-input-icon-color: #b3b842;
+    --tavla-input-icon-color: #00252c;
     --tavla-slider-color: #fff;
-    --tavla-slider-thumb-color: #fff;
-    --tavla-slider-fill-color: rgb(174, 183, 226);
-    --floating-button-background: rgb(84, 86, 140);
+    --tavla-slider-thumb-color: #b3b842;
+    --tavla-slider-fill-color: #b5bd33;
+    --floating-button-background: #b3b842;
     --floating-button-font-color: #fff;
-    --floating-button-primary-background: rgb(174, 183, 226);
-    --floating-button-primary-font-color: rgb(24, 28, 86);
-    --tavla-modal-overlay-color: rgba(24, 28, 86, 0.8);
-    --tavla-tab-selection-indicator: #ff5959;
+    --floating-button-primary-background: #b3b842;
+    --floating-button-primary-font-color: #00252c;
+    --tavla-modal-overlay-color: rgba(0, 37, 44, 0.8);
+    --tavla-tab-selection-indicator: #b3b842;
+    --tavla-warning: #f8cf54;
+    --tavla-warning-text: #00252c;
 }
 
 .default-theme {
