@@ -17,6 +17,7 @@ steps:
       - --runtime=go113
       - --trigger-http
       - --region=europe-west1
+      - --allow-unauthenticated
       - --entry-point=HandleFormSubmission
   - name: 'gcr.io/cloud-builders/gcloud'
     dir: $_WORKDIR
