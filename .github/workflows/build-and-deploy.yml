@@ -14,7 +14,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Build
-        run: npm run build:prod
+        run: npm run build:staging
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
@@ -32,9 +32,11 @@ jobs:
         with:
           name: dist
           path: dist
+      - name: Install typescript
+        run: npm install -g typescript
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy -P prod
+          args: deploy -P staging
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
