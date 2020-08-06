@@ -13,7 +13,7 @@ import {
     TrainIcon,
     TramIcon,
     PlaneIcon,
-    CarFerryIcon,
+    CarferryIcon,
 } from '@entur/icons'
 
 import { colors } from '@entur/tokens'
@@ -47,12 +47,13 @@ function isSubModeCarFerry(subMode?: string): boolean {
     return carFerryTypes.includes(subMode)
 }
 
-export function getIconColorType(theme: Theme): IconColorType {
+export function getIconColorType(theme: Theme | undefined): IconColorType {
+    if (!theme) return IconColorType.CONTRAST
     const defaultThemes = [Theme.LIGHT, Theme.GREY]
     if (defaultThemes.includes(theme)) {
-        return 'default'
+        return IconColorType.DEFAULT
     }
-    return 'contrast'
+    return IconColorType.CONTRAST
 }
 
 export function getIconColor(
@@ -60,9 +61,9 @@ export function getIconColor(
     iconColorType: IconColorType,
     subType?: TransportSubmode,
 ): string {
-    if (isSubModeAirportLink(subType))
+    if (isSubModeAirportLink(subType)) {
         return colors.transport[iconColorType].plane
-
+    }
     switch (type) {
         case 'bus':
             return colors.transport[iconColorType].bus
@@ -124,7 +125,7 @@ export function getTransportIconIdentifier(
 
 export function getIcon(
     legMode: LegMode,
-    iconColorType: IconColorType,
+    iconColorType: IconColorType = IconColorType.CONTRAST,
     subMode?: TransportSubmode,
     color?: string,
 ): JSX.Element | null {
@@ -138,7 +139,7 @@ export function getIcon(
         case 'bicycle':
             return <BicycleIcon color={colorToUse} />
         case 'carferry':
-            return <CarFerryIcon color={colorToUse} />
+            return <CarferryIcon color={colorToUse} />
         case 'ferry':
             return <FerryIcon color={colorToUse} />
         case 'subway':
@@ -333,7 +334,7 @@ export function useFormFields<T>(
 }
 
 export function usePrevious<T>(value: T): T {
-    const ref = useRef<T>()
+    const ref = useRef<T>(value)
 
     useEffect(() => {
         ref.current = value
@@ -347,6 +348,9 @@ export const useThemeColor = (
     fallback: string,
 ): string => {
     const [settings] = useSettingsContext()
+    if (!settings?.theme) {
+        return fallback
+    }
     return color[settings?.theme] || fallback
 }
 

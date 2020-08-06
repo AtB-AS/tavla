@@ -1,5 +1,5 @@
 import React, { useState, Dispatch, SetStateAction } from 'react'
-import firebase, { User } from 'firebase'
+import firebase, { User } from 'firebase/app'
 
 import { TextField, InputGroup } from '@entur/form'
 import { GridContainer, GridItem } from '@entur/grid'
@@ -124,8 +124,9 @@ const Signup = ({ setModalType, onDismiss }: Props): JSX.Element => {
                         label="Passord"
                         variant={isPasswordLongEnough ? undefined : 'error'}
                         feedback={
-                            !isPasswordLongEnough &&
-                            'Passord må ha minst 8 tegn.'
+                            !isPasswordLongEnough
+                                ? 'Passord må ha minst 8 tegn.'
+                                : undefined
                         }
                     >
                         <TextField
@@ -143,7 +144,9 @@ const Signup = ({ setModalType, onDismiss }: Props): JSX.Element => {
                     <InputGroup
                         label="Gjenta passord"
                         feedback={
-                            !isPasswordMatch && 'Passordene må være like.'
+                            !isPasswordMatch
+                                ? 'Passordene må være like.'
+                                : undefined
                         }
                         variant={isPasswordMatch ? undefined : 'error'}
                     >

@@ -62,7 +62,7 @@ const ThemeTab = (): JSX.Element => {
                     className="theme-tab__theme-card"
                 />
                 <RadioCard
-                    title="Dark theme"
+                    title="Mørkt"
                     cardValue="dark"
                     preview={Dark}
                     selected={radioValue === 'dark'}
@@ -70,7 +70,7 @@ const ThemeTab = (): JSX.Element => {
                     className="theme-tab__theme-card"
                 />
                 <RadioCard
-                    title="Light theme"
+                    title="Lyst"
                     cardValue="light"
                     preview={Light}
                     selected={radioValue === 'light'}
@@ -78,7 +78,7 @@ const ThemeTab = (): JSX.Element => {
                     className="theme-tab__theme-card"
                 />
                 <RadioCard
-                    title="Grey theme"
+                    title="Grått"
                     cardValue="grey"
                     preview={Grey}
                     selected={radioValue === 'grey'}

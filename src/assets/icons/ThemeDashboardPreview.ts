@@ -16,7 +16,9 @@ import TimelineAtb from '../../assets/previews/previewAtb/Tidslinje-atb.svg'
 
 import { Theme } from '../../types'
 
-export function ThemeDashbboardPreview(theme: Theme): any {
+export function ThemeDashbboardPreview(
+    theme: Theme | undefined,
+): { [key: string]: any } {
     switch (theme) {
         case Theme.DARK:
             return {

@@ -46,4 +46,7 @@ export enum Theme {
     ATB = 'atb',
 }
 
-export type IconColorType = 'default' | 'contrast'
+export enum IconColorType {
+    DEFAULT = 'default',
+    CONTRAST = 'contrast',
+}

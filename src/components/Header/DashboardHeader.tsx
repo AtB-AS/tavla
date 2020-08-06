@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import { useSettings } from '../../settings'
 
@@ -17,9 +18,9 @@ export function DashboardHeader(): JSX.Element {
     const headerLogo = logo ? (
         <img src={logo} height={logoSize} />
     ) : (
-        <a href="/">
+        <Link to="/">
             <AtbLogo className="header__logo-wrapper__logo" style={logoColor} />
-        </a>
+        </Link>
     )
 
     const logoDescription =

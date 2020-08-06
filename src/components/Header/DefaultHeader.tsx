@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import { ClosedLockIcon, UserIcon, LogOutIcon } from '@entur/icons'
 import { useToast } from '@entur/alert'
@@ -7,7 +8,7 @@ import { AtbLogo, Github } from '../../assets/icons'
 import LoginModal from '../LoginModal'
 
 import { useUser } from '../../auth'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 import { isDarkOrDefaultTheme } from '../../utils'
 import { useSettings } from '../../settings'
 
@@ -22,12 +23,16 @@ export function DefaultHeader(): JSX.Element {
     const { theme } = settings
     const logoColor = isDarkOrDefaultTheme(theme) ? 'white' : 'black'
 
-    const login = (): void => {
+    const login = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    ): void => {
         event.preventDefault()
         setDisplayLoginModal(true)
     }
 
-    const logout = (): void => {
+    const logout = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    ): void => {
         event.preventDefault()
         firebase.auth().signOut()
         setDisplayLoginModal(false)
@@ -64,7 +69,7 @@ export function DefaultHeader(): JSX.Element {
 
     const tavlerItem = !userLoggedIn || (
         <div className="header__resources__item">
-            <a href="/tavler">
+            <Link to="/tavler">
                 <span className="header__resources__item__text">
                     Mine tavler
                 </span>
@@ -72,7 +77,7 @@ export function DefaultHeader(): JSX.Element {
                     className="header__resources__item__icon"
                     size="1.5rem"
                 />
-            </a>
+            </Link>
         </div>
     )
 
@@ -80,18 +85,18 @@ export function DefaultHeader(): JSX.Element {
         <div className="header">
             {loginModal}
             <div className={`header__logo-wrapper`}>
-                <a href="/">
+                <Link to="/">
                     <AtbLogo
                         className={`header__logo-wrapper__logo`}
                         style={logoColor}
                     />
-                </a>
+                </Link>
             </div>
             <div className="header__resources">
                 {!hideLogin ? userItem : null}
                 {tavlerItem}
                 <div className="header__resources__item">
-                    <a href="/privacy">
+                    <Link to="/privacy">
                         <span className="header__resources__item__text">
                             Personvern
                         </span>
@@ -99,7 +104,7 @@ export function DefaultHeader(): JSX.Element {
                             className="header__resources__item__icon"
                             size="1.5rem"
                         />
-                    </a>
+                    </Link>
                 </div>
                 <div className="header__resources__item">
                     <a
