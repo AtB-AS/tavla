@@ -17,16 +17,21 @@ import (
 
 var emailTemplate = `Fra: {{ .Name }} <{{ .Email }}>
 
-{{ .Body }}`
+{{ .Body }}
+
+Nettleser: {{ .UserAgent }}
+`
 
 var emailHTMLTemplate = `<html>
 <body>
 	<h1>Ny tilbakemelding i Tavla</h1>
 	<p>{{ .Name }} ({{ .Email }}), skrev: </p>
 	<blockquote>{{ .Body }}</blockquote>
+	<small>Nettleser: {{ .UserAgent }}</small>
 </body>
 </html>
 `
+
 var emailTmpl = template.Must(template.New("email").Parse(emailTemplate))
 var htmlTmpl = html.Must(html.New("email").Parse(emailHTMLTemplate))
 
