@@ -90,6 +90,10 @@
             }
         }
 
+        &__default {
+            display: flex;
+        }
+
         &__resources {
             width: 10rem;
 
