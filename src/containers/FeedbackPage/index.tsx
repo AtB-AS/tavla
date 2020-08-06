@@ -50,7 +50,7 @@ const FeedbackPage = (): JSX.Element => {
         <div className="feedback-page">
             <PageWrapper>
                 <form
-                    action="https://europe-west1-atb-mobility-platform.cloudfunctions.net/TavlaFormSubmission"
+                    action="https://europe-west1-atb-mobility-platform.cloudfunctions.net/TavlaFeedbackFormHandler"
                     method="post"
                 >
                     <p>
