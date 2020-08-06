@@ -31,5 +31,17 @@ steps:
       - --trigger-topic=tavla_form_feedback
       - --region=europe-west1
       - --entry-point=TavlaFeedbackNotifierSlack
+  - name: 'gcr.io/cloud-builders/gcloud'
+    dir: $_WORKDIR
+    waitFor: ['test']
+    args:
+      - functions
+      - deploy
+      - TavlaFeedbackNotifierEmail
+      - --source=.
+      - --runtime=go113
+      - --trigger-topic=tavla_form_feedback
+      - --region=europe-west1
+      - --entry-point=TavlaFeedbackNotifierEmail
 substitutions:
   _WORKDIR: 'functions/feedback'
