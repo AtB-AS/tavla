@@ -3,8 +3,11 @@ package feedback
 import (
 	"bytes"
 	"context"
+	"fmt"
 	pb "github.com/atb-as/tavla/functions/feedback/proto"
 	"google.golang.org/protobuf/proto"
+	html "html/template"
+	"net/http"
 	"os"
 	"text/template"
 
@@ -15,13 +18,29 @@ import (
 var emailTemplate = `Fra: {{ .Name }} <{{ .Email }}>
 
 {{ .Body }}`
+
+var emailHTMLTemplate = `<html>
+<body>
+	<h1>Ny tilbakemelding i Tavla</h1>
+	<p>{{ .Name }} ({{ .Email }}), skrev: </p>
+	<blockquote>{{ .Body }}</blockquote>
+</body>
+</html>
+`
 var emailTmpl = template.Must(template.New("email").Parse(emailTemplate))
+var htmlTmpl = html.Must(html.New("email").Parse(emailHTMLTemplate))
 
 type emailNotifier struct{}
 
 func (e *emailNotifier) notify(ctx context.Context, m *pb.FormFeedback) error {
-	buf := bytes.Buffer{}
-	err := emailTmpl.Execute(&buf, m)
+	plainBuf := bytes.Buffer{}
+	err := emailTmpl.Execute(&plainBuf, m)
+	if err != nil {
+		return err
+	}
+
+	htmlBuf := bytes.Buffer{}
+	err = htmlTmpl.Execute(&htmlBuf, m)
 	if err != nil {
 		return err
 	}
@@ -29,7 +48,7 @@ func (e *emailNotifier) notify(ctx context.Context, m *pb.FormFeedback) error {
 	from := mail.NewEmail("AtB Tavla", "utvikler@mittatb.no")
 	subject := "Ny tilbakemelding i Tavla"
 	to := mail.NewEmail("AMP Utviklere", "utvikler@mittatb.no")
-	message := mail.NewSingleEmail(from, subject, to, buf.String(), "")
+	message := mail.NewSingleEmail(from, subject, to, plainBuf.String(), htmlBuf.String())
 	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
 
 	if _, err := client.Send(message); err != nil {
