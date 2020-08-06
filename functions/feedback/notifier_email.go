@@ -26,7 +26,7 @@ func (e *emailNotifier) notify(ctx context.Context, m *pb.FormFeedback) error {
 		return err
 	}
 
-	from := mail.NewEmail("AtB Tavla", "tavla@mittatb.no")
+	from := mail.NewEmail("AtB Tavla", "utvikler@mittatb.no")
 	subject := "Ny tilbakemelding i Tavla"
 	to := mail.NewEmail("AMP Utviklere", "utvikler@mittatb.no")
 	message := mail.NewSingleEmail(from, subject, to, buf.String(), "")
