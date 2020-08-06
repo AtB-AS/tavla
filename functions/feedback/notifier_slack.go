@@ -15,12 +15,13 @@ type slackChannelPostRequest struct {
 	Text string `json:"text"`
 }
 
-type slackNotifier struct{
+type slackNotifier struct {
 	c *http.Client
 }
 
 var slackTemplate = `*Ny tilbakemelding til Tavla:*
 Navn: {{ .Name }}
+Nettleser {{ .UserAgent }}
 E-post: {{ .Email }}
 
 {{ .Body }}
@@ -72,4 +73,3 @@ func TavlaFeedbackNotifierSlack(ctx context.Context, m PubSubMessage) error {
 }
 
 var _ notifier = &slackNotifier{}
-

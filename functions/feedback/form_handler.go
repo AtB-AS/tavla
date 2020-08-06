@@ -47,10 +47,16 @@ func HandleFormSubmission(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	ua := r.Header.Get("User-Agent")
+	if ua == "" {
+		ua = "Unknown"
+	}
+
 	err = publishFormFeedback(r.Context(), &pb.FormFeedback{
-		Body:          body,
-		Email:         email,
-		Name:          name,
+		Body:      body,
+		Email:     email,
+		Name:      name,
+		UserAgent: ua,
 	})
 	if err != nil {
 		log.Printf("publish: %v", err)
