@@ -1,0 +1,28 @@
+steps:
+  - name: 'mirror.gcr.io/library/golang'
+    args: ['go', 'version']
+  - name: 'mirror.gcr.io/library/golang'
+    args: ['go', 'test', '-v']
+    id: test
+  - name: 'gcr.io/cloud-builders/gcloud'
+    waitFor: ['test']
+    args:
+      - functions
+      - deploy
+      - TavlaFeedbackFormHandler
+      - --source=.
+      - --runtime=go113
+      - --trigger-http
+      - --region=europe-west1
+      - --entry-point=HandleFormSubmission
+  - name: 'gcr.io/cloud-builders/gcloud'
+    waitFor: ['test']
+    args:
+      - functions
+      - deploy
+      - TavlaFeedbackNotifierSlack
+      - --source=.
+      - --runtime=go113
+      - --trigger-topic=tavla_form_feedback
+      - --region=europe-west1
+      - --entry-point=TavlaFeedbackNotifierSlack
