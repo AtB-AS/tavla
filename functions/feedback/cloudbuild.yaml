@@ -1,10 +1,13 @@
 steps:
   - name: 'mirror.gcr.io/library/golang'
     args: ['go', 'version']
+    dir: $_WORKDIR
   - name: 'mirror.gcr.io/library/golang'
     args: ['go', 'test', '-v']
+    dir: $_WORKDIR
     id: test
   - name: 'gcr.io/cloud-builders/gcloud'
+    dir: $_WORKDIR
     waitFor: ['test']
     args:
       - functions
@@ -16,6 +19,7 @@ steps:
       - --region=europe-west1
       - --entry-point=HandleFormSubmission
   - name: 'gcr.io/cloud-builders/gcloud'
+    dir: $_WORKDIR
     waitFor: ['test']
     args:
       - functions
@@ -26,3 +30,5 @@ steps:
       - --trigger-topic=tavla_form_feedback
       - --region=europe-west1
       - --entry-point=TavlaFeedbackNotifierSlack
+substitutions:
+  _WORKDIR: 'functions/feedback'
