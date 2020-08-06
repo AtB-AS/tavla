@@ -51,9 +51,14 @@ func (e *emailNotifier) notify(ctx context.Context, m *pb.FormFeedback) error {
 	message := mail.NewSingleEmail(from, subject, to, plainBuf.String(), htmlBuf.String())
 	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
 
-	if _, err := client.Send(message); err != nil {
+	res, err := client.Send(message)
+	if err != nil {
 		return err
 	}
+	if res.StatusCode >= http.StatusBadRequest {
+		return fmt.Errorf("failed to send email, got code: %d", res.StatusCode)
+	}
+
 	return nil
 }
 
