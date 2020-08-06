@@ -153,13 +153,12 @@ const SearchPanel = ({ handleCoordinatesSelected }: Props): JSX.Element => {
         <form className="search-panel" onSubmit={handleGoToBoard}>
             <div className="search-container">
                 <div className="input-container">
-                    <span>Område</span>
                     <div className="input-spinner-container">
                         <Dropdown
                             searchable
                             openOnFocus
                             debounceTimeout={500}
-                            placeholder="Adresse eller sted"
+                            placeholder="Stoppested eller adresse"
                             items={getItems}
                             onChange={onItemSelected}
                         />
