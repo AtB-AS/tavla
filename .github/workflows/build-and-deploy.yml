@@ -32,8 +32,6 @@ jobs:
         with:
           name: dist
           path: dist
-      - name: Install typescript
-        run: npm install -g typescript
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
