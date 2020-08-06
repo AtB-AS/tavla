@@ -6,4 +6,5 @@ message FormFeedback {
   string body = 1;
   string email = 2;
   string name = 3;
+  string user_agent = 4;
 };
