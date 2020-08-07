@@ -10,7 +10,7 @@ import LoginModal from '../LoginModal'
 import { useUser } from '../../auth'
 import firebase from 'firebase/app'
 import { isDarkOrDefaultTheme } from '../../utils'
-import { useSettings } from '../../settings'
+import { useSettingsContext } from '../../settings'
 
 export function DefaultHeader(): JSX.Element {
     const [displayLoginModal, setDisplayLoginModal] = useState<boolean>(false)
@@ -18,10 +18,8 @@ export function DefaultHeader(): JSX.Element {
     const userLoggedIn = user && !user.isAnonymous
     const { addToast } = useToast()
 
-    const settings = useSettings()[0]
-    if (!settings) return null
-    const { theme } = settings
-    const logoColor = isDarkOrDefaultTheme(theme) ? 'white' : 'black'
+    const [settings] = useSettingsContext()
+    const logoColor = isDarkOrDefaultTheme(settings?.theme) ? 'white' : 'black'
 
     const login = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,

@@ -237,7 +237,7 @@ export function createTileSubLabel({
     isScheduled,
 }: LineData): TileSubLabel {
     return {
-        hasSituation: situations.length > 0,
+        hasSituation: situations ? situations.length > 0 : false,
         hasCancellation,
         time,
         isScheduled,

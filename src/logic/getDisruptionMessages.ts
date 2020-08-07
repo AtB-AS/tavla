@@ -14,7 +14,7 @@ function getDepartureMessages(departures: LineData[]): Set<string> {
 
 export function getDisruptionMessagesForStop(
     stop: StopPlaceWithDepartures,
-): string[] {
+): string[] | undefined {
     const disruptionMessages: Set<string> = new Set()
 
     // Collect all situation messages from every quay
@@ -28,18 +28,18 @@ export function getDisruptionMessagesForStop(
     const departureMessages = getDepartureMessages(stop.departures)
     const commonMessages = [...departureMessages].filter((departureMessage) =>
         stop.departures.every((departure) =>
-            departure.situations.includes(departureMessage),
+            departure.situations?.includes(departureMessage),
         ),
     )
     commonMessages.forEach((message) => disruptionMessages.add(message))
 
-    return disruptionMessages.size > 0 ? [...disruptionMessages] : null
+    return disruptionMessages.size > 0 ? [...disruptionMessages] : undefined
 }
 
 export function getDisruptionMessagesForRoute(
     departures: LineData[],
     stopDisruptionMessages?: string[],
-): string[] | null {
+): string[] | undefined {
     const disruptionMessages = getDepartureMessages(departures)
 
     // Filter out messages that are already on the parent stop
@@ -47,5 +47,5 @@ export function getDisruptionMessagesForRoute(
         disruptionMessages.delete(stopDisruptionMessage)
     })
 
-    return disruptionMessages.size > 0 ? [...disruptionMessages] : null
+    return disruptionMessages?.size > 0 ? [...disruptionMessages] : undefined
 }

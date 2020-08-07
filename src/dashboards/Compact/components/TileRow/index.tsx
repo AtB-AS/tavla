@@ -17,7 +17,7 @@ export function TileRow({
             <div className="tilerow__icon">{icon}</div>
             <div className="tilerow__texts">
                 <Heading3 className="tilerow__label">{label}</Heading3>
-                <AlertContainer alerts={alerts} />
+                {alerts && <AlertContainer alerts={alerts} />}
                 <div className="tilerow__sublabels">
                     {subLabels.map((subLabel, index) => (
                         <div key={index}>
@@ -34,7 +34,7 @@ export function TileRow({
     )
 }
 
-const AlertContainer = ({ alerts }: AlertProps): JSX.Element => {
+const AlertContainer = ({ alerts }: AlertProps): JSX.Element | null => {
     return alerts ? (
         <div className="tilerow__alerts" key={alerts.toString()}>
             {alerts.map((alertText) => (

@@ -85,7 +85,7 @@ const DepartureTile = ({
 
 interface Props {
     stopPlaceWithDepartures: StopPlaceWithDepartures
-    disruptionMessages: string[]
+    disruptionMessages?: string[]
 }
 
 export default DepartureTile
