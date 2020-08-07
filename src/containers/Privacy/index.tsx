@@ -32,8 +32,9 @@ const Privacy = (): JSX.Element => {
                     tilbake til enkeltbrukere.
                 </Paragraph>
                 <Paragraph>
-                    Vi benytter to informasjonskapsler av typen _ga, én av typen
-                    _gat samt én _gid. Varighet og nærmere beskrivelse av disse
+                    Vi benytter informasjonskapsler for å kunne skille mellom
+                    brukere og å håndtere forespørselsrate. Disse kalles _ga,
+                    _gid og _gat. Varighet og nærmere beskrivelse av disse
                     finnes{' '}
                     <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/cookie-usage">
                         her
