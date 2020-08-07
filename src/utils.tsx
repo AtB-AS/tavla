@@ -135,21 +135,21 @@ export function getIcon(
 
     switch (identifier) {
         case 'bus':
-            return <BusIcon color={colorToUse} />
+            return <BusIcon key={identifier} color={colorToUse} />
         case 'bicycle':
-            return <BicycleIcon color={colorToUse} />
+            return <BicycleIcon key={identifier} color={colorToUse} />
         case 'carferry':
-            return <CarferryIcon color={colorToUse} />
+            return <CarferryIcon key={identifier} color={colorToUse} />
         case 'ferry':
-            return <FerryIcon color={colorToUse} />
+            return <FerryIcon key={identifier} color={colorToUse} />
         case 'subway':
-            return <SubwayIcon color={colorToUse} />
+            return <SubwayIcon key={identifier} color={colorToUse} />
         case 'train':
-            return <TrainIcon color={colorToUse} />
+            return <TrainIcon key={identifier} color={colorToUse} />
         case 'tram':
-            return <TramIcon color={colorToUse} />
+            return <TramIcon key={identifier} color={colorToUse} />
         case 'plane':
-            return <PlaneIcon color={colorToUse} />
+            return <PlaneIcon key={identifier} color={colorToUse} />
         default:
             return null
     }
@@ -188,7 +188,9 @@ export function timeUntil(time: string): number {
     return differenceInSeconds(parseISO(time), new Date())
 }
 
-export function transformDepartureToLineData(departure: Departure): LineData {
+export function transformDepartureToLineData(
+    departure: Departure,
+): LineData | null {
     const {
         date,
         expectedDepartureTime,
@@ -198,7 +200,9 @@ export function transformDepartureToLineData(departure: Departure): LineData {
         cancellation,
     } = departure
 
-    const { line } = serviceJourney.journeyPattern
+    const { line } = serviceJourney.journeyPattern || {}
+
+    if (!line) return null
 
     const departureTime = parseISO(expectedDepartureTime)
     const minDiff = differenceInMinutes(departureTime, new Date())
@@ -209,7 +213,7 @@ export function transformDepartureToLineData(departure: Departure): LineData {
 
     const transportMode =
         line.transportMode === 'coach' ? 'bus' : line.transportMode
-    const subType = departure.serviceJourney.transportSubmode
+    const subType = departure.serviceJourney?.transportSubmode
 
     return {
         id: `${date}::${departure.serviceJourney.id}`,
@@ -354,8 +358,11 @@ export const useThemeColor = (
     return color[settings?.theme] || fallback
 }
 
-export function isDarkOrDefaultTheme(theme: Theme): boolean {
+export function isDarkOrDefaultTheme(theme?: Theme): boolean {
     return (
-        theme === Theme.DARK || theme === Theme.DEFAULT || theme === Theme.ATB
+        !theme ||
+        theme === Theme.DARK ||
+        theme === Theme.DEFAULT ||
+        theme === Theme.ATB
     )
 }

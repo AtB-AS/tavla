@@ -21,15 +21,12 @@ interface Item {
 async function getStopPlace(coordinates: {
     latitude: number
     longitude: number
-}): Promise<string> {
-    return await service
-        .getFeaturesReverse(coordinates, {
-            size: 1,
-            radius: 1000,
-        })
-        .then((result) => {
-            return convertFeatureToLocation(result[0]).name
-        })
+}): Promise<string | undefined> {
+    const result = await service.getFeaturesReverse(coordinates, {
+        size: 1,
+        radius: 1000,
+    })
+    return convertFeatureToLocation(result[0]).name
 }
 
 function mapFeaturesToItems(features: Feature[]): Item[] {
@@ -54,6 +51,11 @@ function getErrorMessage(error: PositionError): string {
     }
 }
 
+interface Location {
+    hasLocation: boolean
+    selectedLocationName: string | null
+}
+
 const SearchPanel = ({ handleCoordinatesSelected }: Props): JSX.Element => {
     const [{ denied }, refreshLocationPermission] = useLocationPermission()
 
@@ -65,9 +67,9 @@ const SearchPanel = ({ handleCoordinatesSelected }: Props): JSX.Element => {
         }
     }, [denied])
 
-    const [errorMessage, setErrorMessage] = useState(null)
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-    const [location, setLocation] = useState({
+    const [location, setLocation] = useState<Location>({
         hasLocation: false,
         selectedLocationName: null,
     })
@@ -77,10 +79,12 @@ const SearchPanel = ({ handleCoordinatesSelected }: Props): JSX.Element => {
     const getAddressFromPosition = (position: Coordinates): void => {
         setChosenCoord(position)
         getStopPlace(position).then((locationName) => {
-            setLocation({
-                hasLocation: true,
-                selectedLocationName: locationName,
-            })
+            if (locationName) {
+                setLocation({
+                    hasLocation: true,
+                    selectedLocationName: locationName,
+                })
+            }
         })
     }
 
@@ -115,7 +119,7 @@ const SearchPanel = ({ handleCoordinatesSelected }: Props): JSX.Element => {
                 handleDeniedLocation,
             )
         } else {
-            setChosenCoord(item.coordinates)
+            setChosenCoord(item.coordinates || null)
             setLocation({
                 hasLocation: true,
                 selectedLocationName: item.label,
@@ -125,7 +129,7 @@ const SearchPanel = ({ handleCoordinatesSelected }: Props): JSX.Element => {
 
     const handleGoToBoard = (event: React.FormEvent<HTMLFormElement>): void => {
         event.preventDefault()
-        if (chosenCoord) {
+        if (chosenCoord && location.selectedLocationName) {
             handleCoordinatesSelected(
                 chosenCoord,
                 location.selectedLocationName,
@@ -184,7 +188,7 @@ const SearchPanel = ({ handleCoordinatesSelected }: Props): JSX.Element => {
 
 interface Props {
     handleCoordinatesSelected: (
-        choseCoord: Coordinates | null,
+        choseCoord: Coordinates,
         locationName: string,
     ) => void
 }

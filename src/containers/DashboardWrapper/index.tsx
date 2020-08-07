@@ -40,7 +40,7 @@ function DashboardWrapper(props: Props): JSX.Element {
         (!stopPlacesWithDepartures || !stopPlacesWithDepartures.length) &&
         (!bikeRentalStations || !bikeRentalStations.length)
 
-    const renderContents = (): JSX.Element | JSX.Element[] => {
+    const renderContents = (): JSX.Element | JSX.Element[] | null => {
         if (!noData && !initialLoading) {
             return children
         }
@@ -56,7 +56,9 @@ function DashboardWrapper(props: Props): JSX.Element {
         return <NoStopsOnTavle />
     }
 
-    const [{ logo, theme }] = useSettingsContext()
+    const [settings] = useSettingsContext()
+
+    const { theme } = settings || {}
 
     const getEnturLogo = (): JSX.Element => {
         const logoColor = isDarkOrDefaultTheme(theme) ? 'white' : 'black'
@@ -67,12 +69,12 @@ function DashboardWrapper(props: Props): JSX.Element {
         <ThemeContrastWrapper useContrast={isDarkOrDefaultTheme(theme)}>
             <div className={`dashboard-wrapper ${className}`}>
                 {renderContents()}
+                <div className="dashboard-wrapper__byline">
+                    <a href="https://tavla.entur.no">
+                        Tjenesten leveres av {getEnturLogo()}
+                    </a>
+                </div>
                 <ThemeContrastWrapper useContrast={true}>
-                    <div className="dashboard-wrapper__byline">
-                        <a href="https://tavla.entur.no">
-                            Tjenesten leveres av {getEnturLogo()}
-                        </a>
-                    </div>
                     <BottomMenu
                         className="dashboard-wrapper__bottom-menu"
                         history={history}

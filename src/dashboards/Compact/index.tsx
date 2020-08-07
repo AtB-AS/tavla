@@ -123,7 +123,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                             />
                         </div>
                     ))}
-                    {anyBikeRentalStations ? (
+                    {bikeRentalStations && anyBikeRentalStations ? (
                         <div
                             key={numberOfStopPlaces.toString()}
                             data-grid={getDataGrid(numberOfStopPlaces)}

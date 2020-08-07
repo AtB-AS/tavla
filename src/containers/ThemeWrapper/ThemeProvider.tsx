@@ -8,7 +8,7 @@ type ThemeContextType = {
 }
 
 const ThemeContext = React.createContext<ThemeContextType>({
-    themeContext: undefined,
+    themeContext: Theme.DEFAULT,
 })
 
 const ThemeProvider: FC = (props): JSX.Element => {
@@ -17,7 +17,13 @@ const ThemeProvider: FC = (props): JSX.Element => {
     const themeContext = settings?.theme || Theme.ATB
 
     useEffect(() => {
-        const themes = ['dark', 'light', 'grey', 'default', 'atb']
+        const themes = [
+            Theme.DARK,
+            Theme.LIGHT,
+            Theme.GREY,
+            Theme.DEFAULT,
+            Theme.ATB,
+        ]
         themes.forEach((theme) => {
             document.body.classList.remove(`${theme}-theme`)
         })

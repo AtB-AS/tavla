@@ -8,7 +8,7 @@ import { AtbLogo } from '../../assets/icons'
 import UpgradeTavlaBanner from '../../containers/DashboardWrapper/UpgradeTavlaBanner'
 import { isDarkOrDefaultTheme } from '../../utils'
 
-export function DashboardHeader(): JSX.Element {
+export function DashboardHeader(): JSX.Element | null {
     const settings = useSettings()[0]
     if (!settings) return null
     const { logo, logoSize, description, theme } = settings
