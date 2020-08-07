@@ -62,6 +62,7 @@ const DepartureTile = ({
         <Tile title={name} icons={headerIcons} alerts={disruptionMessages}>
             {routes.map((route) => {
                 const subType = groupedDepartures[route][0].subType
+                const quayCode = groupedDepartures[route][0].quay?.publicCode
                 const routeData = groupedDepartures[route].slice(0, 3)
                 const routeType = routeData[0].type
                 const icon = getIcon(routeType, iconColorType, subType)
@@ -71,6 +72,7 @@ const DepartureTile = ({
                         key={route}
                         label={route}
                         subLabels={routeData.map(createTileSubLabel)}
+                        quayCode={quayCode}
                         icon={icon}
                         alerts={getDisruptionMessagesForRoute(
                             groupedDepartures[route],
