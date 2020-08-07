@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option go_package = "proto;form_feedback";
+
+message FormFeedback {
+  string body = 1;
+  string email = 2;
+  string name = 3;
+  string user_agent = 4;
+};

@@ -1,7 +1,7 @@
 {
   "projects": {
-    "prod": "entur-tavla-prod",
-    "staging": "entur-tavla-staging",
-    "default": "entur-tavla-staging"
+    "prod": "atb-tavla-d287f",
+    "staging": "atb-tavla-d287f",
+    "default": "atb-tavla-d287f"
   }
 }

@@ -17,7 +17,6 @@ export const DEFAULT_SETTINGS: Settings = {
     coordinates: undefined,
     owners: [],
     theme: Theme.ATB,
-    logo: null,
     logoSize: '32px',
     description: '',
 }
@@ -93,6 +92,7 @@ export function restore(): Settings {
         const decompressed = lz.decompressFromEncodedURIComponent(
             settingsWithoutVersionPrefix,
         )
+        if (!decompressed) return DEFAULT_SETTINGS
         const settings = JSON.parse(decompressed)
         return settings
     } catch (error) {

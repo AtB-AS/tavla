@@ -1,0 +1,47 @@
+steps:
+  - name: 'mirror.gcr.io/library/golang'
+    args: ['go', 'version']
+    dir: $_WORKDIR
+  - name: 'mirror.gcr.io/library/golang'
+    args: ['go', 'test', '-v']
+    dir: $_WORKDIR
+    id: test
+  - name: 'gcr.io/cloud-builders/gcloud'
+    dir: $_WORKDIR
+    waitFor: ['test']
+    args:
+      - functions
+      - deploy
+      - TavlaFeedbackFormHandler
+      - --source=.
+      - --runtime=go113
+      - --trigger-http
+      - --region=europe-west1
+      - --allow-unauthenticated
+      - --entry-point=HandleFormSubmission
+  - name: 'gcr.io/cloud-builders/gcloud'
+    dir: $_WORKDIR
+    waitFor: ['test']
+    args:
+      - functions
+      - deploy
+      - TavlaFeedbackNotifierSlack
+      - --source=.
+      - --runtime=go113
+      - --trigger-topic=tavla_form_feedback
+      - --region=europe-west1
+      - --entry-point=TavlaFeedbackNotifierSlack
+  - name: 'gcr.io/cloud-builders/gcloud'
+    dir: $_WORKDIR
+    waitFor: ['test']
+    args:
+      - functions
+      - deploy
+      - TavlaFeedbackNotifierEmail
+      - --source=.
+      - --runtime=go113
+      - --trigger-topic=tavla_form_feedback
+      - --region=europe-west1
+      - --entry-point=TavlaFeedbackNotifierEmail
+substitutions:
+  _WORKDIR: 'functions/feedback'

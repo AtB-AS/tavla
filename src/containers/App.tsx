@@ -11,6 +11,7 @@ import Chrono from '../dashboards/Chrono'
 import Timeline from '../dashboards/Timeline'
 
 import LandingPage from './LandingPage'
+import FeedbackPage from './FeedbackPage'
 import Admin from './Admin'
 import Privacy from './Privacy'
 import { LockedTavle, PageDoesNotExist } from './Error/ErrorPages'
@@ -24,7 +25,7 @@ import Header from '../components/Header'
 import './styles.scss'
 import MyBoards from './MyBoards'
 
-analytics.initialize('UA-108877193-6')
+analytics.initialize('UA-174177774-1')
 analytics.set('anonymizeIp', true)
 
 analytics.set('page', window.location.pathname)
@@ -56,7 +57,9 @@ const Content = (): JSX.Element => {
 
     return (
         <UserProvider value={user}>
-            <SettingsContext.Provider value={isOnTavle && settings}>
+            <SettingsContext.Provider
+                value={isOnTavle ? settings : [null, settings[1]]}
+            >
                 <ThemeProvider>
                     <div className="themeBackground">
                         <ToastProvider>
@@ -81,9 +84,16 @@ const Content = (): JSX.Element => {
                                 <Route path="/tavler" component={MyBoards} />
                                 <Route
                                     path="/admin"
-                                    component={settings[0] && Admin}
+                                    component={
+                                        settings[0] ? Admin : (): null => null
+                                    }
                                 />
                                 <Route path="/privacy" component={Privacy} />
+                                <Route
+                                    exact
+                                    path="/feedback"
+                                    component={FeedbackPage}
+                                />
                                 <Route path="/" component={PageDoesNotExist} />
                             </Switch>
                         </ToastProvider>

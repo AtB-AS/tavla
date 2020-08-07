@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import { ClosedLockIcon, UserIcon, LogOutIcon } from '@entur/icons'
 import { useToast } from '@entur/alert'
 
-import { TavlaLogo, Github } from '../../assets/icons'
+import { AtbLogo, Github } from '../../assets/icons'
 import LoginModal from '../LoginModal'
 
 import { useUser } from '../../auth'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import { isDarkOrDefaultTheme } from '../../utils'
+import { useSettingsContext } from '../../settings'
 
 export function DefaultHeader(): JSX.Element {
     const [displayLoginModal, setDisplayLoginModal] = useState<boolean>(false)
@@ -15,12 +18,19 @@ export function DefaultHeader(): JSX.Element {
     const userLoggedIn = user && !user.isAnonymous
     const { addToast } = useToast()
 
-    const login = (): void => {
+    const [settings] = useSettingsContext()
+    const logoColor = isDarkOrDefaultTheme(settings?.theme) ? 'white' : 'black'
+
+    const login = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    ): void => {
         event.preventDefault()
         setDisplayLoginModal(true)
     }
 
-    const logout = (): void => {
+    const logout = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    ): void => {
         event.preventDefault()
         firebase.auth().signOut()
         setDisplayLoginModal(false)
@@ -57,7 +67,7 @@ export function DefaultHeader(): JSX.Element {
 
     const tavlerItem = !userLoggedIn || (
         <div className="header__resources__item">
-            <a href="/tavler">
+            <Link to="/tavler">
                 <span className="header__resources__item__text">
                     Mine tavler
                 </span>
@@ -65,7 +75,7 @@ export function DefaultHeader(): JSX.Element {
                     className="header__resources__item__icon"
                     size="1.5rem"
                 />
-            </a>
+            </Link>
         </div>
     )
 
@@ -73,15 +83,18 @@ export function DefaultHeader(): JSX.Element {
         <div className="header">
             {loginModal}
             <div className={`header__logo-wrapper`}>
-                <a href="/">
-                    <TavlaLogo className={`header__logo-wrapper__logo`} />
-                </a>
+                <Link to="/">
+                    <AtbLogo
+                        className={`header__logo-wrapper__logo`}
+                        style={logoColor}
+                    />
+                </Link>
             </div>
             <div className="header__resources">
                 {!hideLogin ? userItem : null}
                 {tavlerItem}
                 <div className="header__resources__item">
-                    <a href="/privacy">
+                    <Link to="/privacy">
                         <span className="header__resources__item__text">
                             Personvern
                         </span>
@@ -89,11 +102,11 @@ export function DefaultHeader(): JSX.Element {
                             className="header__resources__item__icon"
                             size="1.5rem"
                         />
-                    </a>
+                    </Link>
                 </div>
                 <div className="header__resources__item">
                     <a
-                        href="https://github.com/entur/tavla/"
+                        href="https://github.com/atb-as/tavla/"
                         target="_blank"
                         rel="noopener noreferrer"
                     >

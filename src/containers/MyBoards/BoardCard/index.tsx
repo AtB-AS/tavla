@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 import { Heading3 } from '@entur/typography'
 import { LinkIcon, ClockIcon } from '@entur/icons'
@@ -59,20 +60,18 @@ function BoardCard({
         setBoardTitle(settings.boardName)
     }, [settings.boardName])
 
-    const onClickPreview = useCallback(() => {
-        event.preventDefault()
-        history.push(`/t/${id}`)
-    }, [id, history])
-
     const onClickTitle = useCallback(() => {
-        event.preventDefault()
         setTitleEditMode(true)
     }, [setTitleEditMode])
 
     const onChangeTitle = useCallback(
-        (e) => {
+        (
+            event:
+                | React.FocusEvent<HTMLInputElement>
+                | React.KeyboardEvent<HTMLInputElement>,
+        ) => {
             event.preventDefault()
-            const newTitle = e.target.value
+            const newTitle = event.currentTarget.value
             setTitleEditMode(false)
             if (newTitle == settings.boardName) return
 
@@ -99,7 +98,7 @@ function BoardCard({
             autoFocus={true}
             onBlur={onChangeTitle}
             onKeyUp={(e): void => {
-                e.preventDefault
+                e.preventDefault()
                 if (e.keyCode == 13) onChangeTitle(e)
             }}
         />
@@ -116,9 +115,11 @@ function BoardCard({
 
     return (
         <div className={`board-card ${className ? className : ''}`}>
-            <div onClick={onClickPreview} className="board-card__preview">
-                <img src={preview[`${dashboardType}`]} />
-            </div>
+            <Link to={`/t/${id}`}>
+                <div className="board-card__preview">
+                    <img src={preview[`${dashboardType}`]} />
+                </div>
+            </Link>
 
             <div className="board-card__text-container">
                 <div className="board-card__text-container__top-wrapper">

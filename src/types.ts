@@ -1,15 +1,15 @@
-import { LegMode, TransportSubmode, StopPlace } from '@entur/sdk'
+import { LegMode, TransportSubmode, StopPlace, Quay } from '@entur/sdk'
 
 export interface LineData {
     id: string
     type: LegMode
-    subType: TransportSubmode
+    subType?: TransportSubmode
     time: string
     route: string
     expectedDepartureTime: string
-    situation?: string
+    situations?: string[]
     hasCancellation?: boolean
-    isRealtime?: boolean
+    isScheduled?: boolean
 }
 
 export interface Line {
@@ -21,6 +21,7 @@ export interface Line {
 
 export type StopPlaceWithDepartures = StopPlace & {
     departures: LineData[]
+    quays?: Quay[]
 }
 
 export type StopPlaceWithLines = StopPlace & { lines: Line[] }
@@ -34,7 +35,7 @@ export interface TileSubLabel {
     time: string
     hasCancellation?: boolean
     hasSituation?: boolean
-    isRealtime?: boolean
+    isScheduled?: boolean
 }
 
 export enum Theme {
@@ -45,4 +46,7 @@ export enum Theme {
     ATB = 'atb',
 }
 
-export type IconColorType = 'default' | 'contrast'
+export enum IconColorType {
+    DEFAULT = 'default',
+    CONTRAST = 'contrast',
+}

@@ -16,7 +16,7 @@
             padding: 0;
         }
     }
-    
+
     &__submit-button:hover {
         background-color: var(--tavla-box-background-color);
     }
@@ -70,6 +70,10 @@
 
 .eds-tab[aria-selected='true']::after {
     background-color: var(--tavla-background-color);
+}
+
+.eds-tab[aria-selected=true]::before {
+    background: var(--tavla-tab-selection-indicator);
 }
 
 .eds-tab:focus {
