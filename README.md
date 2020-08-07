@@ -1,6 +1,8 @@
 
-
 # AtB Tavla
+
+![Build and Deploy](https://github.com/AtB-AS/tavla/workflows/Build%20and%20Deploy/badge.svg)
+
 
 AtB Tavla ("The Board") is a customizable departure board for public transport in Trøndelag.
 Personalize it from its admin panel, which requires no technical skills.
