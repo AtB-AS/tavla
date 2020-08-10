@@ -1,6 +1,6 @@
-# Entur - Tavla
+# AtB - Tavla
 
-Tavla ("The Board") is a customizable departure board for all public transport in Norway.
+Tavla ("The Board") is a customizable departure board for all public transport in Trondelag, Norway.
 Personalize it from its admin panel, which requires no technical skills.
 
 Go to [tavla.entur.no](https://tavla.entur.no) to set up your table today.
