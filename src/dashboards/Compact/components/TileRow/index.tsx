@@ -21,9 +21,7 @@ export function TileRow({
                 <div className="tilerow__sublabels">
                     {subLabels.map((subLabel, index) => (
                         <div key={index}>
-                            {subLabel.isScheduled && (
-                                <span className="scheduled">ca.</span>
-                            )}
+                            {subLabel.isScheduled && 'ca '}
                             {subLabel.time}
                             <SubLabelIcon subLabel={subLabel} />
                         </div>
