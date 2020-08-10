@@ -7,6 +7,7 @@ import { getDisruptionMessagesForStop } from '../../logic/getDisruptionMessages'
 
 import DepartureTile from './DepartureTile'
 import BikeTile from './BikeTile'
+import MarketingTile from './MarketingTile'
 import './styles.scss'
 
 import {
@@ -131,6 +132,12 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                     ) : (
                         []
                     )}
+                    <div
+                        key="marketing"
+                        data-grid={getDataGrid(numberOfStopPlaces)}
+                    >
+                        <MarketingTile></MarketingTile>
+                    </div>
                 </ResponsiveReactGridLayout>
             </div>
         </DashboardWrapper>
