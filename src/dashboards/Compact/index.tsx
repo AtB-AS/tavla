@@ -61,23 +61,21 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
     }
 
     const cols = {
-        xxlg: limitToMax(6),
-        xlg: limitToMax(5),
-        lg: limitToMax(4),
-        md: limitToMax(3),
-        sm: limitToMax(2),
-        xs: 1,
+        xlg: limitToMax(6),
+        lg: limitToMax(5),
+        md: limitToMax(4),
+        sm: limitToMax(3),
+        xs: limitToMax(2),
         xxs: 1,
     }
 
     const gridBreakpoints = {
-        xxlg: 2200,
-        xlg: 1600,
-        lg: 1350,
-        md: 996,
-        sm: 768,
-        xs: 480,
-        xxs: 0,
+        xlg: 2350,
+        lg: 2000,
+        md: 1550,
+        sm: 1200,
+        xs: 768,
+        xxs: 480,
     }
 
     return (
