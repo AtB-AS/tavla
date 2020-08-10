@@ -17,10 +17,10 @@ function DistanceEditor(props: Props): JSX.Element {
 
     return (
         <div className="distance-editor">
-            <Label>Hvor langt unna vil du inkludere stoppesteder?</Label>
+            <Label>Hvor langt unna vil du inkludere holdeplasser?</Label>
             <Slider handleChange={handleDistanceUpdate} distance={distance} />
             <p className="distance-editor__text">
-                Viser stoppesteder innenfor <b>{distance}</b> m avstand.
+                Viser holdeplasser innenfor <b>{distance}</b> m avstand.
             </p>
         </div>
     )

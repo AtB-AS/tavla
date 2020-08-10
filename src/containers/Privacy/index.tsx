@@ -52,7 +52,7 @@ const Privacy = (): JSX.Element => {
                 <Paragraph>
                     For at søket med «Fra din posisjon» skal fungere, må Entur
                     vite hvor du befinner deg. Denne tilgangen brukes også til å
-                    vise de nærmeste stoppestedene. Posisjonen finner vi ved
+                    vise de nærmeste holdeplassene. Posisjonen finner vi ved
                     hjelp av nettleserens geolokasjons-funksjon.
                 </Paragraph>
                 <Paragraph>

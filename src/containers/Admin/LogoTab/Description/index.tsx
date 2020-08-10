@@ -29,7 +29,7 @@ const Description = (): JSX.Element => {
             <Paragraph className="logo-page__paragraph">
                 Her kan du skrive inn en beskrivelse av tavla. Beskrivelsen er
                 plassert under logoen oppe i venstre hjørne. Dette feltet kan
-                brukes til å beskrive avgangene man ser, hva stoppestedene
+                brukes til å beskrive avgangene man ser, hva holdeplassene
                 ligger i nærheten av eller henvise til andre kanaler. Maks 80
                 tegn.
             </Paragraph>

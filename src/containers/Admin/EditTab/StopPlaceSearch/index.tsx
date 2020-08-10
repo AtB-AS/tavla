@@ -45,12 +45,12 @@ const SelectionPanelSearch = ({ handleAddNewStop }: Props): JSX.Element => {
 
     return (
         <div className="stop-place-search">
-            <Label>Stoppested</Label>
+            <Label>Holdeplass</Label>
             <Dropdown
                 searchable
                 openOnFocus
                 debounceTimeout={500}
-                placeholder="Søk på stoppested for å legge til flere"
+                placeholder="Søk på holdeplass for å legge til flere"
                 items={getItems}
                 onChange={onItemSelected}
             />
