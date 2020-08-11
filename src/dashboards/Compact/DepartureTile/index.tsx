@@ -72,7 +72,7 @@ const DepartureTile = ({
                         key={route}
                         label={route}
                         subLabels={routeData.map(createTileSubLabel)}
-                        quayCode={quayCode}
+                        quayCode={quayCode ? `${name} ${quayCode}` : undefined}
                         icon={icon}
                         alerts={getDisruptionMessagesForRoute(
                             groupedDepartures[route],
