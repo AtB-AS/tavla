@@ -35,9 +35,9 @@ const Privacy = (): JSX.Element => {
                     Vi benytter informasjonskapsler for å kunne skille mellom
                     brukere og å håndtere forespørselsrate. Disse kalles _ga,
                     _gid og _gat. Varighet og nærmere beskrivelse av disse
-                    finnes{' '}
+                    finnes på{' '}
                     <a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/cookie-usage">
-                        her
+                        developers.google.com
                     </a>
                     .
                 </Paragraph>
