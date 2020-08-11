@@ -20,15 +20,30 @@ function onLayoutChange(layouts: Layouts, key: string): void {
     saveToLocalStorage(key, layouts)
 }
 
-function getDataGrid(index: number): { [key: string]: number } {
+function getDataGrid(
+    index: number,
+    columns: number,
+): { [key: string]: number } {
     return {
         w: 1,
         maxW: 1,
         minH: 1,
         h: 4,
-        x: index,
-        y: 0,
+        x: index % columns,
+        y: 1,
     }
+}
+
+function getCurrentLayout(
+    gridBreakpoints: GridBreakpoints,
+): keyof GridBreakpoints {
+    let size = Object.keys(gridBreakpoints)[0]
+    Object.values(gridBreakpoints).forEach((gridValue, i) => {
+        if (gridValue > window.innerWidth) {
+            size = Object.keys(gridBreakpoints)[i + 1] as keyof GridBreakpoints
+        }
+    })
+    return size as keyof GridBreakpoints
 }
 
 const EnturDashboard = ({ history }: Props): JSX.Element => {
@@ -57,7 +72,9 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
 
     // Limit column count if there are not enough space
     function limitToMax(columns: number): number {
-        return Math.min(numberOfStopPlaces + extraCols, columns)
+        return numberOfStopPlaces
+            ? Math.min(numberOfStopPlaces + extraCols, columns)
+            : columns
     }
 
     const cols = {
@@ -78,6 +95,8 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
         xxs: 480,
     }
 
+    const colCount = cols[getCurrentLayout(gridBreakpoints)]
+
     return (
         <DashboardWrapper
             className="compact"
@@ -86,52 +105,58 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
             stopPlacesWithDepartures={stopPlacesWithDepartures}
         >
             <div className="compact__tiles">
-                <ResponsiveReactGridLayout
-                    key={numberOfStopPlaces}
-                    cols={cols}
-                    layouts={localStorageLayout}
-                    breakpoints={gridBreakpoints}
-                    compactType="vertical"
-                    isResizable={true}
-                    onLayoutChange={(
-                        layout: Layout[],
-                        layouts: Layouts,
-                    ): void => {
-                        if (numberOfStopPlaces > 0) {
-                            onLayoutChange(layouts, dashboardKey)
-                        }
-                    }}
-                >
-                    {(stopPlacesWithDepartures || []).map((stop, index) => (
-                        <div
-                            key={index.toString()}
-                            data-grid={getDataGrid(index)}
-                            className={
-                                getDisruptionMessagesForStop(stop)
-                                    ? 'warning'
-                                    : ''
+                {colCount > 0 && (
+                    <ResponsiveReactGridLayout
+                        key={numberOfStopPlaces}
+                        cols={cols}
+                        layouts={localStorageLayout}
+                        breakpoints={gridBreakpoints}
+                        compactType="vertical"
+                        isResizable={true}
+                        margin={[30, 30]}
+                        onLayoutChange={(
+                            layout: Layout[],
+                            layouts: Layouts,
+                        ): void => {
+                            if (numberOfStopPlaces > 0) {
+                                onLayoutChange(layouts, dashboardKey)
                             }
-                        >
-                            <DepartureTile
-                                key={index}
-                                stopPlaceWithDepartures={stop}
-                                disruptionMessages={getDisruptionMessagesForStop(
-                                    stop,
+                        }}
+                    >
+                        {(stopPlacesWithDepartures || []).map((stop, index) => (
+                            <div
+                                key={index.toString()}
+                                data-grid={getDataGrid(index, colCount)}
+                                className={
+                                    getDisruptionMessagesForStop(stop)
+                                        ? 'warning'
+                                        : ''
+                                }
+                            >
+                                <DepartureTile
+                                    key={index}
+                                    stopPlaceWithDepartures={stop}
+                                    disruptionMessages={getDisruptionMessagesForStop(
+                                        stop,
+                                    )}
+                                />
+                            </div>
+                        ))}
+                        {bikeRentalStations && anyBikeRentalStations ? (
+                            <div
+                                key={numberOfStopPlaces.toString()}
+                                data-grid={getDataGrid(
+                                    numberOfStopPlaces,
+                                    colCount,
                                 )}
-                            />
-                        </div>
-                    ))}
-                    {bikeRentalStations && anyBikeRentalStations ? (
-                        <div
-                            key={numberOfStopPlaces.toString()}
-                            data-grid={getDataGrid(numberOfStopPlaces)}
-                        >
-                            <BikeTile stations={bikeRentalStations} />
-                        </div>
-                    ) : (
-                        []
-                    )}
-                </ResponsiveReactGridLayout>
+                            >
+                                <BikeTile stations={bikeRentalStations} />
+                            </div>
+                        ) : (
+                            []
+                        )}
+                    </ResponsiveReactGridLayout>
+                )}
             </div>
         </DashboardWrapper>
     )
@@ -139,6 +164,15 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
 
 interface Props {
     history: any
+}
+
+interface GridBreakpoints {
+    xlg: number
+    lg: number
+    md: number
+    sm: number
+    xs: number
+    xxs: number
 }
 
 export default EnturDashboard
