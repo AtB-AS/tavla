@@ -11,12 +11,14 @@ export function TileRow({
     icon,
     subLabels,
     alerts,
+    quayCode,
 }: Props): JSX.Element {
     return (
         <div className="tilerow">
             <div className="tilerow__icon">{icon}</div>
             <div className="tilerow__texts">
                 <Heading3 className="tilerow__label">{label}</Heading3>
+                <p className="tilerow__quaycode">{quayCode}</p>
                 {alerts && <AlertContainer alerts={alerts} />}
                 <div className="tilerow__sublabels">
                     {subLabels.map((subLabel, index) => (
@@ -65,6 +67,7 @@ interface Props {
     subLabels: TileSubLabel[]
     icon: JSX.Element | null
     alerts?: string[]
+    quayCode?: string
 }
 
 interface AlertProps {

@@ -227,6 +227,7 @@ export function transformDepartureToLineData(
         ),
         hasCancellation: cancellation,
         isScheduled: !departure.realtime,
+        quay: departure.quay,
     }
 }
 

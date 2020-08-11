@@ -10,6 +10,7 @@ export interface LineData {
     situations?: string[]
     hasCancellation?: boolean
     isScheduled?: boolean
+    quay?: Quay
 }
 
 export interface Line {
