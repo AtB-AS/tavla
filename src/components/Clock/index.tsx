@@ -40,7 +40,19 @@ function Clock({ className }: Props): JSX.Element {
     }`
     const hours = `${now.getHours()}`.padStart(2, '0')
     const minutes = `${now.getMinutes()}`.padStart(2, '0')
-    const time = `${hours}:${minutes}`
+    const seconds = now.getSeconds()
+    const time =
+        seconds % 2 ? (
+            <span>
+                {hours}:{minutes}
+            </span>
+        ) : (
+            <span>
+                {hours}
+                <span style={{ opacity: 0 }}>:</span>
+                {minutes}
+            </span>
+        )
 
     return (
         <div className={`clock ${className}`}>
