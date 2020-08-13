@@ -1,8 +1,8 @@
-name: Build and Deploy
+name: Build and Deploy - Staging
 on:
   push:
     branches:
-      - atb/main
+      - atb/dev
 
 jobs:
   build:

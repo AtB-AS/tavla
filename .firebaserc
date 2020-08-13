@@ -1,7 +1,7 @@
 {
   "projects": {
     "prod": "atb-tavla-d287f",
-    "staging": "atb-tavla-d287f",
-    "default": "atb-tavla-d287f"
+    "staging": "atb-tavla-staging-4ded2",
+    "default": "atb-tavla-staging-4ded2"
   }
 }
