@@ -3,9 +3,7 @@ import React, { useState } from 'react'
 import ErrorWrapper from '.'
 import LoginModal from '../../components/LoginModal'
 
-import sikkerhetBomLight from './../../assets/images/sikkerhet_bom_light@2x.png'
-import duerLight from './../../assets/images/duer@2x.png'
-import sauerLight from './../../assets/images/sauer_lag@2x.png'
+import illustration from './../../assets/images/illustration-light.svg'
 
 import { useUser } from '../../auth'
 import firebase from 'firebase/app'
@@ -56,7 +54,7 @@ export function LockedTavle({ history }: Props): JSX.Element {
             <ErrorWrapper
                 title="Oi! Denne tavla er låst."
                 message={errorMessage}
-                image={sikkerhetBomLight}
+                image={illustration}
                 callbackMessage={callbackMessage}
                 callback={callback}
             />
@@ -74,7 +72,7 @@ export function PageDoesNotExist({ history }: Props): JSX.Element {
             <ErrorWrapper
                 title="Her var det tomt!"
                 message="Det finnes ingen tavle på denne url-en. Du kan lage en avgangstavle ved å trykke på knappen nedenfor."
-                image={duerLight}
+                image={illustration}
                 callbackMessage="Gå tilbake"
                 callback={callback}
             />
@@ -88,7 +86,7 @@ export function NoStopsOnTavle(): JSX.Element {
             <ErrorWrapper
                 title="Nå havnet vi på ville veier."
                 message="Vi finner ingen holdeplasser å vise på denne tavla. Rediger tavla eller prøv et nytt søk."
-                image={sauerLight}
+                image={illustration}
             />
         </div>
     )
@@ -104,7 +102,7 @@ export function NoTavlerAvailable({ history }: Props): JSX.Element {
             <ErrorWrapper
                 title="Her var det tomt!"
                 message="Du har ingen tavler som er lagret på denne kontoen. Trykk på knappen nedenfor for å lage en avgangstavle."
-                image={duerLight}
+                image={illustration}
                 callbackMessage="Lag en ny tavle"
                 callback={callback}
             />
@@ -132,7 +130,7 @@ export function NoAccessToTavler(): JSX.Element {
             <ErrorWrapper
                 title="Lenger kommer du ikke!"
                 message="Du er ikke logget inn, og kan derfor ikke se dine tavler. Trykk på knappen nedenfor for å logge inn."
-                image={sikkerhetBomLight}
+                image={illustration}
                 callbackMessage="Logg inn"
                 callback={callback}
             />
