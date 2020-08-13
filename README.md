@@ -1,4 +1,3 @@
-
 # AtB Tavla
 
 ![Build and Deploy](https://github.com/AtB-AS/tavla/workflows/Build%20and%20Deploy/badge.svg)

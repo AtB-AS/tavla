@@ -9,7 +9,8 @@ import './styles.scss'
 
 function Header(): JSX.Element | null {
     const path = window.location.pathname.split('/')[1]
-    const featureToggleDisplayHeader = path == '' || path == 'privacy'
+    const featureToggleDisplayHeader =
+        path == '' || path == 'privacy' || path == 'feedback'
     if (featureToggleDisplayHeader) return null
 
     const onDashboard = path == 't' || path == 'dashboard'

@@ -87,7 +87,7 @@ export function NoStopsOnTavle(): JSX.Element {
         <div>
             <ErrorWrapper
                 title="Nå havnet vi på ville veier."
-                message="Vi finner ingen stoppesteder å vise på denne tavla. Rediger tavla eller prøv et nytt søk."
+                message="Vi finner ingen holdeplasser å vise på denne tavla. Rediger tavla eller prøv et nytt søk."
                 image={sauerLight}
             />
         </div>

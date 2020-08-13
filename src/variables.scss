@@ -58,6 +58,10 @@
     --tavla-slider-color: #fff;
     --tavla-slider-thumb-color: #fff;
     --tavla-slider-fill-color: rgb(174, 183, 226);
+    --floating-button-background: rgb(84, 86, 140);
+    --floating-button-font-color: #fff;
+    --floating-button-primary-background: rgb(174, 183, 226);
+    --floating-button-primary-font-color: rgb(24, 28, 86);
     --tavla-modal-overlay-color: rgba(24, 28, 86, 0.8);
     --tavla-tab-selection-indicator: #ff5959;
     --tavla-warning: #f8cf54;
@@ -86,7 +90,7 @@
     --tavla-input-disabled-font-color: #656781;
     --tavla-input-icon-color: #000;
     --tavla-slider-color: #303030;
-    --tavla-slider-thumb-color: #303030;
+    --tavla-slider-thumb-color: #c1c1c1;
     --tavla-slider-fill-color: #4d4d4d;
     --floating-button-background: rgb(42, 42, 42);
     --floating-button-font-color: #fff;
@@ -151,8 +155,10 @@
     --tavla-input-font-color: black;
     --tavla-input-placeholder-color: #646464;
     --tavla-input-disabled-background-color: #d1d1d3;
+    --tavla-input-disabled-font-color: #656781;
     --tavla-input-icon-color: #000;
     --tavla-slider-color: #e9e9e9;
+    --tavla-slider-thumb-color: #fff;
     --tavla-slider-fill-color: rgb(148, 148, 148);
     --floating-button-background: #fff;
     --floating-button-font-color: #000;
