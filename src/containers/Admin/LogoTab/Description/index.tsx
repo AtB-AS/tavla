@@ -40,7 +40,7 @@ const Description = (): JSX.Element => {
                     setValue(event.currentTarget.value)
                 }
                 maxLength={80}
-                disabled={logoSize === '56px'}
+                disabled={logoSize === '66px'}
                 placeholder="Eks. «Kollektivanganger fra Thon Hotel Oslofjord»."
             />
         </>

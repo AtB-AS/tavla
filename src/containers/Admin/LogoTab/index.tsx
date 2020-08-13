@@ -102,7 +102,7 @@ const LogoTab = ({ tabIndex, setTabIndex }: Props): JSX.Element => {
                         Her kan du legge inn egen logo på din tavle. Logoen vil
                         være plassert i øverste venstre hjørne, og ha en høyde
                         på 32 piksler som standard. Du kan velge å sette
-                        størrelsen til stor logo (56px), men da vil du ikke
+                        størrelsen til stor logo (66px), men da vil du ikke
                         kunne legge til en beskrivelse av avgangstavla.
                     </Paragraph>
                     <Requirements />
