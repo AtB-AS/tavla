@@ -5,9 +5,6 @@ import { GridContainer, GridItem } from '@entur/grid'
 import { PrimaryButton, SecondaryButton } from '@entur/button'
 import { ModalType, LoginCase } from '..'
 
-import sikkerhetBom from './../../../assets/images/sikkerhet_bom.png'
-import retinaSikkerhetBom from './../../../assets/images/sikkerhet_bom@2x.png'
-
 interface Props {
     setModalType: Dispatch<SetStateAction<ModalType>>
     loginCase: LoginCase
@@ -31,9 +28,6 @@ const description = (loginCase: LoginCase): string => {
 const LoginOptions = ({ setModalType, loginCase }: Props): JSX.Element => {
     return (
         <div>
-            <div className="centered">
-                <img src={sikkerhetBom} srcSet={`${retinaSikkerhetBom} 2x`} />
-            </div>
             <Heading3 margin="bottom">Logg inn for å fortsette</Heading3>
             <Paragraph style={{ textAlign: 'center' }}>
                 {description(loginCase)}

@@ -3,9 +3,6 @@ import React, { useEffect } from 'react'
 import { Heading3, Paragraph } from '@entur/typography'
 import { Modal } from '@entur/modal'
 
-import Check from '../../assets/images/check.png'
-import retinaCheck from '../../assets/images/check@2x.png'
-
 import { useFirebaseAuthentication } from '../../auth'
 import { useSettingsContext } from '../../settings'
 
@@ -56,9 +53,6 @@ const LockModal = ({ open, onDismiss }: Props): JSX.Element | null => {
             className="lock-modal"
         >
             <CloseButton onClick={onDismiss} />
-            <div className="centered">
-                <img src={Check} srcSet={`${retinaCheck} 2x`} />
-            </div>
             <Heading3 margin="none">Tavla er låst til din konto</Heading3>
             <Paragraph>
                 Fra nå av kan bare du redigere denne tavla. Hvis du ikke vil ha
