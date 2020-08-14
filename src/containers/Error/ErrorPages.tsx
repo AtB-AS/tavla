@@ -4,6 +4,7 @@ import ErrorWrapper from '.'
 import LoginModal from '../../components/LoginModal'
 
 import illustration from './../../assets/images/illustration-light.svg'
+import villeVeier from './../../assets/images/ville-veier-light.svg'
 
 import { useUser } from '../../auth'
 import firebase from 'firebase/app'
@@ -72,7 +73,7 @@ export function PageDoesNotExist({ history }: Props): JSX.Element {
             <ErrorWrapper
                 title="Her var det tomt!"
                 message="Det finnes ingen tavle på denne url-en. Du kan lage en avgangstavle ved å trykke på knappen nedenfor."
-                image={illustration}
+                image={villeVeier}
                 callbackMessage="Gå tilbake"
                 callback={callback}
             />
@@ -86,7 +87,7 @@ export function NoStopsOnTavle(): JSX.Element {
             <ErrorWrapper
                 title="Nå havnet vi på ville veier."
                 message="Vi finner ingen holdeplasser å vise på denne tavla. Rediger tavla eller prøv et nytt søk."
-                image={illustration}
+                image={villeVeier}
             />
         </div>
     )
