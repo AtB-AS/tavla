@@ -8,9 +8,6 @@ import { useToast } from '@entur/alert'
 
 import CloseButton from '../../../../../components/LoginModal/CloseButton/CloseButton'
 
-import sikkerhetBom from '../../../../../assets/images/sikkerhet_bom.png'
-import retinaSikkerhetBom from '../../../../../assets/images/sikkerhet_bom@2x.png'
-
 import { deleteTavle } from '../../../../../settings/FirestoreStorage'
 
 import './styles.scss'
@@ -42,9 +39,6 @@ const DeleteTavleModal = ({ open, onDismiss, id }: Props): JSX.Element => {
             className="overflow-modal"
         >
             <CloseButton onClick={onDismiss} />
-            <div className="centered">
-                <img src={sikkerhetBom} srcSet={`${retinaSikkerhetBom} 2x`} />
-            </div>
             <Heading3 margin="none">Slette avgangstavle?</Heading3>
             <Paragraph>
                 Er du sikker på at du vil slette denne tavla? Tavla vil være

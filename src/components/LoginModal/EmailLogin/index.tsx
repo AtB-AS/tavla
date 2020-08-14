@@ -10,8 +10,6 @@ import { Heading3, Link } from '@entur/typography'
 import { useFormFields } from '../../../utils'
 import { ModalType } from '..'
 
-import sikkerhetBom from './../../../assets/images/sikkerhet_bom.png'
-import retinaSikkerhetBom from './../../../assets/images/sikkerhet_bom@2x.png'
 import CloseButton from '../CloseButton/CloseButton'
 
 export interface UserLogin {
@@ -74,9 +72,6 @@ const EmailLogin = ({ setModalType, onDismiss }: Props): JSX.Element => {
                     className="go-to"
                 />
                 <CloseButton onClick={handleClose} />
-            </div>
-            <div className="centered">
-                <img src={sikkerhetBom} srcSet={`${retinaSikkerhetBom} 2x`} />
             </div>
             <Heading3 margin="none">Logg inn med e-post</Heading3>
             <form>
