@@ -14,6 +14,10 @@ interface Item {
     coordinates?: Coordinates
 }
 
+enum CountyID {
+    Trøndelag = 'KVE:TopographicPlace:50',
+}
+
 function mapFeaturesToItems(features: Feature[]): Item[] {
     return features.map(({ geometry, properties: { id, name, locality } }) => {
         return {
@@ -32,6 +36,7 @@ async function getItems(query: string): Promise<Item[]> {
 
     const featuresData = await service.getFeatures(query, undefined, {
         layers: ['venue'],
+        'boundary.county_ids': CountyID.Trøndelag,
     })
     return mapFeaturesToItems(featuresData)
 }

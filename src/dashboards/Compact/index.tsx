@@ -94,6 +94,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
                     breakpoints={gridBreakpoints}
                     compactType="vertical"
                     isResizable={true}
+                    margin={[30, 30]}
                     onLayoutChange={(
                         layout: Layout[],
                         layouts: Layouts,

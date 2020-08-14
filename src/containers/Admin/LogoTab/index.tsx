@@ -33,13 +33,13 @@ const Requirements = (): JSX.Element => (
                 Ha god nok kontrast til bakgrunnen i valgt fargetema. Vi
                 anbefaler å bruke en lys eller hvit logo på de mørke temaene, og
                 farget/sort logo på lys bakgrunn for å sikre krav til universell
-                utforming. Om du er i tvil kan du sjekke kontrasten{' '}
+                utforming. Om du er i tvil kan du sjekke kontrasten på{' '}
                 <Link
                     target="_blank"
                     rel="noopener noreferrer"
                     href="https://webaim.org/resources/contrastchecker"
                 >
-                    her
+                    webaim.org
                 </Link>
                 .
             </ListItem>
@@ -102,7 +102,7 @@ const LogoTab = ({ tabIndex, setTabIndex }: Props): JSX.Element => {
                         Her kan du legge inn egen logo på din tavle. Logoen vil
                         være plassert i øverste venstre hjørne, og ha en høyde
                         på 32 piksler som standard. Du kan velge å sette
-                        størrelsen til stor logo (56px), men da vil du ikke
+                        størrelsen til stor logo (66px), men da vil du ikke
                         kunne legge til en beskrivelse av avgangstavla.
                     </Paragraph>
                     <Requirements />
