@@ -45,6 +45,14 @@ The default branch of this project is `atb/main`, which is where the latest rele
 
 To update AtB Tavla to with changes from entur/tavla, merge the `master` branch into the branch you want to update.
 
+## CI/CD
+
+Two versions of Tavla are hosted trough Firebase, staging at [atb-tavla-staging-4ded2.web.app](https://atb-tavla-staging-4ded2.web.app/) and prod at [tavla.dev.mittatb.no](https://tavla.dev.mittatb.no/). These are kept up to date with the `atb/dev`, and `atb/main` branches respectively. 
+
+The build and deploy is executed by the the [Build and Deploy - Staging](.github/workflows/build-and-deploy-staging.yml) and [Build and Deploy - Prod](.github/workflows/build-and-deploy-prod.yml) GitHub Actions on every push. The status of the latest builds can be seen in the [Actions tab](https://github.com/AtB-AS/tavla/actions?query=workflow%3A%22Build+and+Deploy%22).
+
+More details on the firebase setup can be found in [CONTRIBUTING.md](/CONTRIBUTING.md).
+
 ## Licenses and Terms
 
 * The source code is licensed under EUPL-1.2.
