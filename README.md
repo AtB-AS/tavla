@@ -41,7 +41,7 @@ Details on how to create your very own dashboard can be found in [CONTRIBUTING.m
 
 ### Branches
 
-The default branch of this project is `atb/main`, which is where the latest released version of AtB Tavla lives. The `master` branch is a copy of [entur/tavla](https://github.com/entur/tavla), and kept up to date trough an Action in [.github/workflows/repo-sync.yml](.github/workflows/repo-sync.yml). _The `master` branch should not be modified manually._
+The default branch of this project is `atb/main`, which is where the latest released version of AtB Tavla lives. The `master` branch is a copy of entur/tavla, and kept up to date trough an Action in [.github/workflows/repo-sync.yml](.github/workflows/repo-sync.yml). _The `master` branch should not be modified manually._
 
 To update AtB Tavla to with changes from entur/tavla, merge the `master` branch into the branch you want to update.
 
