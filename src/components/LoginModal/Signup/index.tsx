@@ -10,8 +10,6 @@ import { Heading2, Link } from '@entur/typography'
 import { useFormFields } from '../../../utils'
 import { ModalType } from '../index'
 
-import sikkerhetBom from './../../../assets/images/sikkerhet_bom.png'
-import retinaSikkerhetBom from './../../../assets/images/sikkerhet_bom@2x.png'
 import CloseButton from '../CloseButton/CloseButton'
 
 // eslint-disable-next-line
@@ -95,9 +93,6 @@ const Signup = ({ setModalType, onDismiss }: Props): JSX.Element => {
                     className="go-to"
                 />
                 <CloseButton onClick={handleClose} />
-            </div>
-            <div className="centered">
-                <img src={sikkerhetBom} srcSet={`${retinaSikkerhetBom} 2x`} />
             </div>
             <Heading2 margin="none">Lag en ny konto</Heading2>
 

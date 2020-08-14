@@ -10,9 +10,6 @@ import { useSettingsContext } from '../../settings'
 
 import LoginModal from '../../components/LoginModal'
 
-import sikkerhetBom from '../../assets/images/sikkerhet_bom.png'
-import retinaSikkerhetBom from '../../assets/images/sikkerhet_bom@2x.png'
-
 import { getDocumentId } from '../../utils'
 
 import './styles.scss'
@@ -77,9 +74,6 @@ const MineTavlerModal = ({ open, onDismiss }: Props): JSX.Element | null => {
             className="mine-tavler-modal"
         >
             <CloseButton onClick={onDismiss} />
-            <div className="centered">
-                <img src={sikkerhetBom} srcSet={`${retinaSikkerhetBom} 2x`} />
-            </div>
             <Heading3 margin="none">Vil du låse tavla først?</Heading3>
             <Paragraph>
                 Denne avgangstavla er ulåst. Hvis du vil lagre den til senere og
