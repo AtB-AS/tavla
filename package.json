@@ -55,6 +55,7 @@
         "lz-string": "^1.4.4",
         "react": "^16.13.1",
         "react-app-polyfill": "^1.0.6",
+        "react-cool-dimensions": "^1.1.3",
         "react-dom": "^16.13.1",
         "react-grid-layout": "^0.18.3",
         "react-router": "^5.2.0",
