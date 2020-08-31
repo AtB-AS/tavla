@@ -21,7 +21,6 @@ export function getDisruptionMessagesForStop(
     // Collect all situation messages from every quay
     stop?.quays?.forEach((quay) => {
         quay.situations.forEach((situation) => {
-            console.log(situation)
             disruptionMessages.add(situation.description[0]?.value)
         })
     })
