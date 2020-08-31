@@ -6,7 +6,9 @@ function getDepartureMessages(departures: LineData[]): Set<string> {
 
     departures.forEach((departure) => {
         if (departure.situations)
-            departure.situations.forEach((situation) => messages.add(situation))
+            departure.situations.forEach(
+                (situation) => situation.length > 0 && messages.add(situation),
+            )
     })
 
     return messages
@@ -16,7 +18,6 @@ export function getDisruptionMessagesForStop(
     stop: StopPlaceWithDepartures,
 ): string[] | undefined {
     const disruptionMessages: Set<string> = new Set()
-
     // Collect all situation messages from every quay
     stop?.quays?.forEach((quay) => {
         quay.situations.forEach((situation) => {
