@@ -1,0 +1,23 @@
+steps:
+    - name: 'mirror.gcr.io/library/golang'
+      args: ['go', 'version']
+      dir: $_WORKDIR
+    - name: 'mirror.gcr.io/library/golang'
+      args: ['go', 'test', '-v']
+      dir: $_WORKDIR
+      id: test
+    - name: 'gcr.io/cloud-builders/gcloud'
+      dir: $_WORKDIR
+      waitFor: ['test']
+      args:
+          - functions
+          - deploy
+          - TavlaListMarketingImages
+          - --source=.
+          - --runtime=go113
+          - --trigger-http
+          - --region=europe-west1
+          - --allow-unauthenticated
+          - --entry-point=HandleListMarketingImages
+substitutions:
+    _WORKDIR: 'functions/marketing'

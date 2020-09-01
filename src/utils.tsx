@@ -17,6 +17,8 @@ import {
 } from '@entur/icons'
 
 import { colors } from '@entur/tokens'
+colors.transport.contrast.bus = '#A8AD00'
+colors.transport.default.bus = '#A8AD00'
 
 import { Departure, LegMode, TransportSubmode } from '@entur/sdk'
 
