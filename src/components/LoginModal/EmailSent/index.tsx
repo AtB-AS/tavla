@@ -6,8 +6,6 @@ import { Heading3, Paragraph } from '@entur/typography'
 
 import { ModalType } from '..'
 
-import Check from './../../../assets/images/check.png'
-import retinaCheck from './../../../assets/images/check@2x.png'
 import { User } from 'firebase/app'
 import CloseButton from '../CloseButton/CloseButton'
 
@@ -28,9 +26,6 @@ const ResetPassword = ({ setModalType, onDismiss }: Props): JSX.Element => {
     return (
         <>
             <CloseButton onClick={handleClose} />
-            <div className="centered">
-                <img src={Check} srcSet={`${retinaCheck} 2x`} />
-            </div>
             <Heading3 margin="none">Sjekk e-posten din!</Heading3>
             <Paragraph>
                 Hvis du har en profil hos oss, så har vi sendt deg en e-post
