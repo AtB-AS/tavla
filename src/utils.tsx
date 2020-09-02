@@ -19,7 +19,10 @@ import {
 import { colors } from '@entur/tokens'
 colors.transport.contrast.bus = '#A8AD00'
 colors.transport.default.bus = '#A8AD00'
-
+colors.transport.contrast.tram = '#A8AD00'
+colors.transport.default.tram = '#A8AD00'
+colors.transport.default.ferry = '#007788'
+colors.transport.contrast.ferry = '#007788'
 import { Departure, LegMode, TransportSubmode } from '@entur/sdk'
 
 import { LineData, TileSubLabel, Theme, IconColorType } from './types'
@@ -58,14 +61,25 @@ export function getIconColorType(theme: Theme | undefined): IconColorType {
     return IconColorType.CONTRAST
 }
 
+function isRegionalBus(subType?: string): boolean {
+    const subTypes = ['regionalBus', 'nationalCoach']
+    return subType ? subTypes.includes(subType) : false
+}
+
 export function getIconColor(
     type: LegMode,
     iconColorType: IconColorType,
     subType?: TransportSubmode,
 ): string {
+    console.log(subType)
     if (isSubModeAirportLink(subType)) {
         return colors.transport[iconColorType].plane
     }
+
+    if (isRegionalBus(subType)) {
+        return colors.transport[iconColorType].ferry
+    }
+
     switch (type) {
         case 'bus':
             return colors.transport[iconColorType].bus
@@ -131,6 +145,7 @@ export function getIcon(
     subMode?: TransportSubmode,
     color?: string,
 ): JSX.Element | null {
+    console.log(color)
     const colorToUse = color ?? getIconColor(legMode, iconColorType, subMode)
 
     const identifier = getTransportIconIdentifier(legMode, subMode)
