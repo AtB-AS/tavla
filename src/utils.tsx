@@ -71,11 +71,9 @@ export function getIconColor(
     iconColorType: IconColorType,
     subType?: TransportSubmode,
 ): string {
-    console.log(subType)
     if (isSubModeAirportLink(subType)) {
         return colors.transport[iconColorType].plane
     }
-
     if (isRegionalBus(subType)) {
         return colors.transport[iconColorType].ferry
     }
@@ -145,7 +143,6 @@ export function getIcon(
     subMode?: TransportSubmode,
     color?: string,
 ): JSX.Element | null {
-    console.log(color)
     const colorToUse = color ?? getIconColor(legMode, iconColorType, subMode)
 
     const identifier = getTransportIconIdentifier(legMode, subMode)

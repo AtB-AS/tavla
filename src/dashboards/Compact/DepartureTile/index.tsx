@@ -61,9 +61,18 @@ const DepartureTile = ({
     return (
         <Tile title={name} icons={headerIcons} alerts={disruptionMessages}>
             {routes.map((route) => {
-                const subType = groupedDepartures[route][0].subType
+                let subType = groupedDepartures[route][0].subType
+
                 const quayCode = groupedDepartures[route][0].quay?.publicCode
                 const routeData = groupedDepartures[route].slice(0, 3)
+                if (
+                    parseInt(
+                        routeData[0].route.replace(/[^0-9]+/g, '') || '0',
+                        10,
+                    ) >= 100
+                ) {
+                    subType = 'regionalBus'
+                }
                 const routeType = routeData[0].type
                 const icon = getIcon(routeType, iconColorType, subType)
 
