@@ -65,12 +65,11 @@ const DepartureTile = ({
 
                 const quayCode = groupedDepartures[route][0].quay?.publicCode
                 const routeData = groupedDepartures[route].slice(0, 3)
-                if (
-                    parseInt(
-                        routeData[0].route.replace(/[^0-9]+/g, '') || '0',
-                        10,
-                    ) >= 100
-                ) {
+                const lineNumber = parseInt(
+                    routeData[0].route.replace(/[^0-9]+/g, '') || '0',
+                    10,
+                )
+                if (lineNumber >= 300 && lineNumber <= 799) {
                     subType = 'regionalBus'
                 }
                 const routeType = routeData[0].type
