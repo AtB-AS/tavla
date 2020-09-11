@@ -12,7 +12,6 @@ import { getDisruptionMessagesForStop } from '../../logic/getDisruptionMessages'
 import DepartureTile from './DepartureTile'
 import BikeTile from './BikeTile'
 import MarketingTile from './MarketingTile'
-import ScooterTile from './ScooterTile'
 import './styles.scss'
 
 import {
@@ -80,6 +79,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
         getFromLocalStorage(history.location.key) || {}
 
     const bikeCol = anyBikeRentalStations ? 1 : 0
+    const extraCols = anyBikeRentalStations ? 1 : 0
 
     const scooterCol = anyScooters ? 1 : 0
 

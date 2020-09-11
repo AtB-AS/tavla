@@ -7,7 +7,7 @@ import StopPlacePanel from './StopPlacePanel'
 import BikePanelSearch from './BikeSearch'
 import StopPlaceSearch from './StopPlaceSearch'
 import BikePanel from './BikePanel'
-import ScooterPanel from './ScooterPanel'
+// import ScooterPanel from './ScooterPanel'
 import ZoomEditor from './ZoomEditor'
 
 import { useSettingsContext, Mode } from '../../../settings'
@@ -181,7 +181,7 @@ const EditTab = (): JSX.Element => {
                     <BikePanel stations={stations} />
                 </GridItem>
 
-                <GridItem medium={3} small={8}>
+                {/* <GridItem medium={3} small={8}>
                     <div className="edit-tab__header">
                         <Heading2>Sparkesykkel</Heading2>
                         <Switch
@@ -196,7 +196,7 @@ const EditTab = (): JSX.Element => {
                         onZoomUpdated={setZoom}
                         scooters={scooters}
                     />
-                </GridItem>
+                </GridItem> */}
             </GridContainer>
         </div>
     )
