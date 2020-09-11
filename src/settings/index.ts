@@ -6,7 +6,7 @@ import {
     useEffect,
 } from 'react'
 import { useLocation } from 'react-router-dom'
-import { LegMode, Coordinates } from '@entur/sdk'
+import { LegMode, Coordinates, ScooterOperator } from '@entur/sdk'
 import { Theme } from '../types'
 
 import { persist as persistToFirebase, FieldTypes } from './FirestoreStorage'
@@ -19,11 +19,12 @@ import { getSettings } from '../services/firebase'
 import { getDocumentId } from '../utils'
 import { useFirebaseAuthentication } from '../auth'
 
-export type Mode = 'bysykkel' | 'kollektiv'
+export type Mode = 'bysykkel' | 'kollektiv' | 'sparkesykkel'
 
 export interface Settings {
     boardName?: string
     coordinates?: Coordinates
+    hiddenOperators: ScooterOperator[]
     hiddenStations: string[]
     hiddenStops: string[]
     hiddenModes: Mode[]
@@ -32,6 +33,7 @@ export interface Settings {
         [stopPlaceId: string]: string[]
     }
     distance?: number
+    zoom?: number
     newStations?: string[]
     newStops?: string[]
     dashboard?: string | void
@@ -44,6 +46,7 @@ export interface Settings {
 
 interface SettingsSetters {
     setBoardName: (boardName: string) => void
+    setHiddenOperators: (hiddenOperators: ScooterOperator[]) => void
     setHiddenStations: (hiddenStations: string[]) => void
     setHiddenStops: (hiddenStops: string[]) => void
     setHiddenStopModes: (hiddenModes: {
@@ -52,6 +55,7 @@ interface SettingsSetters {
     setHiddenModes: (modes: Mode[]) => void
     setHiddenRoutes: (hiddenModes: { [stopPlaceId: string]: string[] }) => void
     setDistance: (distance: number) => void
+    setZoom: (zoom: number) => void
     setNewStations: (newStations: string[]) => void
     setNewStops: (newStops: string[]) => void
     setDashboard: (dashboard: string) => void
@@ -68,12 +72,14 @@ export const SettingsContext = createContext<
     null,
     {
         setBoardName: (): void => undefined,
+        setHiddenOperators: (): void => undefined,
         setHiddenStations: (): void => undefined,
         setHiddenStops: (): void => undefined,
         setHiddenStopModes: (): void => undefined,
         setHiddenModes: (): void => undefined,
         setHiddenRoutes: (): void => undefined,
         setDistance: (): void => undefined,
+        setZoom: (): void => undefined,
         setNewStations: (): void => undefined,
         setNewStops: (): void => undefined,
         setDashboard: (): void => undefined,
@@ -147,7 +153,12 @@ export function useSettings(): [Settings | null, SettingsSetters] {
                     })
                 }
 
-                setSettings(settingsWithDefaults)
+                setSettings((prevSettings) => {
+                    const onAdmin = location.pathname.split('/')[1] === 'admin'
+                    return prevSettings && onAdmin
+                        ? prevSettings
+                        : settingsWithDefaults
+                })
             })
         }
 
@@ -196,6 +207,13 @@ export function useSettings(): [Settings | null, SettingsSetters] {
         [set],
     )
 
+    const setHiddenOperators = useCallback(
+        (newHiddenOperators: ScooterOperator[]): void => {
+            set('hiddenOperators', newHiddenOperators)
+        },
+        [set],
+    )
+
     const setHiddenStations = useCallback(
         (newHiddenStations: string[]): void => {
             set('hiddenStations', newHiddenStations)
@@ -234,6 +252,13 @@ export function useSettings(): [Settings | null, SettingsSetters] {
     const setDistance = useCallback(
         (newDistance: number): void => {
             set('distance', newDistance)
+        },
+        [set],
+    )
+
+    const setZoom = useCallback(
+        (newZoom: number): void => {
+            set('zoom', newZoom)
         },
         [set],
     )
@@ -295,12 +320,14 @@ export function useSettings(): [Settings | null, SettingsSetters] {
 
     const setters = {
         setBoardName,
+        setHiddenOperators,
         setHiddenStations,
         setHiddenStops,
         setHiddenModes,
         setHiddenStopModes,
         setHiddenRoutes,
         setDistance,
+        setZoom,
         setNewStations,
         setNewStops,
         setDashboard,

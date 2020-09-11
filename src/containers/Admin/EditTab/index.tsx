@@ -7,6 +7,8 @@ import StopPlacePanel from './StopPlacePanel'
 import BikePanelSearch from './BikeSearch'
 import StopPlaceSearch from './StopPlaceSearch'
 import BikePanel from './BikePanel'
+import ScooterPanel from './ScooterPanel'
+import ZoomEditor from './ZoomEditor'
 
 import { useSettingsContext, Mode } from '../../../settings'
 import {
@@ -14,9 +16,9 @@ import {
     toggleValueInList,
     isNotNullOrUndefined,
 } from '../../../utils'
-import { DEFAULT_DISTANCE } from '../../../constants'
+import { DEFAULT_DISTANCE, DEFAULT_ZOOM } from '../../../constants'
 import { StopPlaceWithLines } from '../../../types'
-import { useNearestPlaces } from '../../../logic'
+import { useNearestPlaces, useScooters } from '../../../logic'
 import service, { getStopPlacesWithLines } from '../../../service'
 
 import { BikeRentalStation } from '@entur/sdk'
@@ -32,8 +34,16 @@ const EditTab = (): JSX.Element => {
     const [distance, setDistance] = useState<number>(
         settings?.distance || DEFAULT_DISTANCE,
     )
-    const debouncedDistance = useDebounce(distance, 800)
+    const [zoom, setZoom] = useState<number>(settings?.zoom || DEFAULT_ZOOM)
+    const debouncedZoom = useDebounce(zoom, 200)
 
+    useEffect(() => {
+        if (settings && settings.zoom !== debouncedZoom) {
+            settingsSetters.setZoom(debouncedZoom)
+        }
+    }, [settings, debouncedZoom, settingsSetters])
+
+    const debouncedDistance = useDebounce(distance, 800)
     useEffect(() => {
         if (settings?.distance !== debouncedDistance) {
             settingsSetters.setDistance(debouncedDistance)
@@ -55,6 +65,7 @@ const EditTab = (): JSX.Element => {
                 .map(({ id }) => id),
         [nearestPlaces],
     )
+    const scooters = useScooters()
 
     useEffect(() => {
         let ignoreResponse = false
@@ -135,7 +146,7 @@ const EditTab = (): JSX.Element => {
         <div className="edit-tab">
             <Heading2 className="heading">Rediger innhold</Heading2>
             <GridContainer spacing="extraLarge">
-                <GridItem medium={8} small={12}>
+                <GridItem medium={6} small={12}>
                     <div className="edit-tab__header">
                         <Heading2>Kollektiv</Heading2>
                         <Switch
@@ -154,7 +165,7 @@ const EditTab = (): JSX.Element => {
                     <StopPlacePanel stops={stopPlaces} />
                 </GridItem>
 
-                <GridItem medium={4} small={12}>
+                <GridItem medium={3} small={12}>
                     <div className="edit-tab__header">
                         <Heading2>Bysykkel</Heading2>
                         <Switch
@@ -168,6 +179,23 @@ const EditTab = (): JSX.Element => {
                         onSelected={addNewStation}
                     />
                     <BikePanel stations={stations} />
+                </GridItem>
+
+                <GridItem medium={3} small={8}>
+                    <div className="edit-tab__header">
+                        <Heading2>Sparkesykkel</Heading2>
+                        <Switch
+                            onChange={(): void => toggleMode('sparkesykkel')}
+                            checked={!hiddenModes?.includes('sparkesykkel')}
+                            size="large"
+                        />
+                    </div>
+                    <ScooterPanel />
+                    <ZoomEditor
+                        zoom={zoom}
+                        onZoomUpdated={setZoom}
+                        scooters={scooters}
+                    />
                 </GridItem>
             </GridContainer>
         </div>

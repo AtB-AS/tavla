@@ -1,13 +1,18 @@
 import React from 'react'
 import { WidthProvider, Responsive, Layouts, Layout } from 'react-grid-layout'
 
-import { useBikeRentalStations, useStopPlacesWithDepartures } from '../../logic'
+import {
+    useBikeRentalStations,
+    useStopPlacesWithDepartures,
+    useScooters,
+} from '../../logic'
 import DashboardWrapper from '../../containers/DashboardWrapper'
 import { getDisruptionMessagesForStop } from '../../logic/getDisruptionMessages'
 
 import DepartureTile from './DepartureTile'
 import BikeTile from './BikeTile'
 import MarketingTile from './MarketingTile'
+import ScooterTile from './ScooterTile'
 import './styles.scss'
 
 import {
@@ -52,6 +57,8 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
 
     const bikeRentalStations = useBikeRentalStations()
 
+    const scooters = useScooters()
+
     let stopPlacesWithDepartures = useStopPlacesWithDepartures()
 
     // Remove stop places without departures
@@ -64,12 +71,17 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
     const numberOfStopPlaces = stopPlacesWithDepartures
         ? stopPlacesWithDepartures.length
         : 0
-    const anyBikeRentalStations =
+    const anyBikeRentalStations: number | null =
         bikeRentalStations && bikeRentalStations.length
+
+    const anyScooters = Boolean(scooters && scooters.length)
 
     const localStorageLayout: Layouts =
         getFromLocalStorage(history.location.key) || {}
-    const extraCols = anyBikeRentalStations ? 1 : 0
+
+    const bikeCol = anyBikeRentalStations ? 1 : 0
+
+    const scooterCol = anyScooters ? 1 : 0
 
     // Limit column count if there are not enough space
     function limitToMax(columns: number): number {
@@ -104,6 +116,7 @@ const EnturDashboard = ({ history }: Props): JSX.Element => {
             history={history}
             bikeRentalStations={bikeRentalStations}
             stopPlacesWithDepartures={stopPlacesWithDepartures}
+            scooters={scooters}
         >
             <div className="compact__tiles">
                 {colCount > 0 && (

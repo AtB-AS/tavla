@@ -82,7 +82,7 @@ export function DefaultHeader(): JSX.Element {
     return (
         <div className="header">
             {loginModal}
-            <div className={`header__logo-wrapper`}>
+            <div className="header__logo-wrapper">
                 <Link to="/">
                     <AtbLogo
                         className={`header__logo-wrapper__logo`}
